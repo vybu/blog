@@ -1,0 +1,40 @@
+{
+    "name": "blog",
+    "version": "0.0.1",
+    "description": "Personal blog engine",
+    "main": "index.js",
+    "author": "Vytenis Butkevicius",
+    "license": "MIT",
+    "scripts": {
+        "build": "webpack --config webpack.conf.js",
+        "run": "node_modules/.bin/ts-node ./src/core/generator/parser.ts",
+        "test": "jest"
+    },
+    "devDependencies": {
+        "@types/highlight.js": "^9.1.9",
+        "@types/markdown-it": "^0.0.2",
+        "@types/node": "^7.0.12",
+        "awesome-typescript-loader": "^3.1.2",
+        "jest": "^19.0.2",
+        "markdown-it": "^8.3.1",
+        "nodemon": "^1.11.0",
+        "rimraf": "^2.6.1",
+        "typescript": "^2.2.1",
+        "webpack": "^2.3.1",
+        "webpack-md5-hash": "^0.0.5"
+    },
+    "dependencies": {
+        "highlight.js": "^9.10.0",
+        "markdown-it-footnote": "^3.0.1",
+        "markdown-it-highlightjs": "^3.0.0",
+        "markdown-yaml-metadata-parser": "^0.0.8",
+        "ts-node": "^3.0.2"
+    },
+
+    "jest": {
+        "moduleFileExtensions": ["ts", "js"],
+        "transform": {
+            "^.+\\.(ts|tsx)$": "<rootDir>/tools/jestPreprocessor.js"
+        }
+    }
+}
