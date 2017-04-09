@@ -1,0 +1,8 @@
+@mixin la ($color) {
+    color: $color;
+}
+
+.body {
+    background-color: darken( lightgray, 10%);
+    @include la(red);
+}
