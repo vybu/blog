@@ -3,14 +3,6 @@ import markdownItHighlight = require('markdown-it-highlightjs');
 import markdownItFootnote = require('markdown-it-footnote');
 import mdMetaParser = require('markdown-yaml-metadata-parser');
 
-const state = {
-    name: 'John Snow' // knows nothing
-}
-
-const a = () => {
-    
-}
-
 const md = new MarkdownIt({
     html: true,
     xhtmlOut: true,
@@ -24,23 +16,15 @@ md
 .use(markdownItFootnote)
 .use(markdownItHighlight)
 
-
-/* 
-    Database is file system.
-
-    parser(file.md) -> JSON <metadata, blog contents>, HTML of blog, HTML of blog post page, 
-*/
-
-
-interface ParsedArticle {
+export interface ParsedArticle {
     metaData: object,
     articleJson: object,
     articleHtml: string
 }
 
-module.exports.parseArticle = function parseArticle(articleSource: string): ParsedArticle {
+export function parseArticle(articleSource: string): ParsedArticle {
     const { metadata: metaData, content } = mdMetaParser(articleSource);
-    const articleHtml = md.render(articleSource);
+    const articleHtml = md.render(content);
 
     return {
         metaData,

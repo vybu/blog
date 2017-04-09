@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
+        "target": "esnext",
         "types": [
-            "node"
+            "node",
+            "jest"
         ],
         "allowJs": true,
         "typeRoots": [

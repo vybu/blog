@@ -7,14 +7,17 @@
     "license": "MIT",
     "scripts": {
         "build": "webpack --config webpack.conf.js",
-        "run": "node_modules/.bin/ts-node ./src/core/generator/parser.ts",
-        "test": "jest"
+        "run": "node_modules/.bin/ts-node ./src/core/generator/generator.ts",
+        "test": "jest",
+        "serve": "node tools/browserSync.js"
     },
     "devDependencies": {
         "@types/highlight.js": "^9.1.9",
+        "@types/jest": "^19.2.2",
         "@types/markdown-it": "^0.0.2",
         "@types/node": "^7.0.12",
         "awesome-typescript-loader": "^3.1.2",
+        "browser-sync": "^2.18.8",
         "jest": "^19.0.2",
         "markdown-it": "^8.3.1",
         "nodemon": "^1.11.0",
@@ -24,15 +27,21 @@
         "webpack-md5-hash": "^0.0.5"
     },
     "dependencies": {
+        "@types/glob": "^5.0.30",
+        "ejs": "^2.5.6",
+        "eslint-plugin-jest": "^19.0.1",
+        "glob": "^7.1.1",
         "highlight.js": "^9.10.0",
         "markdown-it-footnote": "^3.0.1",
         "markdown-it-highlightjs": "^3.0.0",
         "markdown-yaml-metadata-parser": "^0.0.8",
         "ts-node": "^3.0.2"
     },
-
     "jest": {
-        "moduleFileExtensions": ["ts", "js"],
+        "moduleFileExtensions": [
+            "ts",
+            "js"
+        ],
         "transform": {
             "^.+\\.(ts|tsx)$": "<rootDir>/tools/jestPreprocessor.js"
         }
