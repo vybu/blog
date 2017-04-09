@@ -18,6 +18,7 @@
         "@types/md5": "^2.1.31",
         "@types/node": "^7.0.12",
         "@types/node-sass": "^3.10.32",
+        "@types/rimraf": "^0.0.28",
         "awesome-typescript-loader": "^3.1.2",
         "browser-sync": "^2.18.8",
         "jest": "^19.0.2",

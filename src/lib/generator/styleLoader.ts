@@ -3,9 +3,8 @@ import path = require('path');
 import fs = require('fs');
 
 import { getHashFileNameFor } from '../utils';
+import { dist, stylesEntryFile } from '../constants';
 
-const dist = path.join(__filename, '../../../dist');
-const entryFile = path.join(__filename, '../../styles/main.scss');
 const outputStyle = 'compressed';
 
 export function buildCSS(): Promise<any> {
@@ -14,7 +13,7 @@ export function buildCSS(): Promise<any> {
         .then(([fileName, sourceMapName]) => {
             return new Promise((resolve, reject) => {
                 nodeSass.render({
-                    file: entryFile,
+                    file: stylesEntryFile,
                     outputStyle,
                     sourceMap: sourceMapName
                 }, (error, result) => {
@@ -29,7 +28,7 @@ export function buildCSS(): Promise<any> {
                         'utf-8',
                         (err) => err ? reject(err) : resolve(fileName)
                     );
-                    
+
                     fs.writeFile(
                         `${dist}/${sourceMapName}`,
                         result.map.toString(),
@@ -45,7 +44,7 @@ export function buildCSS(): Promise<any> {
 function getFileNameHash(): Promise<string[]> {
     return new Promise((resolve, reject) => {
         nodeSass.render({
-            file: entryFile,
+            file: stylesEntryFile,
             outputStyle
         }, (error, result) => {
             if (error) {

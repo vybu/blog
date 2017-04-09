@@ -1,6 +1,9 @@
 import path = require('path');
 import fs = require('fs');
 import glob = require('glob');
+import rimraf = require('rimraf');
+
+import { dist } from '../constants';
 
 const DIST_LOCATION = path.join(__dirname, '../../../dist');
 const ARTICLES_GLOB = 'articles/**/*.md';
@@ -38,3 +41,13 @@ export function saveToDist(fileName: string, fileType: string, content: string) 
         console.log(`Saved ${fileName} to ${DIST_LOCATION}`);
     });
 }
+
+export function cleanup() {
+    return new Promise((resolve, reject) => {
+        rimraf(dist, (error) => {
+            console.info('Cleaned up files');
+            error ? reject(error) : resolve()
+        });
+    })
+}
+
