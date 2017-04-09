@@ -7,6 +7,7 @@ generate();
 
 async function generate() {
     await cleanup();
+    
     const articles = await getArticles();
     const parsedArticles = articles.map(({fileName, content}): [string, ParsedArticle] => [fileName, parseArticle(content)]);
     parsedArticles.forEach(([fileName, content]) => saveToDist(fileName, 'html', buildFullBlogPage(fileName, content)));

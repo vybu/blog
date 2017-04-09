@@ -5,7 +5,6 @@ import rimraf = require('rimraf');
 
 import { dist } from '../constants';
 
-const DIST_LOCATION = path.join(__dirname, '../../../dist');
 const ARTICLES_GLOB = 'articles/**/*.md';
 const root = path.join(__dirname, '../../../');
 
@@ -37,14 +36,14 @@ function getFileName(path: string): string {
 }
 
 export function saveToDist(fileName: string, fileType: string, content: string) {
-    fs.writeFile(`${DIST_LOCATION}/${fileName}.${fileType}`, content, 'utf-8', () => {
-        console.log(`Saved ${fileName} to ${DIST_LOCATION}`);
+    fs.writeFile(`${dist}/${fileName}.${fileType}`, content, 'utf-8', () => {
+        console.log(`Saved ${fileName} to ${dist}`);
     });
 }
 
 export function cleanup() {
     return new Promise((resolve, reject) => {
-        rimraf(dist, (error) => {
+        rimraf(`${dist}/*!(.gitignore)`, (error) => {
             console.info('Cleaned up files');
             error ? reject(error) : resolve()
         });
