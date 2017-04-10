@@ -5,8 +5,16 @@ import autoprefixer = require('autoprefixer');
 import path = require('path');
 import { dist, stylesEntryFile, jsEntryFile, stylesPaths } from '../constants';
 
+interface WebpackStatsAsset {
+    name: string
+}
 
-export function buildJS(): Promise<CompiledFileNames> {
+interface CompiledFileNames {
+    css: string[],
+    js: string[]
+}
+
+export function getJSAndCSSCompiler(): Function {
     const compiler = webpack({
         entry: [
             stylesEntryFile,
@@ -48,34 +56,27 @@ export function buildJS(): Promise<CompiledFileNames> {
         ]
     });
 
-    return new Promise((resolve, reject) => {
-        compiler.run((err, stats) => {
-            if (err) reject(err);
+    return (): Promise<CompiledFileNames> => {
+        return new Promise((resolve, reject) => {
+            compiler.run((err, stats) => {
+                if (err) reject(err);
 
-            const statsJson = stats.toJson();
+                const statsJson = stats.toJson();
 
-            if (stats.hasErrors() || stats.hasWarnings()) {
-                console.error(statsJson.errors);
-                console.warn(statsJson.warnings);
-            }
-            
-            resolve(getJsAndCssFileNames(statsJson.assets));
+                if (stats.hasErrors() || stats.hasWarnings()) {
+                    console.error(statsJson.errors);
+                    console.warn(statsJson.warnings);
+                }
+
+                console.info('Successfully compiled JS and CSS');
+                resolve(getJsAndCssFileNames(statsJson.assets));
+            });
         });
-    });
-
+    };
 
 }
 
-interface Asset {
-    name: string
-}
-
-interface CompiledFileNames {
-    css: string[],
-    js: string[]
-}
-
-function getJsAndCssFileNames(assets: Asset[]): CompiledFileNames {
+function getJsAndCssFileNames(assets: WebpackStatsAsset[]): CompiledFileNames {
     return assets.reduce((result, asset) => {
         if (asset.name.endsWith('.js')) {
             result.js.push(asset.name);

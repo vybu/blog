@@ -2,6 +2,20 @@
 # yarn lockfile v1
 
 
+"@types/browser-sync@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/browser-sync/-/browser-sync-0.0.34.tgz#1bf665b2d81eb35543cabedbd31605acee4f6271"
+  dependencies:
+    "@types/chokidar" "*"
+    "@types/micromatch" "*"
+    "@types/node" "*"
+
+"@types/chokidar@*":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@types/chokidar/-/chokidar-1.6.0.tgz#db1843360d548f267ef38a35f938fe22433c5287"
+  dependencies:
+    "@types/node" "*"
+
 "@types/glob@^5.0.30":
   version "5.0.30"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-5.0.30.tgz#1026409c5625a8689074602808d082b2867b8a51"
@@ -27,6 +41,12 @@
   dependencies:
     "@types/node" "*"
 
+"@types/micromatch@*":
+  version "2.3.29"
+  resolved "https://registry.yarnpkg.com/@types/micromatch/-/micromatch-2.3.29.tgz#6ce0280fe96f500127f0c8c0addf2d3f207e8cec"
+  dependencies:
+    "@types/parse-glob" "*"
+
 "@types/minimatch@*":
   version "2.0.29"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-2.0.29.tgz#5002e14f75e2d71e564281df0431c8c1b4a2a36a"
@@ -40,6 +60,10 @@
 "@types/node@*", "@types/node@^7.0.12":
   version "7.0.12"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.12.tgz#ae5f67a19c15f752148004db07cbbb372e69efc9"
+
+"@types/parse-glob@*":
+  version "3.0.29"
+  resolved "https://registry.yarnpkg.com/@types/parse-glob/-/parse-glob-3.0.29.tgz#6a40ec7ebd2418ee69ee397e48e42169268a10bf"
 
 "@types/rimraf@^0.0.28":
   version "0.0.28"

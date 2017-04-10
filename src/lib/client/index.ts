@@ -1,6 +1,6 @@
 
 function initial(): void {
-    console.log('initial');   
+    console.log('initial shiz');   
 }
 
 initial();

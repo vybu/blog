@@ -1,9 +1,9 @@
-const browserSync = require('browser-sync');
-const path = require('path');
+import browserSync = require('browser-sync');
+import path = require('path');
 
 const dist = path.join(__dirname, '../dist');
 
-export function initServerOnDist() {
+export function initServerOnDist(): browserSync.BrowserSyncInstance {
     const bs = browserSync.create('Dev server');
     bs.init({
         server: dist

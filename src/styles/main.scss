@@ -2,7 +2,7 @@
     color: $color;
 }
 
-.body {
-    background-color: darken( lightgray, 10%);
-    @include la(blue);
+body {
+    background-color: darken( tomato, 10%);
+    @include la(white);
 }

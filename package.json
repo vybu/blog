@@ -7,11 +7,12 @@
     "license": "MIT",
     "scripts": {
         "build": "webpack --config webpack.conf.js",
-        "run": "node_modules/.bin/ts-node ./src/lib/generator/generator.ts",
+        "dev": "node_modules/.bin/ts-node ./src/index.ts",
         "test": "jest",
         "serve": "node tools/browserSync.js"
     },
     "devDependencies": {
+        "@types/browser-sync": "^0.0.34",
         "@types/highlight.js": "^9.1.9",
         "@types/jest": "^19.2.2",
         "@types/markdown-it": "^0.0.2",

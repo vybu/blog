@@ -35,10 +35,15 @@ function getFileName(path: string): string {
     return path.split(/[\/\\]/g).pop().split('.')[0];
 }
 
-export function saveToDist(fileName: string, fileType: string, content: string) {
-    fs.writeFile(`${dist}/${fileName}.${fileType}`, content, 'utf-8', () => {
-        console.log(`Saved ${fileName} to ${dist}`);
-    });
+export function saveToDist(fileName: string, fileType: string, content: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(`${dist}/${fileName}.${fileType}`, content, 'utf-8', (error) => {
+            if (error) return reject(error);
+
+            console.log(`Saved ${fileName} to ${dist}`);
+            resolve();
+        });
+    })
 }
 
 export function cleanup() {
