@@ -7,7 +7,7 @@ const path = require('path');
 const debounce = require('lodash/debounce');
 const initServerOnDist = require('./browserSync');
 
-const app = path.join(__dirname, './appProxy.js');
+const app = path.join(__dirname, './generatorRunnerProxy.js');
 const generatorFilesToWatch = [
     path.join(__dirname, './lib'),
     path.join(__dirname, './lib/generator'),
