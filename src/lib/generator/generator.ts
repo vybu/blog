@@ -10,7 +10,6 @@ export function initGenerator() {
 
     const compiler = getJSAndCSSCompiler();
 
-
     return async function generate() {
         await cleanup();
 
@@ -22,7 +21,5 @@ export function initGenerator() {
         // generate full blog pages,
         // save just contents + json,
         // generate front page
-        console.log(parsedArticles);
     }
 }
-

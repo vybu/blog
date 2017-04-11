@@ -3,11 +3,11 @@ const path = require('path');
 
 const dist = path.join(__dirname, '../dist');
 
-export function initServerOnDist() {
+module.exports = function initServerOnDist() {
     const bs = browserSync.create('Dev server');
     bs.init({
         server: dist
     });
 
     return bs;
-}
+};

@@ -53,7 +53,9 @@ function getResourceTag(
 
     const relVal = rel ? `rel="${rel}"` : '';
     const asyncVal = async ? 'async' : '';
-    const tagOpen = `<${tagName} ${tagName === 'script' ? 'src' : 'href'}="${src}" ${asyncVal} ${relVal}>`
-    const tagClose = tagName === 'script' ? `</${tagName}>` : ''
-    return `${tagOpen}${tagClose}`
+
+    const tagOpen = `<${tagName} ${tagName === 'script' ? 'src' : 'href'}="${src}" ${asyncVal} ${relVal}>`;
+    const tagClose = tagName === 'script' ? `</${tagName}>` : '';
+    
+    return `${tagOpen}${tagClose}`;
 }

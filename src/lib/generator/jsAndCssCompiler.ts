@@ -16,6 +16,7 @@ interface CompiledFileNames {
 
 export function getJSAndCSSCompiler(): Function {
     const compiler = webpack({
+        stats: 'none',
         entry: [
             stylesEntryFile,
             jsEntryFile
@@ -33,7 +34,7 @@ export function getJSAndCSSCompiler(): Function {
         target: 'web',
         module: {
             rules: [
-                { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+                { test: /\.tsx?$/, loader: 'awesome-typescript-loader?silent=true' },
                 { test: /(\.css|\.scss|\.sass)$/, loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!sass-loader?sourceMap') }
             ]
         },

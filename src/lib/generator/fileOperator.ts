@@ -5,7 +5,7 @@ import rimraf = require('rimraf');
 
 import { dist } from '../constants';
 
-const ARTICLES_GLOB = 'articles/**/*.md';
+const ARTICLES_GLOB = './src/articles/**/*.md';
 const root = path.join(__dirname, '../../../');
 
 interface articleRaw {
