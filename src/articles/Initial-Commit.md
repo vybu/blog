@@ -8,3 +8,6 @@ summary: Some thoughts and technical details about this site. <!--If this unspec
 # Initial commit
 
 This is the first blog post in this blog.
+
+
+![Keep calm and build blog](/images/keep-calm-blog.png)

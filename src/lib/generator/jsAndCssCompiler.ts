@@ -3,7 +3,7 @@ import WebpackMd5Hash = require('webpack-md5-hash');
 import ExtractTextPlugin = require('extract-text-webpack-plugin');
 import autoprefixer = require('autoprefixer');
 import path = require('path');
-import { dist, stylesEntryFile, jsEntryFile, stylesPaths } from '../constants';
+import { dist, stylesEntryFile, jsEntryFile, stylesPaths, isDevMode } from '../constants';
 
 interface WebpackStatsAsset {
     name: string
@@ -27,7 +27,7 @@ export function getJSAndCSSCompiler(): Function {
             extensions: ['.js', '.ts', '.scss']
         },
         output: {
-            filename: '[name].[chunkhash].js',
+            filename: isDevMode ? '[name].js' : '[name].[chunkhash].js',
             path: dist,
             publicPath: '/'
         },
@@ -40,7 +40,7 @@ export function getJSAndCSSCompiler(): Function {
         },
         plugins: [
             new WebpackMd5Hash(),
-            new ExtractTextPlugin('[name].[contenthash].css'),
+            new ExtractTextPlugin(isDevMode ? '[name].css' : '[name].[contenthash].css'),
             new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
             new webpack.LoaderOptionsPlugin({
                 minimize: true,

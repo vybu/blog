@@ -4,12 +4,14 @@ import path = require('path');
 import { initGenerator } from './lib/generator';
 
 
-const generator = initGenerator();
+initGenerator().then(generator => {
+    function runGenerator() {
+        generator().then(() => process.send('generated'));
+    }
 
-function runGenerator() {
-    generator().then(() => process.send('generated'));
-}
+    process.on('message', m => m === 'trigger' && runGenerator());
 
-process.on('message', m => m === 'trigger' && runGenerator());
+    runGenerator();
+})
 
-runGenerator();
+

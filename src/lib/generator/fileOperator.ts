@@ -1,10 +1,11 @@
 import path = require('path');
 import fs = require('fs');
+import childProcess = require('child_process');
 import glob = require('glob');
 import rimraf = require('rimraf');
 
 import { ArticleRaw, fileName } from './commonTypes';
-import { dist } from '../constants';
+import { dist, staticFilesPath } from '../constants';
 
 const ARTICLES_GLOB = './src/articles/**/*.md';
 const root = path.join(__dirname, '../../../');
@@ -49,5 +50,10 @@ export function cleanup() {
             error ? reject(error) : resolve()
         });
     })
+}
+
+export function copyStaticFiles(): void {
+    childProcess.exec(`cp -r ${staticFilesPath}/* ${dist}`, (err) =>
+        err ? console.error(err) : console.info('Successfully copied static files'))
 }
 

@@ -1,17 +1,19 @@
 import { parseArticle } from './parser';
-import { getArticles, saveToDist, cleanup } from './fileOperator';
+import { getArticles, saveToDist, cleanup, copyStaticFiles } from './fileOperator';
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler'
 
 import { ProcessedArticle, ParsedArticle, ArticleRaw } from './commonTypes';
 
-export function initGenerator() {
+export async function initGenerator() {
 
     const compiler = getJSAndCSSCompiler();
     const templatesBuilder = new TemplatesBuilder(compiler);
+    
+    await cleanup();
+    copyStaticFiles();
 
     return async function generate() {
-        await cleanup();
 
         const articles = await getArticles();
         const parsedArticles = articles.map(({ fileName, content }): ProcessedArticle =>

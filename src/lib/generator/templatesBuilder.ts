@@ -20,7 +20,7 @@ export default class TemplatesBuilder {
 
     async base(args: { body: string, head?: string }): Promise<string> {
         if (this.cache.base) {
-            return this.cache.base(args);
+            // return this.cache.base(args); TODO for this to work, we cannot delete all dist files
         }
 
         const { js, css } = await this.jsAndCssCompiler();
