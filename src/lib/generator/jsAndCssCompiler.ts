@@ -15,6 +15,28 @@ interface CompiledFileNames {
 }
 
 export function getJSAndCSSCompiler(): Function {
+
+    const plugins = [
+        new ExtractTextPlugin(isDevMode ? '[name].css' : '[name].[contenthash].css'),
+        new webpack.LoaderOptionsPlugin({
+            minimize: !isDevMode,
+            debug: false,
+            noInfo: true, // set to false to see a list of every file being bundled.
+            options: {
+                sassLoader: {
+                    includePaths: [stylesPaths]
+                },
+                context: '/',
+                postcss: () => [autoprefixer],
+            }
+        })
+    ];
+
+    if (!isDevMode) {
+        plugins.unshift(new WebpackMd5Hash());
+        plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+    }
+
     const compiler = webpack({
         stats: 'none',
         entry: [
@@ -38,23 +60,7 @@ export function getJSAndCSSCompiler(): Function {
                 { test: /(\.css|\.scss|\.sass)$/, loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!sass-loader?sourceMap') }
             ]
         },
-        plugins: [
-            new WebpackMd5Hash(),
-            new ExtractTextPlugin(isDevMode ? '[name].css' : '[name].[contenthash].css'),
-            new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
-            new webpack.LoaderOptionsPlugin({
-                minimize: true,
-                debug: false,
-                noInfo: true, // set to false to see a list of every file being bundled.
-                options: {
-                    sassLoader: {
-                        includePaths: [stylesPaths]
-                    },
-                    // context: '/',
-                    postcss: () => [autoprefixer],
-                }
-            })
-        ]
+        plugins
     });
 
     return (): Promise<CompiledFileNames> => {

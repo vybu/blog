@@ -1,3 +1,7 @@
+import { container } from './container';
+import { header } from './header';
+import { footer } from './footer';
+import { ContainerIds } from './constants';
 
 export function base({ body = '', head = ''}: {body: string, head?: string}): string {
     return `
@@ -14,8 +18,9 @@ export function base({ body = '', head = ''}: {body: string, head?: string}): st
             ${head}
         </head>
         <body>
-
-            ${body}
+            ${header()}
+            ${container(body, ContainerIds.App)}
+            ${footer()}
         </body>
         </html>
 `;

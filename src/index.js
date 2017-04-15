@@ -32,7 +32,7 @@ function spawnProcess() {
     });
 
     currentChildProcess.on('exit', () => {
-        console.log('Killing app');
+        console.info('Killing app');
     });
 }
 

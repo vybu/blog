@@ -1,8 +1,10 @@
 import h = require('hyperscript');
 import { html } from '../utils';
 import { ParsedArticle, ProcessedArticle } from './commonTypes';
-import { base, header, footer, articlesList } from '../../templates'
+import { base, articlesList } from '../../templates'
 
+// TODO this now violates open/closed, should refactor so it's possible to add remove pages without changing generator.
+// Should implement some sort of framework and specs about pages should be in templates, file structure/config.
 
 export default class TemplatesBuilder {
     private cache: { base?: Function };
@@ -30,7 +32,7 @@ export default class TemplatesBuilder {
         const f = this.cache.base = ({ head = '', body = '' }: { body: string, head?: string }) => {
             return base({
                 head: `${jsResources} ${cssResources} ${head}`,
-                body: `${header()} ${body} ${footer()}`
+                body
             });
         }
 
