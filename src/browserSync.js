@@ -6,7 +6,13 @@ const dist = path.join(__dirname, '../dist');
 module.exports = function initServerOnDist() {
     const bs = browserSync.create('Dev server');
     bs.init({
-        server: dist
+        server: {
+            baseDir: dist,
+            serveStaticOptions: {
+                extensions: ['html']
+            }
+        },
+
     });
 
     return bs;

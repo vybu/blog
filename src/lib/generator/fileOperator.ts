@@ -3,17 +3,13 @@ import fs = require('fs');
 import glob = require('glob');
 import rimraf = require('rimraf');
 
+import { ArticleRaw, fileName } from './commonTypes';
 import { dist } from '../constants';
 
 const ARTICLES_GLOB = './src/articles/**/*.md';
 const root = path.join(__dirname, '../../../');
 
-interface articleRaw {
-    fileName: string,
-    content: string
-};
-
-export function getArticles(articlesGlob: string = ARTICLES_GLOB): Promise<articleRaw[]> {
+export function getArticles(articlesGlob: string = ARTICLES_GLOB): Promise<ArticleRaw[]> {
     return new Promise((resolve, reject) => {
         glob(articlesGlob, { root }, (error, files) => {
             if (error) {
@@ -31,7 +27,7 @@ function readFileAt(path: string): string {
     return fs.readFileSync(path, 'utf-8');
 }
 
-function getFileName(path: string): string {
+function getFileName(path: string): fileName {
     return path.split(/[\/\\]/g).pop().split('.')[0];
 }
 

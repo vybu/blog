@@ -1,61 +1,39 @@
-import { ParsedArticle } from './parser';
+import h = require('hyperscript');
+import { html } from '../utils';
+import { ParsedArticle, ProcessedArticle } from './commonTypes';
 import { base, header, footer, articlesList } from '../../templates'
-import { getJSAndCSSCompiler } from './jsAndCssCompiler'
 
 
-class TemplatesBuilder {
+export default class TemplatesBuilder {
+    private cache: { base?: Function };
     constructor(private jsAndCssCompiler: Function) {
-
+        this.cache = {};
     }
 
-    static getResourceTag(
-        tagName: 'script' | 'link',
-        src: string,
-        { async = false, rel = null }: { async?: boolean, rel?: string | null }): string {
-
-        const relVal = rel ? `rel="${rel}"` : '';
-        const asyncVal = async ? 'async' : '';
-        const tagOpen = `<${tagName} ${tagName === 'script' ? 'src' : 'href'}="${src}" ${asyncVal} ${relVal}>`
-        const tagClose = tagName === 'script' ? `</${tagName}>` : ''
-        return `${tagOpen}${tagClose}`
+    async buildFullBlogPage(parsedArticle: ParsedArticle) {
+        return await this.base({body: parsedArticle.articleHtml});
     }
-}
 
-export async function buildFullBlogPage(fileName: string, parsedArticle: ParsedArticle) {
-    const compiler = getJSAndCSSCompiler();
+    async buildMainPage(parsedArticles: Array<ProcessedArticle>) {
+        return await this.base({body: articlesList(parsedArticles)});        
+    }
 
-    const { js, css } = await compiler();
+    async base(args: { body: string, head?: string }): Promise<string> {
+        if (this.cache.base) {
+            return this.cache.base(args);
+        }
 
-    const jsResources = js.map(j => getResourceTag('script', j, { async: true }));
-    const cssResources = css.map(c => getResourceTag('link', c, { async: true, rel: 'stylesheet' }));
+        const { js, css } = await this.jsAndCssCompiler();
+        const jsResources = js.map(src => html(h('script', { src, async: true })));
+        const cssResources = css.map(href => html(h('link', { href, async: true, rel: 'stylesheet' })));
 
-    return base({
-        head: `
-            ${jsResources}
-            ${cssResources}
-        `,
-        body: `
-         ${header()}
-         ${parsedArticle.articleHtml}
-         ${footer()}
-         `
-    });
-}
+        const f = this.cache.base = ({ head = '', body = '' }: { body: string, head?: string }) => {
+            return base({
+                head: `${jsResources} ${cssResources} ${head}`,
+                body: `${header()} ${body} ${footer()}`
+            });
+        }
 
-function buildPageCore() {
-    // build core with core, header, footer, include css and js files
-}
-
-function getResourceTag(
-    tagName: 'script' | 'link',
-    src: string,
-    { async = false, rel = null }: { async?: boolean, rel?: string | null }): string {
-
-    const relVal = rel ? `rel="${rel}"` : '';
-    const asyncVal = async ? 'async' : '';
-
-    const tagOpen = `<${tagName} ${tagName === 'script' ? 'src' : 'href'}="${src}" ${asyncVal} ${relVal}>`;
-    const tagClose = tagName === 'script' ? `</${tagName}>` : '';
-    
-    return `${tagOpen}${tagClose}`;
+        return f(args);
+    }
 }
