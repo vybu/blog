@@ -1,12 +1,13 @@
 import { ProcessedArticle } from '../lib/generator/commonTypes';
-import { getRouterLinkIdentifier, ContainerIds } from './constants';
+import { ContainerIds } from './constants';
+import { a } from './elements';
 
 export function articlesList(articles: ProcessedArticle[]): string {
     return `
         <ul>
             ${articles.map(({ fileName, parsedArticle }) => (
             `<li>
-                <a ${getRouterLinkIdentifier(ContainerIds.App)} href="/${fileName}">${parsedArticle.metaData.title}</a>
+                ${a(ContainerIds.App, `/${fileName}`, parsedArticle.metaData.title)}
                 <p>${parsedArticle.metaData.summary}<p/>
             </li>`
         )).join('')}

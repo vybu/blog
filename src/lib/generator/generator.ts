@@ -3,13 +3,22 @@ import { getArticles, saveToDist, cleanup, copyStaticFiles } from './fileOperato
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler'
 
-import { ProcessedArticle, ParsedArticle, ArticleRaw } from './commonTypes';
+import { ProcessedArticle, ParsedArticle, ArticleRaw, PageJson, BuiltPage } from './commonTypes';
+
+function saveTemplate(fileName, { fullPage, content }: BuiltPage) {
+    const pageJson: PageJson = {
+        renderedHtml: content
+    };
+
+    saveToDist(fileName, 'html', fullPage);
+    saveToDist(fileName, 'json', JSON.stringify(pageJson));
+}
 
 export async function initGenerator() {
 
     const compiler = getJSAndCSSCompiler();
     const templatesBuilder = new TemplatesBuilder(compiler);
-    
+
     await cleanup();
     copyStaticFiles();
 
@@ -20,15 +29,9 @@ export async function initGenerator() {
             Object.assign({}, { fileName, content, parsedArticle: parseArticle(content) }));
 
         for (let { fileName, parsedArticle } of parsedArticles) {
-            await [
-                saveToDist(fileName, 'html', await templatesBuilder.buildFullBlogPage(parsedArticle)),
-                saveToDist(fileName, 'json', JSON.stringify(parsedArticle))
-            ];
+            saveTemplate(fileName, await templatesBuilder.buildFullBlogPage(parsedArticle));
         }
 
-        await saveToDist('index', 'html', await templatesBuilder.buildMainPage(parsedArticles)) // TODO maybe i don' need to await this, why block?
-        // generate full blog pages,
-        // save just contents + json,
-        // generate front page
+        saveTemplate('index', await templatesBuilder.buildMainPage(parsedArticles))
     }
 }

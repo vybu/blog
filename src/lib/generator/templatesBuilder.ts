@@ -1,6 +1,6 @@
 import h = require('hyperscript');
 import { html } from '../utils';
-import { ParsedArticle, ProcessedArticle } from './commonTypes';
+import { ParsedArticle, ProcessedArticle, BuiltPage } from './commonTypes';
 import { base, articlesList } from '../../templates'
 
 // TODO this now violates open/closed, should refactor so it's possible to add remove pages without changing generator.
@@ -12,12 +12,24 @@ export default class TemplatesBuilder {
         this.cache = {};
     }
 
-    async buildFullBlogPage(parsedArticle: ParsedArticle) {
-        return await this.base({body: parsedArticle.articleHtml});
+    async buildFullBlogPage(parsedArticle: ParsedArticle): Promise<BuiltPage> {
+        return await this.assemble(parsedArticle.articleHtml);
     }
 
-    async buildMainPage(parsedArticles: Array<ProcessedArticle>) {
-        return await this.base({body: articlesList(parsedArticles)});        
+    async buildMainPage(parsedArticles: Array<ProcessedArticle>): Promise<BuiltPage> {
+          return await this.assemble(articlesList(parsedArticles))      
+    };
+
+    async buildAboutPage(parsedArticles: Array<ProcessedArticle>): Promise<BuiltPage> {
+        return await this.assemble(articlesList(parsedArticles))
+    }
+
+    async assemble(content: string): Promise<BuiltPage> {
+        const fullPage = await this.base({ body: content });
+        return {
+            fullPage,
+            content
+        }
     }
 
     async base(args: { body: string, head?: string }): Promise<string> {

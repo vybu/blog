@@ -20,3 +20,12 @@ export interface ParsedArticle {
 export interface ProcessedArticle extends ArticleRaw {
     parsedArticle: ParsedArticle
 }
+
+export interface PageJson {
+    renderedHtml: string
+}
+
+export interface BuiltPage {
+    fullPage: string,
+    content: string
+}
