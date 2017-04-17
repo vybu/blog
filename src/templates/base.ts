@@ -19,7 +19,7 @@ export function base({ body = '', head = ''}: {body: string, head?: string}): st
         </head>
         <body>
             ${header()}
-            ${container(body, ContainerIds.App)}
+            ${container(body, ContainerIds.App, 'main')}            
             ${footer()}
         </body>
         </html>

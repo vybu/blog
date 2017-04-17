@@ -1,6 +1,111 @@
+@import "./normize.scss";
 @import "../../node_modules/highlight.js/styles/docco.css";
 // docco, rainbow, xcode, darcula
+// possiblr font: open-sans
+$headerHeight: 200px;
+$footerHeight: 50px;
+$borderColor: rgba(0, 0, 0, 0.2);
+$primaryTextColor: rgba(0, 0, 0, 0.8);
+$pagePaddingDesktop: 25vw;
+$pagePaddingMobile: 6vw;
+@mixin forMobileOnly {
+    @media (max-width: 425px) {
+        @content;
+    }
+}
+
+@mixin pagePadding {
+    padding-left: $pagePaddingDesktop;
+    padding-right: $pagePaddingDesktop;
+    @include forMobileOnly {
+        padding-left: $pagePaddingMobile;
+        padding-right: $pagePaddingMobile;
+    }
+}
+
+@mixin fullWidth {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
+    height: 100%;
+    font-family: Helvetica, sans-serif;
+    color: $primaryTextColor;
+    margin: 0;
     background-color: lighten( whitesmoke, 5%);
-    color: black;
+    font-size: 16px;
+}
+
+body {
+    overflow-x: hidden;
+    position: relative;
+}
+
+ul {
+    margin: 0;
+}
+
+header {
+    @include pagePadding();
+    min-height: $headerHeight;
+    background-color: gainsboro;
+    position: relative;
+    nav {
+        // position: absolute;
+        // right: 20px;
+    }
+}
+
+main {
+    @include pagePadding();
+    overflow: hidden;
+    min-height: calc(100% - (#{$headerHeight} + #{$footerHeight}));
+    padding-top: 8vh;
+    padding-bottom: 6vh;
+}
+
+footer {
+    @include pagePadding();
+    border-top: 1px solid $borderColor;
+    height: $footerHeight;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Page: main/landing */
+
+.articles {
+    list-style: none;
+    padding: 0;
+    .title {
+        font-weight: normal;
+        font-size: 2rem;
+        margin: 0 0 0.6rem;
+    }
+    .date {
+        margin-bottom: 1.2rem;
+    }
+    .summary {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+    li {
+        margin-bottom: 3rem;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
 }
