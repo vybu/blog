@@ -37,7 +37,7 @@ export function saveToDist(fileName: string, fileType: string, content: string):
         fs.writeFile(`${dist}/${fileName}.${fileType}`, content, 'utf-8', (error) => {
             if (error) return reject(error);
 
-            console.log(`Saved ${fileName} to ${dist}`);
+            console.log(`Saved ${fileName}.${fileType} to ${dist}`);
             resolve();
         });
     })

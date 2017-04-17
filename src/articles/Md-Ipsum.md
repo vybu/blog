@@ -23,19 +23,60 @@ Header Level 2
   * Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
   * Aliquam tincidunt mauris eu risus. LOL
 
-```
 
-|   |   |   |
-| - | - | - |
-|   |   |   |
-|   |   |   |
-|   |   |   |
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
-hmxxss
+## Tables
 
+| Option | Description |
+| ------ | ----------- |
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default. |
+| ext    | extension to be used for dest files. |
+
+~~hmxxss~~
+
+```css
 #header h1 a {
   display: block;
   width: 300px;
   height: 80px;
 }
+```
+
+```js
+function spawnProcess() {
+    currentChildProcess = childProcess.fork(`${app}`);
+
+    currentChildProcess.on('message', (m) => {
+        if (m === 'generated') {
+            server.reload();
+        }
+    });
+
+    currentChildProcess.on('exit', () => {
+        console.info('Killing app');
+    });
+}
+```
+
+```typescript
+
+export function getArticles(articlesGlob: string = ARTICLES_GLOB): Promise<ArticleRaw[]> {
+    return new Promise((resolve, reject) => {
+        glob(articlesGlob, { root }, (error, files) => {
+            if (error) {
+                reject(error);
+            }
+            resolve(files.map(file => ({
+                fileName: getFileName(file),
+                content: readFileAt(`${root}${file}`)
+            })));
+        });
+    })
+}
+
 ```

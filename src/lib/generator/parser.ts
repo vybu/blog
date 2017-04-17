@@ -6,12 +6,11 @@ import mdMetaParser = require('markdown-yaml-metadata-parser');
 import { ParsedArticle, MetaData } from './commonTypes';
 
 
-
 const md = new MarkdownIt({
     html: true,
     xhtmlOut: true,
     breaks: true,
-    langPrefix: 'true',
+    langPrefix: 'lang-',
     linkify: true,
     typographer: true,
 });

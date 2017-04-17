@@ -1,8 +1,6 @@
-@mixin la ($color) {
-    color: $color;
-}
-
+@import "../../node_modules/highlight.js/styles/docco.css";
+// docco, rainbow, xcode, darcula
 body {
-    background-color: darken( lightsalmon, 10%);
-    @include la(white);
+    background-color: lighten( whitesmoke, 5%);
+    color: black;
 }
