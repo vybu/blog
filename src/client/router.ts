@@ -5,11 +5,12 @@
 // on mouseup if fetching is done render it into [container], else wait until done and then render into [container]
 // for rendered content in [container] repeat
 
-import { routerLinkIdentifier, ContainerIds, containerPrefix } from '../templates';
+import { routerLinkIdentifier, ContainerIds, containerPrefix } from '../templates/constants';
 import { ParsedArticle, PageJson } from '../lib/generator/commonTypes';
 
 // TODO: don't transpile this, if browser don't support a feature, simple don't run this;
 // TODO: thoughrouly test
+// TODO: could do caching for recurring visits to same route.
 
 const ROUTER_LINKS_SELECTOR = `a[${routerLinkIdentifier}]`;
 
@@ -137,9 +138,11 @@ function initRouterForAllSelector(specificContainerId: ContainerIds | null): voi
 
 
 export default function init() {
-    window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
-    initRouterForAllSelector(null);
-    setPushStateForInitialLoad();
+    if (window.fetch) {
+        window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
+        initRouterForAllSelector(null);
+        setPushStateForInitialLoad();
+    }
 }
 
 

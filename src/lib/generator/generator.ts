@@ -23,8 +23,8 @@ export async function initGenerator() {
     copyStaticFiles();
 
     return async function generate() {
-
-        const articles = await getArticles();
+        const [articles]: [ArticleRaw[], void] = await Promise.all([getArticles(), templatesBuilder.precompileJsAndCss()]);
+        
         const parsedArticles = articles.map(({ fileName, content }): ProcessedArticle =>
             Object.assign({}, { fileName, content, parsedArticle: parseArticle(content) }));
 
@@ -32,6 +32,7 @@ export async function initGenerator() {
             saveTemplate(fileName, await templatesBuilder.buildFullBlogPage(parsedArticle));
         }
 
-        saveTemplate('index', await templatesBuilder.buildMainPage(parsedArticles))
+        saveTemplate('index', await templatesBuilder.buildMainPage(parsedArticles));
+        saveTemplate('about', await templatesBuilder.buildAboutPage());
     }
 }

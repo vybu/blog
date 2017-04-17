@@ -33,8 +33,8 @@ export function getJSAndCSSCompiler(): Function {
     ];
 
     if (!isDevMode) {
-        plugins.unshift(new WebpackMd5Hash());
-        plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+        plugins.unshift(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+        plugins.unshift(new WebpackMd5Hash());        
     }
 
     const compiler = webpack({
@@ -56,7 +56,7 @@ export function getJSAndCSSCompiler(): Function {
         target: 'web',
         module: {
             rules: [
-                { test: /\.tsx?$/, loader: 'awesome-typescript-loader?silent=true' },
+                { test: /\.tsx?$/, loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json' },
                 { test: /(\.css|\.scss|\.sass)$/, loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!sass-loader?sourceMap') }
             ]
         },
