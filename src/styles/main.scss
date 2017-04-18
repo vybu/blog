@@ -2,7 +2,7 @@
 @import "../../node_modules/highlight.js/styles/docco.css";
 // docco, rainbow, xcode, darcula
 // possiblr font: open-sans
-$headerHeight: 200px;
+$headerHeight: 80px;
 $footerHeight: 50px;
 $borderColor: rgba(0, 0, 0, 0.2);
 $primaryTextColor: rgba(0, 0, 0, 0.8);
@@ -55,15 +55,20 @@ ul {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+    color: black
+}
+
 header {
     @include pagePadding();
     min-height: $headerHeight;
-    background-color: gainsboro;
+    border-bottom: 1px solid $borderColor;
     position: relative;
-    nav {
-        // position: absolute;
-        // right: 20px;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    nav {}
 }
 
 main {
@@ -81,6 +86,11 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    .powered-by {
+        position: absolute;
+        right: 20px;
+        font-size: 12px;
+    }
 }
 
 
