@@ -1,13 +1,16 @@
 @import "./normize.scss";
 @import "../../node_modules/highlight.js/styles/docco.css";
 // docco, rainbow, xcode, darcula
-// possiblr font: open-sans
+// SIZES
 $headerHeight: 80px;
 $footerHeight: 50px;
+$pagePaddingDesktop: 25px;
+$pagePaddingMobile: 6vw;
+$maxContentWidth: 800px;
+// STYLES
+$fontFamily: ('Liberation Serif', Helvetica, sans-serif);
 $borderColor: rgba(0, 0, 0, 0.2);
 $primaryTextColor: rgba(0, 0, 0, 0.8);
-$pagePaddingDesktop: 25vw;
-$pagePaddingMobile: 6vw;
 @mixin forMobileOnly {
     @media (max-width: 425px) {
         @content;
@@ -15,8 +18,10 @@ $pagePaddingMobile: 6vw;
 }
 
 @mixin pagePadding {
+    margin: 0 auto;
     padding-left: $pagePaddingDesktop;
     padding-right: $pagePaddingDesktop;
+    max-width: $maxContentWidth;
     @include forMobileOnly {
         padding-left: $pagePaddingMobile;
         padding-right: $pagePaddingMobile;
@@ -39,7 +44,7 @@ $pagePaddingMobile: 6vw;
 html,
 body {
     height: 100%;
-    font-family: Helvetica, sans-serif;
+    font-family: $fontFamily;
     color: $primaryTextColor;
     margin: 0;
     background-color: lighten( whitesmoke, 5%);
@@ -47,6 +52,7 @@ body {
 }
 
 body {
+    min-width: 100vw;
     overflow-x: hidden;
     position: relative;
 }
@@ -57,37 +63,58 @@ ul {
 
 a {
     text-decoration: none;
-    color: black
+    color: black;
+    &:hover {
+        background-color: lighten( tomato, 10%);
+        outline: 5px solid lighten( tomato, 10%);
+        // color: black !important;
+    }
 }
 
 header {
-    @include pagePadding();
+    .header-inner {
+        @include pagePadding();
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h1 {
+            font-weight: normal;
+        }
+    }
     min-height: $headerHeight;
     border-bottom: 1px solid $borderColor;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    nav {}
+    nav {
+        span:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
 }
 
 main {
     @include pagePadding();
-    overflow: hidden;
     min-height: calc(100% - (#{$headerHeight} + #{$footerHeight}));
     padding-top: 8vh;
     padding-bottom: 6vh;
 }
 
 footer {
-    @include pagePadding();
     border-top: 1px solid $borderColor;
     height: $footerHeight;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .footer-inner {
+        @include pagePadding();
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
     .powered-by {
         position: absolute;
+        @include forMobileOnly {
+            position: inherit;
+        }
         right: 20px;
         font-size: 12px;
     }
@@ -100,22 +127,50 @@ footer {
     list-style: none;
     padding: 0;
     .title {
-        font-weight: normal;
-        font-size: 2rem;
+        font-weight: bold;
+        font-size: 2.4rem;
         margin: 0 0 0.6rem;
     }
     .date {
+        font-style: italic;
         margin-bottom: 1.2rem;
     }
     .summary {
         font-size: 1.2rem;
-        line-height: 1.4;
+        line-height: 1.6;
     }
     li {
         margin-bottom: 3rem;
     }
     a {
         text-decoration: none;
-        color: black;
+        color: $primaryTextColor;
+    }
+}
+
+
+/* Page: post */
+
+.blog-post {
+    line-height: 1.8;
+    font-size: 1.2rem;
+    h1 {
+        font-size: 3rem;
+    }
+    h2 {
+        font-size: 2.4rem;
+    }
+    h3 {
+        font-size: 1.8rem;
+    }
+    a {
+        border-bottom: 2px solid black;
+    }
+    p,
+    li {}
+    pre {}
+    code.hljs {
+        font-size: 14px;
+        line-height: 1.2;
     }
 }

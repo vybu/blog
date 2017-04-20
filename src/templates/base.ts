@@ -15,6 +15,7 @@ export function base({ body = '', head = ''}: {body: string, head?: string}): st
             <title>Blog</title>
             <meta name="description" content="Blog">
             <!--<meta property="og:site_name" content="https://keepcalm.top/">-->
+            <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
             ${head}
         </head>
         <body>
