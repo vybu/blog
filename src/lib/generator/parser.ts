@@ -1,4 +1,5 @@
 import MarkdownIt = require('markdown-it');
+import Token = require('markdown-it/lib/token');
 import markdownItHighlight = require('markdown-it-highlightjs');
 import markdownItFootnote = require('markdown-it-footnote');
 import mdMetaParser = require('markdown-yaml-metadata-parser');
@@ -6,7 +7,7 @@ import moment = require('moment');
 
 import { ParsedArticle, MetaData } from './commonTypes';
 
-
+console.log(Token);
 const md = new MarkdownIt({
     html: true,
     xhtmlOut: true,

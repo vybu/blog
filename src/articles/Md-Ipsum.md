@@ -2,10 +2,11 @@
 author: Vytenis Butkevicius
 title: Md Impsum Generated
 date: 2017-01-20
+tags:
+    - javascript
+    - web
+    - static-generator
 ---
-
-Markdown Ipsum Presents
-=======================
 
 **Pellentesque habitant morbi tristique** senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. _Aenean ultricies mi vitae est_. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, `commodo vitae`, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum  rutrum orci, sagittis tempus lacus enim ac dui. [Donec non enim](#) in turpis pulvinar facilisis. Ut felis.
 
@@ -34,7 +35,10 @@ export async function initGenerator() {
     copyStaticFiles();
 
     return async function generate() {
-        const [articles]: [ArticleRaw[], void] = await Promise.all([getArticles(), templatesBuilder.precompileJsAndCss()]);
+        const [articles]: [ArticleRaw[], void] = await Promise.all([
+            getArticles(),
+            templatesBuilder.precompileJsAndCss()
+        ]);
         
         const parsedArticles = articles.map(({ fileName, content }): ProcessedArticle =>
             Object.assign({}, { fileName, content, parsedArticle: parseArticle(content) }));
@@ -57,7 +61,7 @@ Header Level 2
   2. Aliquam tincidunt mauris eu risus.
 
 
-> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur  massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur  massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.
 
 ```js
 function spawnProcess() {

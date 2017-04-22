@@ -1,16 +1,17 @@
 @import "./normize.scss";
-@import "../../node_modules/highlight.js/styles/docco.css";
-// docco, rainbow, xcode, darcula
+@import "../../node_modules/highlight.js/styles/railscasts.css";
+// docco, rainbow, xcode, darcula, railscasts
 // SIZES
 $headerHeight: 80px;
-$footerHeight: 50px;
+$footerHeight: 60px;
 $pagePaddingDesktop: 25px;
 $pagePaddingMobile: 6vw;
-$maxContentWidth: 800px;
+$maxContentWidth: 920px;
 // STYLES
 $fontFamily: ('Liberation Serif', Helvetica, sans-serif);
 $borderColor: rgba(0, 0, 0, 0.2);
 $primaryTextColor: rgba(0, 0, 0, 0.8);
+$brStandard: 5px;
 @mixin forMobileOnly {
     @media (max-width: 425px) {
         @content;
@@ -71,8 +72,8 @@ a {
     text-decoration: none;
     color: black;
     &:hover {
-        background-color: lighten( tomato, 10%);
-        outline: 5px solid lighten( tomato, 10%);
+        background-color: #F9E79F;
+        outline: 5px solid #F9E79F;
         // color: black !important;
     }
 }
@@ -85,12 +86,12 @@ header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        border-bottom: 1px solid $borderColor;
         h1 {
             font-weight: normal;
         }
     }
     min-height: $headerHeight;
-    border-bottom: 1px solid $borderColor;
     nav {
         span:not(:last-child) {
             margin-right: 10px;
@@ -101,23 +102,24 @@ header {
 main {
     @include pagePadding();
     min-height: calc(100% - (#{$headerHeight} + #{$footerHeight}));
-    padding-top: 8vh;
+    padding-top: 6vh;
     padding-bottom: 6vh;
 }
 
 footer {
-    border-top: 1px solid $borderColor;
     height: $footerHeight;
+    padding: 1rem 0;
+    @include pagePadding();
+    border-top: 1px solid $borderColor;
     .footer-inner {
-        @include pagePadding();
         height: 100%;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
     }
     .powered-by {
-        position: absolute;
+        // position: absolute;
         @include forMobileOnly {
             position: inherit;
         }
@@ -160,6 +162,13 @@ footer {
 .blog-post {
     line-height: 1.8;
     font-size: 1.2rem;
+    &-title {
+        margin-bottom: 0rem;
+    }
+    &-date {
+        font-style: italic;
+        margin-bottom: 2rem;
+    }
     h1 {
         font-size: 3rem;
     }
@@ -174,29 +183,37 @@ footer {
     }
     p,
     li {}
-    pre {
-        position: relative;
-        &::after {
-            content: "";
-            position: absolute;
-            left: -50vw;
-            width: 50vw;
-            background-color: #f8f8ff;
-            top: 0;
-            bottom: -0;
-            @include forContentCollapseOnly {
-                display: none;
-            }
-        }
-        display: flex;
-    }
+    pre {}
     code.hljs {
-        position: relative;
-        min-width: calc(50vw + #{$maxContentWidth} / 2);
+        border-radius: $brStandard;
         font-size: 14px;
         line-height: 1.2;
-        @include forContentCollapseOnly {
-            min-width: inherit;
-        }
     }
 }
+
+// pre {
+//     position: relative;
+//     &::after {
+//         content: "";
+//         position: absolute;
+//         left: -50vw;
+//         width: 50vw;
+//         background-color: #232323;
+//         top: 0;
+//         bottom: -0;
+//         @include forContentCollapseOnly {
+//             display: none;
+//         }
+//     }
+//     display: flex;
+// }
+// code.hljs {
+//     position: relative;
+//     min-width: calc(50vw + #{$maxContentWidth} / 2);
+//     font-size: 14px;
+//     line-height: 1.2;
+//     @include forContentCollapseOnly {
+//         min-width: inherit;
+//         width: 100%;
+//     }
+// }

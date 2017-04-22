@@ -19,7 +19,7 @@ export default class TemplatesBuilder {
     }
 
     async buildFullBlogPage(parsedArticle: ParsedArticle): Promise<BuiltPage> {
-        return await this.assemble(article(parsedArticle.articleHtml));
+        return await this.assemble(article(parsedArticle));
     }
 
     async buildMainPage(parsedArticles: Array<ProcessedArticle>): Promise<BuiltPage> {

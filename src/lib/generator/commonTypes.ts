@@ -9,6 +9,7 @@ export interface MetaData {
     author: string,
     title: string,
     date: string,
+    tags: string[],
     summary?: string
 }
 
