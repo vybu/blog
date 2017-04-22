@@ -57,3 +57,16 @@ export function copyStaticFiles(): void {
         err ? console.error(err) : console.info('Successfully copied static files'))
 }
 
+export function getGitCommitsCount(): Promise<number> {
+    return new Promise((resolve, reject) => {
+        childProcess.exec('git rev-list --all --count', (err: string, stdout: string) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            }
+            console.info(`Successfully retrieved git commit count: ${stdout}`);
+            resolve(parseInt(stdout));
+        });
+    });
+}
+

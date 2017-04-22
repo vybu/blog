@@ -1,5 +1,5 @@
 import { parseArticle } from './parser';
-import { getArticles, saveToDist, cleanup, copyStaticFiles } from './fileOperator';
+import { getArticles, saveToDist, cleanup, copyStaticFiles, getGitCommitsCount } from './fileOperator';
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler'
 
@@ -16,8 +16,9 @@ function saveTemplate(fileName, { fullPage, content }: BuiltPage) {
 
 export async function initGenerator() {
 
+    const commitsCount = await getGitCommitsCount();
     const compiler = getJSAndCSSCompiler();
-    const templatesBuilder = new TemplatesBuilder(compiler);
+    const templatesBuilder = new TemplatesBuilder(compiler, commitsCount);
 
     await cleanup();
     copyStaticFiles();

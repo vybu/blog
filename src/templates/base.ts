@@ -3,7 +3,7 @@ import { header } from './header';
 import { footer } from './footer';
 import { ContainerIds } from './constants';
 
-export function base({ body = '', head = ''}: {body: string, head?: string}): string {
+export function base({ body = '', head = '', commitsCount}: {body: string, head?: string, commitsCount: number}): string {
     return `
         <!DOCTYPE html>
         <html lang="en">
@@ -29,7 +29,7 @@ export function base({ body = '', head = ''}: {body: string, head?: string}): st
         <body>
             ${header()}
             ${container(body, ContainerIds.App, 'main')}            
-            ${footer()}
+            ${footer(commitsCount)}
         </body>
         </html>
 `;

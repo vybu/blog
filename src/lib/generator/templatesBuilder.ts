@@ -10,7 +10,7 @@ export default class TemplatesBuilder {
     private jsResources: string;
     private cssResources: string;
 
-    constructor(private jsAndCssCompiler: Function) {}
+    constructor(private jsAndCssCompiler: Function, private commitsCount: number) {}
 
     async precompileJsAndCss(): Promise<void> {
         const { js, css } = await this.jsAndCssCompiler();
@@ -34,7 +34,8 @@ export default class TemplatesBuilder {
         const f = ({ head = '', body = '' }: { body: string, head?: string }) => {
             return base({
                 head: `${this.jsResources} ${this.cssResources} ${head}`,
-                body
+                body,
+                commitsCount: this.commitsCount
             });
         }
 
