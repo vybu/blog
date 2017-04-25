@@ -10,12 +10,12 @@ export default class TemplatesBuilder {
     private jsResources: string;
     private cssResources: string;
 
-    constructor(private jsAndCssCompiler: Function, private commitsCount: number) {}
+    constructor(private jsAndCssCompiler: Function, private commitsCount: number) { }
 
     async precompileJsAndCss(): Promise<void> {
         const { js, css } = await this.jsAndCssCompiler();
-        this.jsResources = js.map(src => html(h('script', { src, async: true })));
-        this.cssResources = css.map(href => html(h('link', { href, async: true, rel: 'stylesheet' })));
+        this.jsResources = js.map(src => html(h('script', { attrs: { src, async: true } })));
+        this.cssResources = css.map(href => html(h('link', { attrs: { href, type: 'text/css', rel: 'stylesheet' } })));
     }
 
     async buildFullBlogPage(parsedArticle: ParsedArticle): Promise<BuiltPage> {

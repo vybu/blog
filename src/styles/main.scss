@@ -11,6 +11,7 @@ $maxContentWidth: 920px;
 $fontFamily: ('Liberation Serif', Helvetica, sans-serif);
 $borderColor: rgba(0, 0, 0, 0.2);
 $primaryTextColor: rgba(0, 0, 0, 0.8);
+$primaryGeneralColor :#F9E79F;
 $brStandard: 5px;
 @mixin forMobileOnly {
     @media (max-width: 425px) {
@@ -72,9 +73,8 @@ a {
     text-decoration: none;
     color: black;
     &:hover {
-        background-color: #F9E79F;
-        outline: 5px solid #F9E79F;
-        // color: black !important;
+        background-color: $primaryGeneralColor;
+        outline: 5px solid $primaryGeneralColor;
     }
 }
 
@@ -179,7 +179,7 @@ footer {
         font-size: 1.8rem;
     }
     a {
-        border-bottom: 2px solid black;
+        border-bottom: 2px solid $primaryGeneralColor;
     }
     p,
     li {}
@@ -191,29 +191,52 @@ footer {
     }
 }
 
-// pre {
-//     position: relative;
-//     &::after {
-//         content: "";
-//         position: absolute;
-//         left: -50vw;
-//         width: 50vw;
-//         background-color: #232323;
-//         top: 0;
-//         bottom: -0;
-//         @include forContentCollapseOnly {
-//             display: none;
-//         }
-//     }
-//     display: flex;
-// }
-// code.hljs {
-//     position: relative;
-//     min-width: calc(50vw + #{$maxContentWidth} / 2);
-//     font-size: 14px;
-//     line-height: 1.2;
-//     @include forContentCollapseOnly {
-//         min-width: inherit;
-//         width: 100%;
-//     }
-// }
+.lb {
+    &-container {
+        margin-top: 4.5rem;
+    }
+    &-text-container {
+        line-height: 1;
+        display: flex;
+        justify-content: flex-end;
+        padding: 0.5rem 0;
+    }
+    &-likes {
+        color: rgba(0, 0, 0, 0.6);
+        flex: 1;
+        font-size: 1rem;
+        font-style: italic;
+        text-align: right;
+    }
+    a.lb-like {
+        flex: 1;
+        color: rgba(0, 0, 0, 0.9);
+        border-bottom: none;
+        &:hover {
+            cursor: pointer;
+            background-color: transparent;
+            outline: none;
+        }
+    }
+    &-unit-container {
+        line-height: 1;
+        display: flex;
+        flex-wrap: wrap;
+        border-top: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 4px;
+    }
+    &-unit {
+        background-color: rgba(0, 0, 0, 0.8);
+        width: 12px;
+        height: 12px;
+        margin: 4px;
+        &.is-personal {
+            background-color: tomato;
+        }
+    }
+    &-floating {
+        position: fixed;
+        bottom: 30px;
+        right: 40px;
+    }
+}

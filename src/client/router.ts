@@ -35,6 +35,7 @@ const JSONFetchMap = {
 }
 
 const contentPromises: ContentPromises = {};
+let navigationListeners: Function[] = [];
 
 function getJSON(href: string): Promise<any> {
     return fetch(`${href}.json`).then(r => {
@@ -77,6 +78,8 @@ function handleHistoryChange({ containerId, innerHTML }: HistoryState): void {
     if (container) {
         container.innerHTML = innerHTML;
         initRouterForAllSelector(containerId);
+
+        navigationListeners.forEach(l => l());
     } else {
         window.location.reload();
     }
@@ -137,11 +140,12 @@ function initRouterForAllSelector(specificContainerId: ContainerIds | null): voi
 }
 
 
-export default function init() {
+export default function init(...listeners: Function[]) {
     if (window.fetch) {
         window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
         initRouterForAllSelector(null);
         setPushStateForInitialLoad();
+        navigationListeners = navigationListeners.concat(listeners);
     }
 }
 

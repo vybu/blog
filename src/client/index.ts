@@ -1,3 +1,5 @@
-import init from './router';
+import initRouter from './router';
+import drawLikebox from './likebox';
 
-init();
+initRouter(drawLikebox);
+drawLikebox();

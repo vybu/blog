@@ -10,7 +10,8 @@ export interface MetaData {
     title: string,
     date: string,
     tags: string[],
-    summary?: string
+    summary?: string,
+    id: number,
 }
 
 export interface ParsedArticle {

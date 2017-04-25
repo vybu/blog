@@ -23,7 +23,6 @@ export function base({ body = '', head = '', commitsCount}: {body: string, head?
             <meta name="theme-color" content="#ffffff">
 
             <!--<meta property="og:site_name" content="https://keepcalm.top/">-->
-            <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
             ${head}
         </head>
         <body>
