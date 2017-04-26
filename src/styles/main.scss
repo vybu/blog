@@ -11,6 +11,7 @@ $maxContentWidth: 920px;
 $fontFamily: ('Liberation Serif', Helvetica, sans-serif);
 $borderColor: rgba(0, 0, 0, 0.2);
 $primaryTextColor: rgba(0, 0, 0, 0.8);
+$secondaryTextColor: rgba(0, 0, 0, 0.6);
 $primaryGeneralColor :#F9E79F;
 $brStandard: 5px;
 @mixin forMobileOnly {
@@ -202,13 +203,14 @@ footer {
         padding: 0.5rem 0;
     }
     &-likes {
-        color: rgba(0, 0, 0, 0.6);
+        color: $secondaryTextColor;
         flex: 1;
         font-size: 1rem;
         font-style: italic;
         text-align: right;
     }
     a.lb-like {
+        margin: 0 4px;
         flex: 1;
         color: rgba(0, 0, 0, 0.9);
         border-bottom: none;
@@ -230,13 +232,9 @@ footer {
         width: 12px;
         height: 12px;
         margin: 4px;
+        border-radius: 2px;
         &.is-personal {
             background-color: tomato;
         }
-    }
-    &-floating {
-        position: fixed;
-        bottom: 30px;
-        right: 40px;
     }
 }

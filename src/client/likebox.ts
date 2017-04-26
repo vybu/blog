@@ -1,22 +1,26 @@
 import { getCurrentArticleId, persist, retrieve } from './lib';
 import { PersistObject } from './commonTypes';
+
+type UnitsData = number[];
+
 // sorted by timestamp
-const FAKE_DATA: string[] = [
-    '',
-    '',
-    '',
-    '',
+const FAKE_DATA: UnitsData = [
+
 ];
 
 let likesCount = 0;
-let hasReaderLiked = false;
+let readerLikedTimestamp: number | boolean = false;
 
 
-function el(tag: string, className: string = '', innerHTML: string = null): HTMLElement {
+function el(tag: string, className: string = '', innerHTML: string = null, props: Object = null): HTMLElement {
     const e = document.createElement(tag);
     e.className = className;
     if (innerHTML) {
         e.innerHTML = innerHTML;
+    }
+
+    if (props) {
+        Object.keys(props).forEach(p => e[p] = props[p]);
     }
     return e;
 }
@@ -25,12 +29,13 @@ function createLikeNumberText(): [HTMLElement, Function] {
     const e = el('span', 'lb-likes');
 
     const updateText = () => {
-        if (likesCount === 0 ) {
+        if (likesCount === 0) {
+            e.innerText = readerLikedTimestamp ? 'You liked this post' : 'Be first to like this post!';
         }
         else if (likesCount === 1) {
-            e.innerText = hasReaderLiked ? 'You and 1 other person liked this post' : '1 person liked this post';
+            e.innerText = readerLikedTimestamp ? 'You and 1 other person liked this post' : '1 person liked this post';
         } else {
-            e.innerText = hasReaderLiked ? `You and ${likesCount} other people liked this post` : `${likesCount} people liked this post`;
+            e.innerText = readerLikedTimestamp ? `You and ${likesCount} other people liked this post` : `${likesCount} people liked this post`;
         }
     }
     updateText();
@@ -41,11 +46,13 @@ function createLikeNumberText(): [HTMLElement, Function] {
 
 function initLikeAdder(unitContainer: HTMLElement, updateLikesCountText: Function) {
     const likeBtn = el('a', 'lb-like', '+');
+    likeBtn.title = 'Click to like this article'
     unitContainer.appendChild(likeBtn);
     likeBtn.addEventListener('click', function addUnit() {
         const timestamp = Date.now();
-        hasReaderLiked = true;
+        readerLikedTimestamp = true;
         unitContainer.appendChild(el('div', 'lb-unit is-personal'));
+
         likeBtn.removeEventListener('click', addUnit);
         unitContainer.removeChild(likeBtn);
         updateLikesCountText();
@@ -54,10 +61,22 @@ function initLikeAdder(unitContainer: HTMLElement, updateLikesCountText: Functio
     });
 }
 
-function getHasReaderLiked(): boolean {
+function addUnits(unitContainer: HTMLElement, unitsData: UnitsData, readerLikedTimestamp) {
+    unitsData.forEach(u =>
+        unitContainer.appendChild(
+            el(
+                'div',
+                `lb-unit ${readerLikedTimestamp === u ? 'is-personal' : ''}`,
+                null,
+                { title: `${readerLikedTimestamp === u ? 'You' : 'Someone'} liked this at ${new Date(u).toLocaleString()}` })
+        )
+    )
+}
+
+function getHasReaderLiked(): boolean | number {
     const o = retrieve(getCurrentArticleId());
     if (o) {
-        return o.hasReaderLiked === true;
+        return o.hasReaderLiked === true ? o.timestamp : false;
     }
 
     return false;
@@ -70,19 +89,18 @@ export default function drawLikebox() {
 
     // fetch.then
     likesCount = FAKE_DATA.length;
-    hasReaderLiked = getHasReaderLiked();
+    readerLikedTimestamp = getHasReaderLiked();
 
     const likeBoxContainer = el('div', 'lb-container');
     const unitContainer = el('div', 'lb-unit-container');
     const textContainer = el('div', 'lb-text-container')
-    
+
     const [likesCountTextElement, updateLikesCountText] = createLikeNumberText();
 
-    FAKE_DATA.forEach(d => unitContainer.appendChild(el('div', 'lb-unit')));
+    addUnits(unitContainer, FAKE_DATA, readerLikedTimestamp)
 
-    !hasReaderLiked && initLikeAdder(unitContainer, updateLikesCountText);
+    !readerLikedTimestamp && initLikeAdder(unitContainer, updateLikesCountText);
 
-    likeBoxContainer.appendChild(el('div', 'lb-floating', '+'));
     textContainer.appendChild(likesCountTextElement);
     likeBoxContainer.appendChild(textContainer);
     likeBoxContainer.appendChild(unitContainer);
