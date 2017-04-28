@@ -46,7 +46,7 @@ function createLikeNumberText(): [HTMLElement, Function] {
 
 function initLikeAdder(unitContainer: HTMLElement, updateLikesCountText: Function) {
     const likeBtn = el('a', 'lb-like', '+');
-    likeBtn.title = 'Click to like this article'
+    likeBtn.title = 'Click to like this post'
     unitContainer.appendChild(likeBtn);
     likeBtn.addEventListener('click', function addUnit() {
         const timestamp = Date.now();

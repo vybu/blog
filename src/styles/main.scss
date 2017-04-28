@@ -1,10 +1,11 @@
 @import "./normize.scss";
+@import "./typography.scss";
 @import "../../node_modules/highlight.js/styles/railscasts.css";
 // docco, rainbow, xcode, darcula, railscasts
 // SIZES
 $headerHeight: 80px;
 $footerHeight: 60px;
-$pagePaddingDesktop: 25px;
+$pagePaddingDesktop: map-get($spacing, space3);
 $pagePaddingMobile: 6vw;
 $maxContentWidth: 920px;
 // STYLES
@@ -57,7 +58,7 @@ body {
     color: $primaryTextColor;
     margin: 0;
     background-color: lighten( whitesmoke, 5%);
-    font-size: 16px;
+    font-size: $baseFontSize;
 }
 
 body {
@@ -137,7 +138,7 @@ footer {
     padding: 0;
     .title {
         font-weight: bold;
-        font-size: 2.4rem;
+        font-size: map-get($fontSize, size5);
         margin: 0 0 0.6rem;
     }
     .date {
@@ -161,7 +162,7 @@ footer {
 /* Page: post */
 
 .blog-post {
-    line-height: 1.8;
+    line-height: 1.4;
     font-size: 1.2rem;
     &-title {
         margin-bottom: 0rem;
@@ -171,13 +172,13 @@ footer {
         margin-bottom: 2rem;
     }
     h1 {
-        font-size: 3rem;
+        font-size: map-get($fontSize, size6);
     }
     h2 {
-        font-size: 2.4rem;
+        font-size: map-get($fontSize, size5);
     }
     h3 {
-        font-size: 1.8rem;
+        font-size: map-get($fontSize, size4);
     }
     a {
         border-bottom: 2px solid $primaryGeneralColor;
