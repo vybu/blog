@@ -9,7 +9,7 @@ export function footer(commitsCount: number): string {
         <footer>
             <div class="footer-inner">
                 <div class="built-by">Built by Vytenis Butkevicius, ©  ${currentYear !== originalDate ? `${originalDate} - ` : ''} ${currentYear}</div>
-                <div class="powered-by">Proudly Powered By ${a(ContainerIds.Noop, 'https://github.com/CanisMajorisLT/blog', `${commitsCount} Commits`)}</div>
+                <div class="powered-by">Proudly Powered By ${a(ContainerIds.Noop, 'https://github.com/vybu/blog', `${commitsCount} Commits`)}</div>
             </div>
         </footer>
 `;

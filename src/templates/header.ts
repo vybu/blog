@@ -12,7 +12,7 @@ export function header(): string {
                     <div class="lb-unit"></div>
                 </div>`)}</h2>
                 <nav>
-                    <span class="about">${a(ContainerIds.Noop, 'https://github.com/CanisMajorisLT', 'Github', '_blank')}</span>                    
+                    <span class="about">${a(ContainerIds.Noop, 'https://github.com/vybu', 'Github', '_blank')}</span>                    
                     <span class="about">${a(ContainerIds.App, '/about', 'About')}</span>                    
                 </nav>
             </div>
