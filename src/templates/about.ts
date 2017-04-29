@@ -4,7 +4,7 @@ import { ContainerIds } from './constants';
 export function about(): string {
     return `
         <div class="about">
-            <img src="/images/me_cartoon.jpeg" alt="cartoon picture of me"/>
+            <img src="/images/me_cartoon.png" alt="cartoon picture of me"/>
             <p>Welcome to my personal website, I am a software engineer working from beautiful city of Vilnius.
             On day to day basis I spend most of my time coding solutions with ReactJS.
             While I am deeply interested in front end development, 
