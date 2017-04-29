@@ -10,6 +10,7 @@ $spacing0: $spacingFactor /2;
 $spacing1: $spacingFactor;
 $spacing2: 2 * $spacingFactor;
 $spacing3: 3 * $spacingFactor;
+$spacing6: 6 * $spacingFactor;
 $headerHeight: 60px;
 $footerHeight: 48px;
 $pagePaddingDesktop: $spacing3;
@@ -154,6 +155,19 @@ footer {
     }
     a {
         color: $primaryTextColor;
+    }
+}
+
+
+/* Page: about */
+
+.about {
+    img {
+        display: block;
+        margin: 0 auto;
+        max-width: 600px;
+        width: 100%;
+        margin-bottom: $spacing6;
     }
 }
 

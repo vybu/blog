@@ -9,11 +9,12 @@ export function base({ body = '', head = '', commitsCount}: {body: string, head?
         <html lang="en">
 
         <head>
+            <title>Vytenis Blog</title>        
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Vytenis Blog</title>
-            <meta name="description" content="Blog">
+            <meta name="description" content="Quality content about programming, computer science,
+             with focus on front end technologies: HTML, CSS, JavaScript">
 
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
             <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
