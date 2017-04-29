@@ -21,9 +21,11 @@ export function base({ body = '', head = '', commitsCount}: {body: string, head?
             <link rel="manifest" href="/manifest.json">
             <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
             <meta name="theme-color" content="#ffffff">
-            <link href="//fonts.googleapis.com/css?family=Merriweather:700|Source+Sans+Pro:400,400i,700" rel="stylesheet" type="text/css">
 
-            <!--<meta property="og:site_name" content="https://keepcalm.top/">-->
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/ZvcMqxEwPfh2qDWBPxn6nnNuWYKPzoeKl5tYj8yhly0.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/ODelI1aHBYDBqgeIAH2zlNV_2ngZ8dMf8fLgjYEouxg.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/toadOcfmlt9b38dHJxOBGEo0As1BFRXtCDhS66znb_k.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/M2Jd71oPJhLKp0zdtTvoMxgy2Fsj5sj3EzlXpqVXRKo.woff2">
             ${head}
         </head>
         <body>
