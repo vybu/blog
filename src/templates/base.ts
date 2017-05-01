@@ -23,10 +23,10 @@ export function base({ body = '', head = '', commitsCount}: {body: string, head?
             <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
             <meta name="theme-color" content="#ffffff">
 
-            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/ZvcMqxEwPfh2qDWBPxn6nnNuWYKPzoeKl5tYj8yhly0.woff2">
-            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/ODelI1aHBYDBqgeIAH2zlNV_2ngZ8dMf8fLgjYEouxg.woff2">
-            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/toadOcfmlt9b38dHJxOBGEo0As1BFRXtCDhS66znb_k.woff2">
-            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/M2Jd71oPJhLKp0zdtTvoMxgy2Fsj5sj3EzlXpqVXRKo.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/Merriweather_Bold.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/SourceSansPro_Regular.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/SourceSansPro_Bold.woff2">
+            <link rel="preload" as="font" crossorigin="crossorigin" type="font/woff2" href="/fonts/SourceSansPro_It.woff2">
             ${head}
         </head>
         <body>

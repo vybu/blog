@@ -3,7 +3,7 @@ import WebpackMd5Hash = require('webpack-md5-hash');
 import ExtractTextPlugin = require('extract-text-webpack-plugin');
 import autoprefixer = require('autoprefixer');
 import path = require('path');
-import { dist, stylesEntryFile, jsEntryFile, stylesPaths, isDevMode } from '../constants';
+import { dist, stylesEntryFile, jsEntryFile, swFile, stylesPaths, isDevMode } from '../constants';
 
 interface WebpackStatsAsset {
     name: string
@@ -34,7 +34,7 @@ export function getJSAndCSSCompiler(): Function {
 
     if (!isDevMode) {
         plugins.unshift(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
-        plugins.unshift(new WebpackMd5Hash());        
+        plugins.unshift(new WebpackMd5Hash());
     }
 
     const compiler = webpack({
@@ -63,8 +63,42 @@ export function getJSAndCSSCompiler(): Function {
         plugins
     });
 
+    // TODO: probably need to have different script in which it builds and run sw.js, while in others t doesn't;
+    const swCompiler = webpack({
+        stats: 'none',
+        entry: swFile,
+        devtool: 'source-map',
+        resolve: {
+            extensions: ['.js', '.ts', '.scss']
+        },
+        output: {
+            filename: 'sw.js',
+            path: dist,
+            publicPath: '/'
+        },
+        target: 'web',
+        module: {
+            rules: [
+                { test: /\.tsx?$/, loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json' },
+            ]
+        },
+        plugins: [new webpack.optimize.UglifyJsPlugin({ sourceMap: true })]
+    });
+
     return (): Promise<CompiledFileNames> => {
         return new Promise((resolve, reject) => {
+            swCompiler.run((err, stats) => {
+                const statsJson = stats.toJson();
+
+                if (stats.hasErrors() || stats.hasWarnings()) {
+                    console.error('Failed to compile sw.js');
+                    console.error(statsJson.errors);
+                    console.warn(statsJson.warnings);
+                }
+
+                console.info('Successfully compiled sw.js');
+            });
+
             compiler.run((err, stats) => {
                 if (err) reject(err);
 
@@ -85,7 +119,7 @@ export function getJSAndCSSCompiler(): Function {
 
 function getJsAndCssFileNames(assets: WebpackStatsAsset[]): CompiledFileNames {
     return assets.reduce((result, asset) => {
-        if (asset.name.endsWith('.js')) {
+        if (asset.name.endsWith('.js') && !asset.name.includes('sw.')) {
             result.js.push(asset.name);
         }
 

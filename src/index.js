@@ -16,7 +16,8 @@ const generatorFilesToWatch = [
 const generatorTargetFilesToWatch = [
     path.join(__dirname, './articles'),
     path.join(__dirname, './styles'),
-    path.join(__dirname, './client')
+    path.join(__dirname, './client'),
+    path.join(__dirname, './client/sw')
 ];
 
 const server = initServerOnDist();
