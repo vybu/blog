@@ -17,6 +17,9 @@ interface CompiledFileNames {
 export function getJSAndCSSCompiler(): Function {
 
     const plugins = [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': isDevMode ? '"development"' : '"production"',
+        }),
         new ExtractTextPlugin(isDevMode ? '[name].css' : '[name].[contenthash].css'),
         new webpack.LoaderOptionsPlugin({
             minimize: !isDevMode,
@@ -82,7 +85,7 @@ export function getJSAndCSSCompiler(): Function {
                 { test: /\.tsx?$/, loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json' },
             ]
         },
-        plugins: [new webpack.optimize.UglifyJsPlugin({ sourceMap: true })]
+        plugins
     });
 
     return (): Promise<CompiledFileNames> => {
