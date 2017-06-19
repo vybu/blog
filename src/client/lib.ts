@@ -6,19 +6,19 @@ export function getCurrentArticleId() {
 }
 
 export function persist(id: string | number, data: object) {
-    const idS = `${id}`
+    const idS = `${id}`;
     const o = localStorage.getItem(idS);
     if (o) {
         try {
             const d = JSON.parse(o);
             localStorage.setItem(idS, JSON.stringify(Object.assign(d, data)));
-        } catch (e) { }
+        } catch (e) {}
     } else {
         localStorage.setItem(idS, JSON.stringify(data));
     }
 }
 
 export function retrieve(id: string | number): PersistObject | null {
-    const o =  localStorage.getItem(`${id}`);
+    const o = localStorage.getItem(`${id}`);
     return o ? JSON.parse(o) : null;
 }

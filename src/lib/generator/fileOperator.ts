@@ -16,12 +16,14 @@ export function getArticles(articlesGlob: string = ARTICLES_GLOB): Promise<Artic
             if (error) {
                 reject(error);
             }
-            resolve(files.map(file => ({
-                fileName: getFileName(file),
-                content: readFileAt(`${root}${file}`)
-            })));
+            resolve(
+                files.map(file => ({
+                    fileName: getFileName(file),
+                    content: readFileAt(`${root}${file}`),
+                })),
+            );
         });
-    })
+    });
 }
 
 function readFileAt(path: string): string {
@@ -34,27 +36,29 @@ function getFileName(path: string): fileName {
 
 export function saveToDist(fileName: string, fileType: string, content: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        fs.writeFile(`${dist}/${fileName}.${fileType}`, content, 'utf-8', (error) => {
+        fs.writeFile(`${dist}/${fileName}.${fileType}`, content, 'utf-8', error => {
             if (error) return reject(error);
 
             console.log(`Saved ${fileName}.${fileType} to ${dist}`);
             resolve();
         });
-    })
+    });
 }
 
 export function cleanup() {
     return new Promise((resolve, reject) => {
-        rimraf(`${dist}/*!(.gitignore)`, (error) => {
+        rimraf(`${dist}/*!(.gitignore)`, error => {
             console.info('Cleaned up files');
-            error ? reject(error) : resolve()
+            error ? reject(error) : resolve();
         });
-    })
+    });
 }
 
 export function copyStaticFiles(): void {
-    childProcess.exec(`cp -r ${staticFilesPath}/* ${dist}`, (err) =>
-        err ? console.error(err) : console.info('Successfully copied static files'))
+    childProcess.exec(
+        `cp -r ${staticFilesPath}/* ${dist}`,
+        err => (err ? console.error(err) : console.info('Successfully copied static files')),
+    );
 }
 
 export function getGitCommitsCount(): Promise<number> {
@@ -69,4 +73,3 @@ export function getGitCommitsCount(): Promise<number> {
         });
     });
 }
-

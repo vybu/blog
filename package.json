@@ -8,7 +8,8 @@
     "scripts": {
         "dev": "NODE_ENV=development node ./src/index.js",
         "build": "NODE_ENV=production node ./src/index.js",
-        "test": "jest"
+        "test": "jest",
+        "format": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=all --write \"src/**/*.+(js|ts)\""
     },
     "devDependencies": {
         "@types/browser-sync": "^0.0.34",
@@ -25,6 +26,7 @@
         "jest": "^19.0.2",
         "moment": "^2.18.1",
         "nodemon": "^1.11.0",
+        "prettier": "^1.4.4",
         "rimraf": "^2.6.1",
         "typescript": "^2.2.1",
         "webpack": "^2.3.1",

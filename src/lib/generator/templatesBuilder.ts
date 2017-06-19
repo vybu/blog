@@ -1,7 +1,7 @@
 import h = require('hyperscript');
 import { html } from '../utils';
 import { ParsedArticle, ProcessedArticle, BuiltPage } from './commonTypes';
-import { base, articlesList, about, article } from '../../templates'
+import { base, articlesList, about, article } from '../../templates';
 
 // TODO this now violates open/closed, should refactor so it's possible to add remove pages without changing generator.
 // Should implement some sort of framework and specs about pages should be in templates, file structure/config.
@@ -10,7 +10,7 @@ export default class TemplatesBuilder {
     private jsResources: string;
     private cssResources: string;
 
-    constructor(private jsAndCssCompiler: Function, private commitsCount: number) { }
+    constructor(private jsAndCssCompiler: Function, private commitsCount: number) {}
 
     async precompileJsAndCss(): Promise<void> {
         const { js, css } = await this.jsAndCssCompiler();
@@ -23,21 +23,21 @@ export default class TemplatesBuilder {
     }
 
     async buildMainPage(parsedArticles: Array<ProcessedArticle>): Promise<BuiltPage> {
-        return await this.assemble(articlesList(parsedArticles))
-    };
-
-    async buildAboutPage(): Promise<BuiltPage> {
-        return await this.assemble(about())
+        return await this.assemble(articlesList(parsedArticles));
     }
 
-    async base(args: { body: string, head?: string }): Promise<string> {
-        const f = ({ head = '', body = '' }: { body: string, head?: string }) => {
+    async buildAboutPage(): Promise<BuiltPage> {
+        return await this.assemble(about());
+    }
+
+    async base(args: { body: string; head?: string }): Promise<string> {
+        const f = ({ head = '', body = '' }: { body: string; head?: string }) => {
             return base({
                 head: `${this.jsResources} ${this.cssResources} ${head}`,
                 body,
-                commitsCount: this.commitsCount
+                commitsCount: this.commitsCount,
             });
-        }
+        };
 
         return f(args);
     }
@@ -46,7 +46,7 @@ export default class TemplatesBuilder {
         const fullPage = await this.base({ body: content });
         return {
             fullPage,
-            content
-        }
+            content,
+        };
     }
 }

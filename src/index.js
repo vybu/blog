@@ -11,13 +11,13 @@ const app = path.join(__dirname, './generatorRunnerProxy.js');
 const generatorFilesToWatch = [
     path.join(__dirname, './lib'),
     path.join(__dirname, './lib/generator'),
-    path.join(__dirname, './templates')
+    path.join(__dirname, './templates'),
 ];
 const generatorTargetFilesToWatch = [
     path.join(__dirname, './articles'),
     path.join(__dirname, './styles'),
     path.join(__dirname, './client'),
-    path.join(__dirname, './client/sw')
+    path.join(__dirname, './client/sw'),
 ];
 
 const server = initServerOnDist();
@@ -26,7 +26,7 @@ let currentChildProcess;
 function spawnProcess() {
     currentChildProcess = childProcess.fork(`${app}`);
 
-    currentChildProcess.on('message', (m) => {
+    currentChildProcess.on('message', m => {
         if (m === 'generated') {
             server.reload();
         }
@@ -49,16 +49,20 @@ function triggerGenerator() {
 const debouncedRerunApp = debounce(rerunApp, 100);
 const debouncedTriggerGenerator = debounce(triggerGenerator, 100);
 
-generatorFilesToWatch.forEach(f => fs.watch(f, (eventType) => {
-    if (eventType === 'change') {
-        debouncedRerunApp();
-    }
-}));
+generatorFilesToWatch.forEach(f =>
+    fs.watch(f, eventType => {
+        if (eventType === 'change') {
+            debouncedRerunApp();
+        }
+    }),
+);
 
-generatorTargetFilesToWatch.forEach(f => fs.watch(f, (eventType) => {
-    if (eventType === 'change') {
-        debouncedTriggerGenerator();
-    }
-}));
+generatorTargetFilesToWatch.forEach(f =>
+    fs.watch(f, eventType => {
+        if (eventType === 'change') {
+            debouncedTriggerGenerator();
+        }
+    }),
+);
 
 spawnProcess();

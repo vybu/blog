@@ -9,10 +9,9 @@ module.exports = function initServerOnDist() {
         server: {
             baseDir: dist,
             serveStaticOptions: {
-                extensions: ['html']
-            }
+                extensions: ['html'],
+            },
         },
-
     });
 
     return bs;

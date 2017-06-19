@@ -1,6 +1,6 @@
 export enum ContainerIds {
     App,
-    Noop
+    Noop,
 }
 
 export const containerPrefix = 'container';

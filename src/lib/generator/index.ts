@@ -1,1 +1,1 @@
-export { initGenerator } from './generator'
+export { initGenerator } from './generator';

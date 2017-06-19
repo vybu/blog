@@ -17,22 +17,22 @@ const ROUTER_LINKS_SELECTOR = `a[${routerLinkIdentifier}]`;
 type innerHTML = string;
 
 interface RoutingInfo {
-    containerId: ContainerIds,
-    href: string
+    containerId: ContainerIds;
+    href: string;
 }
 
 interface HistoryState {
-    containerId: ContainerIds,
-    innerHTML
+    containerId: ContainerIds;
+    innerHTML;
 }
 
 interface ContentPromises {
-    [key: string]: { then: Function }
+    [key: string]: { then: Function };
 }
 
 const JSONFetchMap = {
-    '/': '/index'
-}
+    '/': '/index',
+};
 
 const contentPromises: ContentPromises = {};
 let navigationListeners: Function[] = [];
@@ -44,13 +44,13 @@ function getJSON(href: string): Promise<any> {
         } else {
             throw new Error(r.statusText);
         }
-    })
+    });
 }
 
 function getRoutingInfo(element: Element): RoutingInfo {
     return {
         containerId: parseInt(element.getAttribute(routerLinkIdentifier)),
-        href: element.getAttribute('href')
+        href: element.getAttribute('href'),
     };
 }
 
@@ -58,11 +58,10 @@ function getContainerElement(containerId: ContainerIds): Element {
     return document.getElementById(`${containerPrefix}${containerId}`);
 }
 
-
 function changeUrlTo({ href, containerId }: RoutingInfo, innerHTML: innerHTML, replace: boolean = false): void {
     const historyState: HistoryState = {
         containerId,
-        innerHTML
+        innerHTML,
     };
 
     if (replace) {
@@ -91,7 +90,7 @@ function startFetchingJson({ href }: RoutingInfo): EventListenerOrEventListenerO
             then(handler) {
                 const h = JSONFetchMap[href] ? JSONFetchMap[href] : href;
                 getJSON(h).then(handler).catch(err => console.error(err));
-            }
+            },
         };
     };
 }
@@ -100,9 +99,13 @@ function jsonLoadHandler(r: PageJson) {
     return r.renderedHtml;
 }
 
-function displayedFetchedContent({ href, containerId }: RoutingInfo, jsonLoadHandler): EventListenerOrEventListenerObject {
-    return () => contentPromises[href] && contentPromises[href]
-        .then(r => {
+function displayedFetchedContent(
+    { href, containerId }: RoutingInfo,
+    jsonLoadHandler,
+): EventListenerOrEventListenerObject {
+    return () =>
+        contentPromises[href] &&
+        contentPromises[href].then(r => {
             const innerHTML = jsonLoadHandler(r);
             changeUrlTo({ href, containerId }, innerHTML);
             handleHistoryChange({ containerId, innerHTML });
@@ -110,7 +113,6 @@ function displayedFetchedContent({ href, containerId }: RoutingInfo, jsonLoadHan
 }
 
 function initRouter(routerLinksSelector: string, jsonLoadHandler: Function): void {
-
     Array.from(document.querySelectorAll(routerLinksSelector)).forEach(element => {
         const routingInfo = getRoutingInfo(element);
 
@@ -136,9 +138,7 @@ function initRouterForAllSelector(specificContainerId: ContainerIds | null): voi
         containerSelector = `#${containerPrefix}${specificContainerId} `;
     }
     initRouter(`${containerSelector}${ROUTER_LINKS_SELECTOR}`, jsonLoadHandler);
-
 }
-
 
 export default function init(...listeners: Function[]) {
     if (window.fetch) {
@@ -148,6 +148,3 @@ export default function init(...listeners: Function[]) {
         navigationListeners = navigationListeners.concat(listeners);
     }
 }
-
-
-

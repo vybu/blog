@@ -9,7 +9,7 @@ describe('parser#parseArticle', () => {
 });
 
 describe('fileFinder#getArticles', () => {
-    it('returns an array of matched files at given glob pattern', async() => {
+    it('returns an array of matched files at given glob pattern', async () => {
         const articles = await getArticles('tests/**/*.md');
         expect(articles).toMatchSnapshot();
     });

@@ -3,7 +3,15 @@ import { header } from './header';
 import { footer } from './footer';
 import { ContainerIds } from './constants';
 
-export function base({ body = '', head = '', commitsCount}: {body: string, head?: string, commitsCount: number}): string {
+export function base({
+    body = '',
+    head = '',
+    commitsCount,
+}: {
+    body: string;
+    head?: string;
+    commitsCount: number;
+}): string {
     return `
         <!DOCTYPE html>
         <html lang="en">

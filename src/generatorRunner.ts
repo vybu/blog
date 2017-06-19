@@ -3,7 +3,6 @@ import path = require('path');
 
 import { initGenerator } from './lib/generator';
 
-
 initGenerator().then(generator => {
     function runGenerator() {
         generator().then(() => process.send('generated'));
@@ -12,6 +11,4 @@ initGenerator().then(generator => {
     process.on('message', m => m === 'trigger' && runGenerator());
 
     runGenerator();
-})
-
-
+});

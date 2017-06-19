@@ -4,13 +4,10 @@ import { PersistObject } from './commonTypes';
 type UnitsData = number[];
 
 // sorted by timestamp
-const FAKE_DATA: UnitsData = [
-
-];
+const FAKE_DATA: UnitsData = [];
 
 let likesCount = 0;
 let readerLikedTimestamp: number | boolean = false;
-
 
 function el(tag: string, className: string = '', innerHTML: string = null, props: Object = null): HTMLElement {
     const e = document.createElement(tag);
@@ -20,7 +17,7 @@ function el(tag: string, className: string = '', innerHTML: string = null, props
     }
 
     if (props) {
-        Object.keys(props).forEach(p => e[p] = props[p]);
+        Object.keys(props).forEach(p => (e[p] = props[p]));
     }
     return e;
 }
@@ -31,22 +28,22 @@ function createLikeNumberText(): [HTMLElement, Function] {
     const updateText = () => {
         if (likesCount === 0) {
             e.innerText = readerLikedTimestamp ? 'You liked this post' : 'Be first to like this post!';
-        }
-        else if (likesCount === 1) {
+        } else if (likesCount === 1) {
             e.innerText = readerLikedTimestamp ? 'You and 1 other person liked this post' : '1 person liked this post';
         } else {
-            e.innerText = readerLikedTimestamp ? `You and ${likesCount} other people liked this post` : `${likesCount} people liked this post`;
+            e.innerText = readerLikedTimestamp
+                ? `You and ${likesCount} other people liked this post`
+                : `${likesCount} people liked this post`;
         }
-    }
+    };
     updateText();
 
     return [e, updateText];
 }
 
-
 function initLikeAdder(unitContainer: HTMLElement, updateLikesCountText: Function) {
     const likeBtn = el('a', 'lb-like', '+');
-    likeBtn.title = 'Click to like this post'
+    likeBtn.title = 'Click to like this post';
     unitContainer.appendChild(likeBtn);
     likeBtn.addEventListener('click', function addUnit() {
         const timestamp = Date.now();
@@ -64,13 +61,13 @@ function initLikeAdder(unitContainer: HTMLElement, updateLikesCountText: Functio
 function addUnits(unitContainer: HTMLElement, unitsData: UnitsData, readerLikedTimestamp) {
     unitsData.forEach(u =>
         unitContainer.appendChild(
-            el(
-                'div',
-                `lb-unit ${readerLikedTimestamp === u ? 'is-personal' : ''}`,
-                null,
-                { title: `${readerLikedTimestamp === u ? 'You' : 'Someone'} liked this at ${new Date(u).toLocaleString()}` })
-        )
-    )
+            el('div', `lb-unit ${readerLikedTimestamp === u ? 'is-personal' : ''}`, null, {
+                title: `${readerLikedTimestamp === u ? 'You' : 'Someone'} liked this at ${new Date(
+                    u,
+                ).toLocaleString()}`,
+            }),
+        ),
+    );
 }
 
 function getHasReaderLiked(): boolean | number {
@@ -82,7 +79,6 @@ function getHasReaderLiked(): boolean | number {
     return false;
 }
 
-// TODO: Add global + in non mobile readers, add hover effect with explanations, think of creative way to present 0 likes;
 export default function drawLikebox() {
     const target = document.querySelector('.lb');
     if (getCurrentArticleId() === null || !target) return;
@@ -93,11 +89,11 @@ export default function drawLikebox() {
 
     const likeBoxContainer = el('div', 'lb-container');
     const unitContainer = el('div', 'lb-unit-container');
-    const textContainer = el('div', 'lb-text-container')
+    const textContainer = el('div', 'lb-text-container');
 
     const [likesCountTextElement, updateLikesCountText] = createLikeNumberText();
 
-    addUnits(unitContainer, FAKE_DATA, readerLikedTimestamp)
+    addUnits(unitContainer, FAKE_DATA, readerLikedTimestamp);
 
     !readerLikedTimestamp && initLikeAdder(unitContainer, updateLikesCountText);
 
@@ -106,3 +102,7 @@ export default function drawLikebox() {
     likeBoxContainer.appendChild(unitContainer);
     target.appendChild(likeBoxContainer);
 }
+
+// TODO:
+// Refactor this so it can function without DOM and can be used for server-side rendering. And so code doesn't look like shit.
+// Server side render with refactored version

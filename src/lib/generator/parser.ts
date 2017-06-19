@@ -15,9 +15,7 @@ const md = new MarkdownIt({
     typographer: true,
 });
 
-md
-.use(markdownItFootnote)
-.use(markdownItHighlight)
+md.use(markdownItFootnote).use(markdownItHighlight);
 
 function addSummary(metaData: MetaData, content: string): void {
     if (!metaData.summary) {
@@ -39,6 +37,6 @@ export function parseArticle(articleSource: string): ParsedArticle {
 
     return {
         metaData,
-        articleHtml
+        articleHtml,
     };
 }

@@ -7,4 +7,3 @@ export function getHashFileNameFor(content: string, fileExtension: string): stri
 export function html(h) {
     return h.outerHTML;
 }
-
