@@ -1,4 +1,4 @@
-const { Article, init, sequalize } = require('../db');
+const { Article, init, sequalize } = require('../index');
 
 function makeLike(ip = `${Math.random()}`, timestamp = Date.now()) {
     return { ip, timestamp };
