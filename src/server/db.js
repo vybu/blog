@@ -1,23 +1,25 @@
 const Sequelize = require('sequelize');
 const path = require('path');
 
+const isTest = process.env.NODE_ENV === 'test';
+
 const DB_NAME = process.env.DB_NAME || './db.sqlite';
 const sequalize = new Sequelize('database', 'username', 'password', {
     logging: false,
     dialect: 'sqlite',
-    storage: process.env.NODE_ENV === 'test' ? ':memory:' : path.resolve(__dirname, '../../../', DB_NAME)
+    storage: isTest ? ':memory:' : path.resolve(__dirname, '../../', DB_NAME)
 });
 
 const Article = sequalize.define('article', {
     id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true
     }
 });
 
 const Like = sequalize.define('like', {
     timestamp: Sequelize.INTEGER,
-    ip: Sequelize.STRING
+    _ip: Sequelize.STRING
 });
 
 const Comment = sequalize.define('comment', {
@@ -26,34 +28,56 @@ const Comment = sequalize.define('comment', {
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
     },
-    _ip: Sequelize.STRING,
-    name: Sequelize.STRING,
-    comment: Sequelize.STRING,
-    parent: Sequelize.INTEGER
+    _ip: { type: Sequelize.STRING, allowNull: false },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    comment: { type: Sequelize.STRING, allowNull: false },
+    parent: { type: Sequelize.STRING, allowNull: false }
 });
 
 Article.hasMany(Like);
 Article.hasMany(Comment);
 
-Article.submitLike = async function(id, timestamp, ip) {
+Article.get = async function(id) {
+    let article = await Article.findById(id);
+    if (!article) {
+        // TODO: check that such id actually exist
+        console.log('gonna create with', id);
+        article = await Article.create({ id });
+        console.log({ article });
+    }
+
+    return article;
+};
+
+Article.submitLike = async function(id, { timestamp, _ip }) {
     try {
-        const article = await Article.findById(id);
-        const previousLike = await Like.findOne({ where: { ip } });
-        if (previousLike) {
+        const article = await Article.get(id);
+        const previousLike = await Like.findOne({ where: { _ip } });
+        if (!article || previousLike) {
             return false;
         }
-        const like = await Like.create({ timestamp, ip });
+        const like = await Like.create({ timestamp, _ip });
         await article.addLike(like);
         return true;
     } catch (e) {
-        console.error('Failed to submitLike', e);
+        !isTest && console.error('Failed to submitLike', e);
         return false;
     }
 };
 
 Article.retrieveLikes = async function name(id) {
     const article = await Article.findById(id);
-    return await article.getLikes({ raw: true, attributes: ['timestamp', 'ip'] });
+    if (!article) return [];
+    return await article.getLikes({ raw: true, attributes: ['timestamp'] });
+};
+
+Article.retrieveLikeForIp = async function name(_ip) {
+    const like = await Like.findOne({ where: { _ip } });
+    if (!like) return null;
+    return like.timestamp;
 };
 
 Article.isCommentWithValidFrequency = async function(article, commentData) {
@@ -68,6 +92,11 @@ Article.isCommentWithValidFrequency = async function(article, commentData) {
 
 Article.submitComment = async function(id, commentData) {
     try {
+        const article = await Article.get(id);
+        if (!article) {
+            return [false];
+        }
+        console.log(1, article, commentData);
         if (commentData.parent !== id) {
             // we don't allow to nest comments deeper than 1 level;
             // a comment can have a reply, but reply can't have a reply;
@@ -77,7 +106,6 @@ Article.submitComment = async function(id, commentData) {
             }
         }
 
-        const article = await Article.findById(id);
         const isValidPostFrequency = await Article.isCommentWithValidFrequency(article, commentData);
         if (!isValidPostFrequency) {
             return [false];
@@ -86,7 +114,7 @@ Article.submitComment = async function(id, commentData) {
         await article.addComment(comment);
         return [true, comment.id];
     } catch (e) {
-        console.error('Failed to submitComment on Article', e);
+        !isTest && console.error('Failed to submitComment on Article', e);
         return [false];
     }
 };
