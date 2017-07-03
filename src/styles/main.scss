@@ -20,7 +20,7 @@ $maxContentWidth: 800px;
 $borderColor: rgba(0, 0, 0, 0.2);
 $primaryTextColor: rgba(0, 0, 0, 0.8);
 $secondaryTextColor: rgba(0, 0, 0, 0.6);
-$primaryGeneralColor :#F9E79F;
+$primaryGeneralColor: #f9e79f;
 $brStandard: 5px;
 @mixin forMobileOnly {
     @media (max-width: 425px) {
@@ -135,7 +135,6 @@ footer {
     }
 }
 
-
 /* Page: main/landing */
 
 .articles {
@@ -149,7 +148,8 @@ footer {
         font-style: italic;
         margin-bottom: 1.2rem;
     }
-    .summary {}
+    .summary {
+    }
     li {
         margin-bottom: 3rem;
     }
@@ -157,7 +157,6 @@ footer {
         color: $primaryTextColor;
     }
 }
-
 
 /* Page: about */
 
@@ -170,7 +169,6 @@ footer {
         margin-bottom: $spacing6;
     }
 }
-
 
 /* Page: post */
 
@@ -233,5 +231,85 @@ footer {
         &.is-personal {
             background-color: tomato;
         }
+    }
+}
+
+// Comments
+
+.comments-container {
+    margin-top: $spacing6;
+}
+
+.existing-comment {
+    margin-bottom: $spacing3;
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    .inner-wrap {
+        // border: 1px solid rgba(0, 0, 0, 0.3);
+        padding: $spacing2;
+        &:target {
+            .new-reply {
+                display: block;
+            }
+        }
+        .new-reply {
+            display: none;
+        }
+    }
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+        .name {
+            font-weight: bold;
+        }
+    }
+
+    .comment {
+        margin-bottom: $spacing1;
+
+        // width: 100%;
+    }
+
+    .add-reply {
+        a {
+            font-size: 16px;
+        }
+        &:active {
+        }
+    }
+}
+
+.replies {
+    .existing-comment {
+        margin-top: $spacing2;
+        margin-left: $spacing6;
+    }
+}
+
+.new-comment {
+    .comment {
+        padding: $spacing0;
+        min-width: 100%;
+        max-width: 100%;
+        margin-bottom: $spacing1;
+    }
+
+    .bottom {
+        display: flex;
+        .name {
+            padding: $spacing0;
+            flex: 1;
+            margin-right: $spacing1;
+        }
+        .add {
+            flex: 1;
+        }
+    }
+}
+
+.existing-comment {
+    .new-comment {
+        margin-top: $spacing3;
     }
 }

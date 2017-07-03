@@ -12,7 +12,7 @@ const md = new MarkdownIt({
     breaks: true,
     langPrefix: 'lang-',
     linkify: true,
-    typographer: true,
+    typographer: true
 });
 
 md.use(markdownItFootnote).use(markdownItHighlight);
@@ -24,8 +24,9 @@ function addSummary(metaData: MetaData, content: string): void {
     }
 }
 
-function formatDate(metaData: MetaData): void {
+function formatMetaData(metaData: MetaData): void {
     metaData.date = moment(metaData.date).format('MMM DD, YYYY');
+    metaData.id = `${metaData.id}`;
 }
 
 export function parseArticle(articleSource: string): ParsedArticle {
@@ -33,10 +34,10 @@ export function parseArticle(articleSource: string): ParsedArticle {
     const articleHtml = md.render(content);
 
     addSummary(metaData, content);
-    formatDate(metaData);
+    formatMetaData(metaData);
 
     return {
         metaData,
-        articleHtml,
+        articleHtml
     };
 }

@@ -1,4 +1,4 @@
-const { Article, Comment, init, sequalize } = require('../db');
+const { Article, Comment, init, sequalize } = require('../db.ts');
 
 function makeComment(comment, parent, name = `${Math.random()}`, _ip = `${Math.random()}`) {
     return { comment, parent, name, _ip };
@@ -45,6 +45,11 @@ describe('db.comments', () => {
     it.skip('fails to create a comment if honeypot field is filled', () => {});
     it('fails to create a comment if required fields are not specified', async () => {
         const [isSuccessful] = await Article.submitComment(articleId, { comment: 'Hello world', parent: articleId });
+        expect(isSuccessful).toBeFalsy();
+    });
+
+    it('fails to create a comment if parent comment does not exist', async () => {
+        const [isSuccessful, a] = await Article.submitComment(articleId, makeComment('Hello world', 'non-existent-id'));
         expect(isSuccessful).toBeFalsy();
     });
     it('prevents spamming comments to often: 1 every 10 min after 2 comments', async () => {

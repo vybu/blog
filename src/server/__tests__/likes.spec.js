@@ -1,4 +1,4 @@
-const { Article, init, sequalize } = require('../db');
+const { Article, init, sequalize } = require('../db.ts');
 
 function makeLike(_ip = `${Math.random()}`, timestamp = Date.now()) {
     return { _ip, timestamp };
@@ -24,8 +24,8 @@ describe('db.likes', () => {
 
         const likes = await Article.retrieveLikes(articleId);
 
-        expect(likes[0]).toEqual({ timestamp: 1234456 });
-        expect(likes[1]).toEqual({ timestamp: 1234457 });
+        expect(likes[0]).toEqual(1234456);
+        expect(likes[1]).toEqual(1234457);
     });
 
     it('prevents likes with same ip addresses', async () => {

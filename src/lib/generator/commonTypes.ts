@@ -1,8 +1,14 @@
+import { CommentAttributes } from '../../server/db'
 export type fileName = string;
 
 export interface ArticleRaw {
     fileName;
     content: string;
+}
+
+export interface ArticlesReadersData {
+    likes: number[];
+    comments: CommentAttributes[];
 }
 
 export interface MetaData {
@@ -11,7 +17,7 @@ export interface MetaData {
     date: string;
     tags: string[];
     summary?: string;
-    id: number;
+    id: string;
 }
 
 export interface ParsedArticle {
@@ -21,6 +27,7 @@ export interface ParsedArticle {
 
 export interface ProcessedArticle extends ArticleRaw {
     parsedArticle: ParsedArticle;
+    articlesReadersData: ArticlesReadersData;
 }
 
 export interface PageJson {

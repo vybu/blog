@@ -4,7 +4,7 @@ import childProcess = require('child_process');
 import glob = require('glob');
 import rimraf = require('rimraf');
 
-import { ArticleRaw, fileName } from './commonTypes';
+import { ArticleRaw, fileName, BuiltPage, PageJson } from './commonTypes';
 import { dist, staticFilesPath } from '../constants';
 
 const ARTICLES_GLOB = './src/articles/**/*.md';
@@ -43,6 +43,15 @@ export function saveToDist(fileName: string, fileType: string, content: string):
             resolve();
         });
     });
+}
+
+export function saveFinalOutput(fileName, { fullPage, content }: BuiltPage) {
+    const pageJson: PageJson = {
+        renderedHtml: content
+    };
+
+    saveToDist(fileName, 'html', fullPage);
+    saveToDist(fileName, 'json', JSON.stringify(pageJson));
 }
 
 export function cleanup() {

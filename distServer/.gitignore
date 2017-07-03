@@ -1,0 +1,3 @@
+// ignore this folder, except for this file itself
+*
+!.gitignore

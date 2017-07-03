@@ -12,12 +12,14 @@ const generatorFilesToWatch = [
     path.join(__dirname, './lib'),
     path.join(__dirname, './lib/generator'),
     path.join(__dirname, './templates'),
+    path.join(__dirname, './templates/comments'),
+    path.join(__dirname, './server')
 ];
 const generatorTargetFilesToWatch = [
     path.join(__dirname, './articles'),
     path.join(__dirname, './styles'),
     path.join(__dirname, './client'),
-    path.join(__dirname, './client/sw'),
+    path.join(__dirname, './client/sw')
 ];
 
 const server = initServerOnDist();
@@ -54,7 +56,7 @@ generatorFilesToWatch.forEach(f =>
         if (eventType === 'change') {
             debouncedRerunApp();
         }
-    }),
+    })
 );
 
 generatorTargetFilesToWatch.forEach(f =>
@@ -62,7 +64,7 @@ generatorTargetFilesToWatch.forEach(f =>
         if (eventType === 'change') {
             debouncedTriggerGenerator();
         }
-    }),
+    })
 );
 
 spawnProcess();

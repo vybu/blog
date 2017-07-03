@@ -17,7 +17,7 @@ interface CompiledFileNames {
 export function getJSAndCSSCompiler(): Function {
     const plugins = [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': isDevMode ? '"development"' : '"production"',
+            'process.env.NODE_ENV': isDevMode ? '"development"' : '"production"'
         }),
         new ExtractTextPlugin(isDevMode ? '[name].css' : '[name].[contenthash].css'),
         new webpack.LoaderOptionsPlugin({
@@ -26,12 +26,12 @@ export function getJSAndCSSCompiler(): Function {
             noInfo: true, // set to false to see a list of every file being bundled.
             options: {
                 sassLoader: {
-                    includePaths: [stylesPaths],
+                    includePaths: [stylesPaths]
                 },
                 context: '/',
-                postcss: () => [autoprefixer],
-            },
-        }),
+                postcss: () => [autoprefixer]
+            }
+        })
     ];
 
     if (!isDevMode) {
@@ -45,27 +45,27 @@ export function getJSAndCSSCompiler(): Function {
         devtool: 'source-map',
 
         resolve: {
-            extensions: ['.js', '.ts', '.scss'],
+            extensions: ['.js', '.ts', '.scss']
         },
         output: {
             filename: isDevMode ? '[name].js' : '[name].[chunkhash].js',
             path: dist,
-            publicPath: '/',
+            publicPath: '/'
         },
         target: 'web',
         module: {
             rules: [
                 {
                     test: /\.tsx?$/,
-                    loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json',
+                    loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json'
                 },
                 {
                     test: /(\.css|\.scss|\.sass)$/,
-                    loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!sass-loader?sourceMap'),
-                },
-            ],
+                    loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!sass-loader?sourceMap')
+                }
+            ]
         },
-        plugins,
+        plugins
     });
 
     // TODO: probably need to have different script in which it builds and run sw.js, while in others t doesn't;
@@ -74,23 +74,23 @@ export function getJSAndCSSCompiler(): Function {
         entry: swFile,
         devtool: 'source-map',
         resolve: {
-            extensions: ['.js', '.ts', '.scss'],
+            extensions: ['.js', '.ts', '.scss']
         },
         output: {
             filename: 'sw.js',
             path: dist,
-            publicPath: '/',
+            publicPath: '/'
         },
         target: 'web',
         module: {
             rules: [
                 {
                     test: /\.tsx?$/,
-                    loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json',
-                },
-            ],
+                    loader: 'awesome-typescript-loader?silent=true&configFileName=tsconfig.client.json'
+                }
+            ]
         },
-        plugins,
+        plugins
     });
 
     return (): Promise<CompiledFileNames> => {
@@ -102,9 +102,9 @@ export function getJSAndCSSCompiler(): Function {
                     console.error('Failed to compile sw.js');
                     console.error(statsJson.errors);
                     console.warn(statsJson.warnings);
+                } else {
+                    console.info('Successfully compiled sw.js');
                 }
-
-                console.info('Successfully compiled sw.js');
             });
 
             compiler.run((err, stats) => {
@@ -137,6 +137,6 @@ function getJsAndCssFileNames(assets: WebpackStatsAsset[]): CompiledFileNames {
 
             return result;
         },
-        { js: [], css: [] },
+        { js: [], css: [] }
     );
 }

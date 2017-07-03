@@ -1,7 +1,7 @@
 import h = require('hyperscript');
 import { html } from '../utils';
-import { ParsedArticle, ProcessedArticle, BuiltPage } from './commonTypes';
-import { base, articlesList, about, article } from '../../templates';
+import { ParsedArticle, ProcessedArticle, ArticlesReadersData, BuiltPage} from './commonTypes';
+import { base, articlesList, about, article, commentsContainer } from '../../templates';
 
 // TODO this now violates open/closed, should refactor so it's possible to add remove pages without changing generator.
 // Should implement some sort of framework and specs about pages should be in templates, file structure/config.
@@ -18,8 +18,8 @@ export default class TemplatesBuilder {
         this.cssResources = css.map(href => html(h('link', { attrs: { href, type: 'text/css', rel: 'stylesheet' } })));
     }
 
-    async buildFullBlogPage(parsedArticle: ParsedArticle): Promise<BuiltPage> {
-        return await this.assemble(article(parsedArticle));
+    async buildFullBlogPage(parsedArticle: ParsedArticle, articlesReadersData: ArticlesReadersData): Promise<BuiltPage> {
+        return await this.assemble(article(parsedArticle, articlesReadersData));
     }
 
     async buildMainPage(parsedArticles: Array<ProcessedArticle>): Promise<BuiltPage> {
