@@ -275,14 +275,14 @@ footer {
         a {
             font-size: 16px;
         }
-        &:active {
-        }
     }
 }
 
 .replies {
+    overflow: auto;
     .existing-comment {
-        margin-top: $spacing2;
+        // margin-top: $spacing2;
+        margin: $spacing2;
         margin-left: $spacing6;
     }
 }
@@ -292,6 +292,7 @@ footer {
         padding: $spacing0;
         min-width: 100%;
         max-width: 100%;
+        min-height: 120px;
         margin-bottom: $spacing1;
     }
 

@@ -9,9 +9,11 @@ function getIp(req) {
 }
 
 function sanitize(comment) {
-    comment.comment = escapeHtml(comment.comment);
-    comment.name = escapeHtml(comment.name);
-    return comment;
+    return {
+        name: escapeHtml(comment.name),
+        comment: escapeHtml(comment.comment),
+        parent: comment.parent
+    }
 }
 
 async function submitLike(articleId, _ip) {
@@ -22,7 +24,6 @@ async function submitLike(articleId, _ip) {
 }
 
 async function submitComment(articleId, ip, commentData) {
-    commentData.timestamp = Date.now();
     commentData._ip = ip;
     const [isSuccessful, commentId] = await Article.submitComment(articleId, commentData);
     return { isSuccessful, commentId };
@@ -41,6 +42,9 @@ async function parseFormData(req: IncomingMessage) {
 
 const server = hotArticleRebuilder =>
     micro(async (req: IncomingMessage, res: ServerResponse) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'content-type');
+
         const { method, url } = req;
         const like = url.match(/like\/([^/]+)/);
         const comment = url.match(/comments\/([^/]+)/);
@@ -60,6 +64,7 @@ const server = hotArticleRebuilder =>
                 return { likes, existingLike };
             }
         } else if (comment) {
+            // TODO: check for link as spam prevention, also check for max length on comment
             if (method === 'POST') {
                 let comment = {};
                 if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
@@ -77,6 +82,8 @@ const server = hotArticleRebuilder =>
                 return await Article.retrieveComments(articleId);
             }
         }
+
+        return {};
     });
 
 export default server;

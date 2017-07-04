@@ -41,7 +41,7 @@ export interface CommentAttributes {
     comment: string;
     comments?: CommentAttributes[];
     name: string;
-    _ip: string;
+    _ip?: string;
     createdAt?: string; // date
 }
 export interface CommentInstance extends Sequelize.Instance<CommentAttributes>, CommentAttributes {}

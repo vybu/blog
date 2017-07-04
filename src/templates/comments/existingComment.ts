@@ -21,6 +21,7 @@ export function existingComment(data: CommentAttributes, articleId: string, pare
     if (parent === null) {
         parent = articleId;
     }
+    console.log( data);
     const commentAge = dateDiffInDays(new Date(data.createdAt), new Date());
 
     return `
