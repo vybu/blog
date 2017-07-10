@@ -13,7 +13,7 @@ function sanitize(comment) {
         name: escapeHtml(comment.name),
         comment: escapeHtml(comment.comment),
         parent: comment.parent
-    }
+    };
 }
 
 async function submitLike(articleId, _ip) {
@@ -66,17 +66,20 @@ const server = hotArticleRebuilder =>
         } else if (comment) {
             // TODO: check for link as spam prevention, also check for max length on comment
             if (method === 'POST') {
+                console.info(req.headers['content-type']);
                 let comment = {};
                 if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
                     comment = await parseFormData(req);
                     const result = await submitComment(articleId, ip, sanitize(comment));
                     await hotArticleRebuilder(articleId);
-                    console.info(result);
-                    res.writeHead(302, { Location: req.headers.referer });
-                    res.end();
+                    console.info(result, req.headers);
+                    res.setHeader('Location', req.headers.referer);
+                    return micro.send(res, 302);
                 } else if (req.headers['content-type'] === 'application/json') {
                     comment = await micro.json(req);
-                    return await submitComment(articleId, ip, sanitize(comment));
+                    const result = await submitComment(articleId, ip, sanitize(comment));
+                    hotArticleRebuilder(articleId);
+                    return result;
                 }
             } else if (method === 'GET') {
                 return await Article.retrieveComments(articleId);
