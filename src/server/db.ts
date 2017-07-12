@@ -71,7 +71,7 @@ const Comment: CommentModel = sequalize.define<CommentInstance, CommentAttribute
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-            len: [1, 50],
+            len: [0, 50],
             includesNoUrl
         }
     },

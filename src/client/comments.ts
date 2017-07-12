@@ -56,6 +56,15 @@ function enhanceCommentFormValues(comment: CommentFormValues): Comment {
     return Object.assign({}, comment, { comments: [], id: `temp-${Date.now()}` });
 }
 
+function getRepliesContainer(form: Element) {
+    const parent = form.parentElement.parentElement.parentElement;
+    if (parent.parentElement.parentElement.lastElementChild.classList.contains(REPLIES_CONTAINER_CLASS)) {
+        return parent.parentElement.parentElement.lastElementChild;
+    } else {
+        return parent.lastElementChild;
+    }
+}
+
 function appendComment(comment: Comment, form: Element) {
     let commentContainer;
     if (form.parentElement.getAttribute('class') === COMMENTS_CONTAINER_CLASS) {
@@ -63,10 +72,8 @@ function appendComment(comment: Comment, form: Element) {
         commentContainer = $(`.${COMMENTS_CONTAINER_CLASS}`);
     } else {
         // reply to comment
-        commentContainer = $(
-            `.${REPLIES_CONTAINER_CLASS}`,
-            form.parentElement.parentElement.parentElement.parentElement.parentElement
-        );
+        console.log(form.parentElement.parentElement.parentElement.parentElement.parentElement);
+        commentContainer = getRepliesContainer(form);
     }
     commentContainer.innerHTML += existingComment(comment, comment.articleId);
 
@@ -106,8 +113,10 @@ function getFormValue(form: Element): CommentFormValues {
 
 function addCommentOnSubmit() {
     const commentForms: Element[] = Array.from(document.querySelectorAll(FORM_CLASS_SELECTOR));
-    commentForms.forEach(form =>
-        form.addEventListener('submit', async ev => {
+    const listenerRemovers = [];
+
+    const interceptFormSubmit = (form: Element): void => {
+        const listener = async ev => {
             ev.preventDefault();
             const commentData = getFormValue(form);
             const commentComponent = appendComment(enhanceCommentFormValues(commentData), form);
@@ -117,8 +126,16 @@ function addCommentOnSubmit() {
             } else {
                 commentComponent.failedToCreate();
             }
-        })
-    );
+
+            listenerRemovers.forEach(r => r());
+            addCommentOnSubmit();
+        };
+
+        form.addEventListener('submit', listener);
+        listenerRemovers.push(() => form.removeEventListener('submit', listener));
+    };
+
+    commentForms.forEach(interceptFormSubmit);
 }
 
 function enhanceComments() {

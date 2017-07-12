@@ -78,7 +78,9 @@ const server = hotArticleRebuilder =>
                 } else if (req.headers['content-type'] === 'application/json') {
                     comment = await micro.json(req);
                     const result = await submitComment(articleId, ip, sanitize(comment));
-                    hotArticleRebuilder(articleId);
+                    if (result.isSuccessful) {
+                        hotArticleRebuilder(articleId);
+                    }
                     return result;
                 }
             } else if (method === 'GET') {
