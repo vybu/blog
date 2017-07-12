@@ -64,15 +64,15 @@ const server = hotArticleRebuilder =>
                 return { likes, existingLike };
             }
         } else if (comment) {
-            // TODO: check for link as spam prevention, also check for max length on comment
             if (method === 'POST') {
                 console.info(req.headers['content-type']);
                 let comment = {};
                 if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
                     comment = await parseFormData(req);
                     const result = await submitComment(articleId, ip, sanitize(comment));
-                    await hotArticleRebuilder(articleId);
-                    console.info(result, req.headers);
+                    if (result.isSuccessful) {
+                        await hotArticleRebuilder(articleId);
+                    }
                     res.setHeader('Location', req.headers.referer);
                     return micro.send(res, 302);
                 } else if (req.headers['content-type'] === 'application/json') {

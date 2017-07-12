@@ -1,5 +1,6 @@
 import Sequelize = require('sequelize');
 import path = require('path');
+import validator = require('validator');
 import { isDevMode, isTestMode } from '../lib/constants';
 
 const DB_NAME = process.env.DB_NAME || './db.sqlite';
@@ -68,9 +69,20 @@ const Comment: CommentModel = sequalize.define<CommentInstance, CommentAttribute
     _ip: { type: Sequelize.STRING, allowNull: false },
     name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            len: [1, 50],
+            includesNoUrl
+        }
     },
-    comment: { type: Sequelize.STRING, allowNull: false },
+    comment: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            len: [1, 20000],
+            includesNoUrl
+        }
+    },
     parent: { type: Sequelize.STRING, allowNull: false }
 });
 
@@ -186,6 +198,12 @@ Article.retrieveComments = async function(id: string) {
 
 async function init() {
     return await sequalize.sync();
+}
+
+function includesNoUrl(value) {
+    if (value.split(' ').some(v => validator.isURL(v))) {
+        throw Error('Basic urls are not allowed (to prevent spam)');
+    }
 }
 
 export { Article, Like, Comment, init, sequalize };

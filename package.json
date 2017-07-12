@@ -26,6 +26,7 @@
         "@types/node-sass": "^3.10.32",
         "@types/rimraf": "^0.0.28",
         "@types/sequelize": "^4.0.62",
+        "@types/validator": "^6.2.1",
         "@types/webpack": "^2.2.14",
         "awesome-typescript-loader": "3.2.1",
         "jest": "^20.0.4",
@@ -64,7 +65,8 @@
         "sequelize": "4.2.1",
         "sqlite3": "^3.1.8",
         "style-loader": "^0.16.1",
-        "ts-node": "^3.0.2"
+        "ts-node": "^3.0.2",
+        "validator": "^8.0.0"
     },
     "jest": {
         "moduleFileExtensions": [
