@@ -31,7 +31,7 @@ export function existingComment(data: CommentAttributes, articleId: string, pare
                     <span class="time">${getDaysFormattedWithNoun(commentAge)}</span>
                 </div>
                 <p class="comment" name="comment">${data.comment}</p>
-                <div class="add-reply"><a href="#${data.id}">Reply</a></div>
+                <div class="add-reply"><a class="reply-btn" href="#${data.id}">Reply</a></div>
 
                 <div class="new-reply">${newComment(articleId, data.id)}</div>
             </div>

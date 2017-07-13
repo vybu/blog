@@ -242,12 +242,12 @@ footer {
 
 .existing-comment {
     margin-bottom: $spacing3;
-    background-color: rgba(0, 0, 0, 0.08);
+    // background-color: rgba(0, 0, 0, 0.08);
     border-radius: 2px;
     .inner-wrap {
-        // border: 1px solid rgba(0, 0, 0, 0.3);
+        border-top: 1px solid rgba(0, 0, 0, 0.3);
         padding: $spacing2;
-        &:target {
+        &:target, &.show-reply {
             .new-reply {
                 display: block;
             }
@@ -267,7 +267,7 @@ footer {
 
     .comment {
         margin-bottom: $spacing1;
-
+        white-space: pre-wrap;
         // width: 100%;
     }
 
@@ -282,8 +282,7 @@ footer {
     overflow: auto;
     .existing-comment {
         // margin-top: $spacing2;
-        margin: $spacing2;
-        margin-left: $spacing6;
+        margin: $spacing2 0 $spacing2 $spacing6;
     }
 }
 

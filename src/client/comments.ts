@@ -7,7 +7,7 @@ const INNER_WRAP_SELECTOR = '.inner-wrap'; // used for focusing / showing commen
 const COMMENTS_CONTAINER_CLASS = 'comments-container';
 const REPLIES_CONTAINER_CLASS = 'replies';
 // TODO: must tree shake this
-
+// TODO: Bugs: <a> is triggering router
 interface CommentFormValues {
     name: string;
     comment: string;
@@ -72,7 +72,6 @@ function appendComment(comment: Comment, form: Element) {
         commentContainer = $(`.${COMMENTS_CONTAINER_CLASS}`);
     } else {
         // reply to comment
-        console.log(form.parentElement.parentElement.parentElement.parentElement.parentElement);
         commentContainer = getRepliesContainer(form);
     }
     commentContainer.innerHTML += existingComment(comment, comment.articleId);
@@ -112,12 +111,23 @@ function getFormValue(form: Element): CommentFormValues {
 }
 
 function addCommentOnSubmit() {
-    const commentForms: Element[] = Array.from(document.querySelectorAll(FORM_CLASS_SELECTOR));
     const listenerRemovers = [];
+    let hideOpenReply;
+    
+    const commentForms: Element[] = Array.from(document.querySelectorAll(FORM_CLASS_SELECTOR));
+    Array.from(document.querySelectorAll('a.reply-btn')).forEach(a => a.addEventListener('click', e => {
+        e.preventDefault()
+        hideOpenReply && hideOpenReply();
+        const target = document.getElementById(a.getAttribute('href').slice(1));
+        target.classList.add('show-reply');
+        hideOpenReply = () => target.classList.remove('show-reply')
+        
+    }));
 
     const interceptFormSubmit = (form: Element): void => {
         const listener = async ev => {
             ev.preventDefault();
+            hideOpenReply();            
             const commentData = getFormValue(form);
             const commentComponent = appendComment(enhanceCommentFormValues(commentData), form);
             const { isSuccessful, commentId } = await sendToServer(commentData);
@@ -126,7 +136,6 @@ function addCommentOnSubmit() {
             } else {
                 commentComponent.failedToCreate();
             }
-
             listenerRemovers.forEach(r => r());
             addCommentOnSubmit();
         };
