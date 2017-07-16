@@ -165,6 +165,7 @@ footer {
         display: block;
         margin: 0 auto;
         max-width: 320px;
+        min-height: 374px;
         width: 100%;
         margin-bottom: $spacing6;
     }
@@ -238,16 +239,20 @@ footer {
 
 .comments-container {
     margin-top: $spacing6;
+    border-top: 1px dashed rgba(0, 0, 0, 0.4);
+    padding-top: $spacing6;
 }
 
 .existing-comment {
+    position: relative;
     margin-bottom: $spacing3;
     // background-color: rgba(0, 0, 0, 0.08);
     border-radius: 2px;
     .inner-wrap {
         border-top: 1px solid rgba(0, 0, 0, 0.3);
         padding: $spacing2;
-        &:target, &.show-reply {
+        &:target,
+        &.show-reply {
             .new-reply {
                 display: block;
             }
@@ -276,6 +281,39 @@ footer {
             font-size: 16px;
         }
     }
+
+    .coment-msg {
+        opacity: 0;
+        background-color: white;
+        padding: $spacing2;
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        animation: fade-in 3s;
+
+        &.is-positive {
+            color: green;
+        }
+        &.is-negative {
+            color: red;
+        }
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 .replies {
@@ -287,12 +325,19 @@ footer {
 }
 
 .new-comment {
-    .comment {
+    .comment-area {
         padding: $spacing0;
         min-width: 100%;
         max-width: 100%;
         min-height: 120px;
-        margin-bottom: $spacing1;
+        border-radius: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+    }
+    .formatting-info {
+        font-size: 12px;
+        line-height: 1.4;
+        margin-bottom: $spacing2;
+        color: rgba(0, 0, 0, 0.6);
     }
 
     .bottom {
@@ -301,9 +346,21 @@ footer {
             padding: $spacing0;
             flex: 1;
             margin-right: $spacing1;
+            border-radius: 2px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
         }
         .add {
             flex: 1;
+            color: rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            &:hover,
+            &:focus {
+                color: rgba(0, 0, 0, 1);
+                border: 1px solid rgba(0, 0, 0, 0.5);
+            }
         }
     }
 }

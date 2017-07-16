@@ -65,6 +65,13 @@ function getRepliesContainer(form: Element) {
     }
 }
 
+function showCommentActionMsg(commentEl: Element, isPositive: boolean) {
+    const msg = document.createElement('div');
+    msg.innerText = isPositive ? 'Saved!' : 'Failed to save :(';
+    msg.className = `coment-msg ${isPositive ? 'is-positive' : 'is-negative'}`;
+    commentEl.appendChild(msg);
+}
+
 function appendComment(comment: Comment, form: Element) {
     let commentContainer;
     if (form.parentElement.getAttribute('class') === COMMENTS_CONTAINER_CLASS) {
@@ -85,10 +92,11 @@ function appendComment(comment: Comment, form: Element) {
             commentEl.setAttribute('id', articleId);
             parentInput.setAttribute('value', articleId);
             replyBtn.setAttribute('href', `#${articleId}`);
-            // show that comment was saved in db
+            showCommentActionMsg(commentEl, true);
         },
         failedToCreate() {
-            // show that comment has not been saved in db
+            const commentEl: Element = document.getElementById(comment.id);            
+            showCommentActionMsg(commentEl, false);            
         }
     };
 }
@@ -113,21 +121,22 @@ function getFormValue(form: Element): CommentFormValues {
 function addCommentOnSubmit() {
     const listenerRemovers = [];
     let hideOpenReply;
-    
+
     const commentForms: Element[] = Array.from(document.querySelectorAll(FORM_CLASS_SELECTOR));
-    Array.from(document.querySelectorAll('a.reply-btn')).forEach(a => a.addEventListener('click', e => {
-        e.preventDefault()
-        hideOpenReply && hideOpenReply();
-        const target = document.getElementById(a.getAttribute('href').slice(1));
-        target.classList.add('show-reply');
-        hideOpenReply = () => target.classList.remove('show-reply')
-        
-    }));
+    Array.from(document.querySelectorAll('a.reply-btn')).forEach(a =>
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            hideOpenReply && hideOpenReply();
+            const target = document.getElementById(a.getAttribute('href').slice(1));
+            target.classList.add('show-reply');
+            hideOpenReply = () => target.classList.remove('show-reply');
+        })
+    );
 
     const interceptFormSubmit = (form: Element): void => {
         const listener = async ev => {
             ev.preventDefault();
-            hideOpenReply();            
+            hideOpenReply && hideOpenReply();
             const commentData = getFormValue(form);
             const commentComponent = appendComment(enhanceCommentFormValues(commentData), form);
             const { isSuccessful, commentId } = await sendToServer(commentData);

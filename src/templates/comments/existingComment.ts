@@ -17,6 +17,18 @@ function getDaysFormattedWithNoun(daysNumber: number): string {
     else return `${daysNumber} days ago`;
 }
 
+function removeUrlEscape(comment: string): string {
+    const splitComment = comment.split('@');
+    return splitComment.reduce((cmnt, val, i) => {
+        if (val === '@' && (splitComment[i + 2] === '@' || splitComment[i - 2] === '@')) {
+            return cmnt;
+        }
+
+        cmnt += val;
+        return cmnt;
+    }, '');
+}
+
 export function existingComment(data: CommentAttributes, articleId: string, parent: string = null) {
     if (parent === null) {
         parent = articleId;
@@ -30,7 +42,7 @@ export function existingComment(data: CommentAttributes, articleId: string, pare
                     <span class="name">${data.name || 'Anonymous'}</span>
                     <span class="time">${getDaysFormattedWithNoun(commentAge)}</span>
                 </div>
-                <p class="comment" name="comment">${data.comment}</p>
+                <p class="comment" name="comment">${removeUrlEscape(data.comment)}</p>
                 <div class="add-reply"><a class="reply-btn" href="#${data.id}">Reply</a></div>
 
                 <div class="new-reply">${newComment(articleId, data.id)}</div>

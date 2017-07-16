@@ -162,6 +162,7 @@ Article.submitComment = async function(id: string, commentData: CommentAttribute
         if (!isValidPostFrequency) {
             return [false, null];
         }
+
         const comment = await Comment.create(commentData);
         await article.addComment(comment);
         return [true, comment.id];
