@@ -10,4 +10,4 @@ export const swFile = path.join(__dirname, '../../src/client/sw/sw.ts');
 export const staticFilesPath = path.join(__dirname, '../static');
 export const isDevMode = process.env.NODE_ENV === 'development';
 export const isTestMode = process.env.NODE_ENV === 'test';
-export const serverPort = process.env.PORT || 3000;
+export const serverPort = process.env.PORT || 3006;
