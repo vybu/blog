@@ -72,7 +72,7 @@ export function copyStaticFiles(): void {
 
 export function getGitCommitsCount(): Promise<number> {
     return new Promise((resolve, reject) => {
-        childProcess.exec('git rev-list --all --count', (err: string, stdout: string) => {
+        childProcess.exec('git rev-list --all --count', (err: Error, stdout: string) => {
             if (err) {
                 console.error(err);
                 reject(err);

@@ -2,7 +2,6 @@ import webpack = require('webpack');
 import WebpackMd5Hash = require('webpack-md5-hash');
 import ExtractTextPlugin = require('extract-text-webpack-plugin');
 import autoprefixer = require('autoprefixer');
-import path = require('path');
 import { dist, stylesEntryFile, jsEntryFile, swFile, stylesPaths, isDevMode } from '../constants';
 
 interface WebpackStatsAsset {
@@ -68,7 +67,7 @@ export function getJSAndCSSCompiler(): Function {
         plugins
     });
 
-    // TODO: probably need to have different script in which it builds and run sw.js, while in others t doesn't;
+    // TODO: probably need to have different script in which it builds and run sw.js, while in others it doesn't;
     const swCompiler = webpack({
         stats: 'none',
         entry: swFile,
