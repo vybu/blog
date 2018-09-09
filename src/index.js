@@ -28,7 +28,7 @@ let currentChildProcess;
 function spawnProcess() {
     currentChildProcess = childProcess.fork(`${app}`);
 
-    currentChildProcess.on('message', m => {
+    currentChildProcess.on('message', (m) => {
         if (m === 'generated') {
             server.reload();
         }
@@ -52,7 +52,7 @@ const debouncedRerunApp = debounce(rerunApp, 100);
 const debouncedTriggerGenerator = debounce(triggerGenerator, 100);
 
 generatorFilesToWatch.forEach(f =>
-    fs.watch(f, eventType => {
+    fs.watch(f, (eventType) => {
         if (eventType === 'change') {
             debouncedRerunApp();
         }
@@ -60,7 +60,7 @@ generatorFilesToWatch.forEach(f =>
 );
 
 generatorTargetFilesToWatch.forEach(f =>
-    fs.watch(f, eventType => {
+    fs.watch(f, (eventType) => {
         if (eventType === 'change') {
             debouncedTriggerGenerator();
         }

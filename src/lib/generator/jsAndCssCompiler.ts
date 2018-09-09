@@ -1,8 +1,10 @@
 import webpack = require('webpack');
 import WebpackMd5Hash = require('webpack-md5-hash');
-import ExtractTextPlugin = require('extract-text-webpack-plugin');
+import MiniCssExtractPlugin = require("mini-css-extract-plugin");
 import autoprefixer = require('autoprefixer');
 import { dist, stylesEntryFile, jsEntryFile, swFile, stylesPaths, isDevMode } from '../constants';
+
+const mode = isDevMode ? 'development' : 'production'
 
 interface WebpackStatsAsset {
     name: string;
@@ -15,10 +17,9 @@ interface CompiledFileNames {
 
 export function getJSAndCSSCompiler(): Function {
     const plugins = [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': isDevMode ? '"development"' : '"production"'
+        new MiniCssExtractPlugin({
+            filename: isDevMode ? '[name].css' : '[name].[contenthash].css'
         }),
-        new ExtractTextPlugin(isDevMode ? '[name].css' : '[name].[contenthash].css'),
         new webpack.LoaderOptionsPlugin({
             minimize: !isDevMode,
             debug: false,
@@ -34,11 +35,11 @@ export function getJSAndCSSCompiler(): Function {
     ];
 
     if (!isDevMode) {
-        plugins.unshift(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
         plugins.unshift(new WebpackMd5Hash());
     }
 
     const compiler = webpack({
+        mode,
         stats: 'none',
         entry: [stylesEntryFile, jsEntryFile],
         devtool: 'source-map',
@@ -60,7 +61,12 @@ export function getJSAndCSSCompiler(): Function {
                 },
                 {
                     test: /(\.css|\.scss|\.sass)$/,
-                    loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!sass-loader?sourceMap')
+                    use: [
+                        isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        { loader: 'postcss-loader', options: { parser: 'postcss-scss', syntax: 'postcss-scss', } },
+                        'sass-loader',
+                    ]
                 }
             ]
         },
@@ -69,6 +75,7 @@ export function getJSAndCSSCompiler(): Function {
 
     // TODO: probably need to have different script in which it builds and run sw.js, while in others it doesn't;
     const swCompiler = webpack({
+        mode,
         stats: 'none',
         entry: swFile,
         devtool: 'source-map',
