@@ -39,6 +39,7 @@
         "webpack-md5-hash": "0.0.6"
     },
     "dependencies": {
+        "@octokit/rest": "^15.13.1",
         "@types/glob": "^5.0.30",
         "@types/hyperscript": "0.0.3",
         "autoprefixer": "^9.1.5",

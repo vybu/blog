@@ -1,5 +1,5 @@
 interface IResourceBase {
-  _id: string;
+  __id: string;
   createdAt: string | number;
 }
 interface IArticle extends IResourceBase {
@@ -8,7 +8,7 @@ interface IArticle extends IResourceBase {
 interface ILike extends IResourceBase {
   timestamp: string | number;
   _ip: string;
-  articleId?: string;
+  __articleId?: string;
 }
 interface IComment extends IResourceBase {
   id: string;
@@ -16,7 +16,7 @@ interface IComment extends IResourceBase {
   name: string;
   comment: string;
   parent: string;
-  articleId?: string;
+  __articleId?: string;
 }
 
 interface IData {
@@ -48,7 +48,7 @@ export class DataWrapper implements IDataWrapper {
   }
 
   static create<T>(obj: T): T & IResourceBase {
-    return Object.assign({ createdAt: Date.now(), _id: getId() }, obj);
+    return Object.assign({ createdAt: Date.now(), __id: getId() }, obj);
   }
 
   getData(): IData {
@@ -109,15 +109,15 @@ export class DataWrapper implements IDataWrapper {
     return resource;
   }
 
-  addLikeToArticle({ _id: articleId }: IArticle, { _id: likeId }: ILike) {
-    const like = this.data.likes.find((a) => a._id === likeId);
-    like.articleId = articleId;
+  addLikeToArticle({ __id: __articleId }: IArticle, { __id: likeId }: ILike) {
+    const like = this.data.likes.find((a) => a.__id === likeId);
+    like.__articleId = __articleId;
     return like;
   }
 
-  addCommentToArticle({ _id: articleId }: IArticle, { _id: commentId }: IComment) {
-    const comment = this.data.comments.find((a) => a._id === commentId);
-    comment.articleId = articleId;
+  addCommentToArticle({ __id: __articleId }: IArticle, { __id: commentId }: IComment) {
+    const comment = this.data.comments.find((a) => a.__id === commentId);
+    comment.__articleId = __articleId;
     return comment;
   }
 }

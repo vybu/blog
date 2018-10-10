@@ -11,7 +11,7 @@ describe('DataWrapper', () => {
     expect(data.likes).toEqual([]);
     expect(data.comments).toEqual([]);
     expect(data.articles).toHaveLength(1);
-    expect(data.articles[0]).toHaveProperty('_id');
+    expect(data.articles[0]).toHaveProperty('__id');
     expect(data.articles[0]).toHaveProperty('createdAt');
     expect(data.articles[0].id).toBe('1');
   });
@@ -21,7 +21,7 @@ describe('DataWrapper', () => {
     expect(data.articles).toEqual([]);
     expect(data.comments).toEqual([]);
     expect(data.likes).toHaveLength(1);
-    expect(data.likes[0]).toHaveProperty('_id');
+    expect(data.likes[0]).toHaveProperty('__id');
     expect(data.likes[0]).toHaveProperty('createdAt');
     expect(data.likes[0].timestamp).toBe(123);
     expect(data.likes[0]._ip).toBe('123.456');
@@ -38,7 +38,7 @@ describe('DataWrapper', () => {
     expect(data.articles).toEqual([]);
     expect(data.likes).toEqual([]);
     expect(data.comments).toHaveLength(1);
-    expect(data.comments[0]).toHaveProperty('_id');
+    expect(data.comments[0]).toHaveProperty('__id');
     expect(data.comments[0]).toHaveProperty('createdAt');
     expect(data.comments[0].id).toBe('123');
     expect(data.comments[0]._ip).toBe('456');
@@ -104,7 +104,7 @@ describe('DataWrapper', () => {
     const article = dataWrapper.createArticle({ id: '1' });
     const like = dataWrapper.createLike({ timestamp: 123, _ip: '123.456' });
     dataWrapper.addLikeToArticle(article, like);
-    expect(dataWrapper.findLike(like)).toHaveProperty('articleId', article._id);
+    expect(dataWrapper.findLike(like)).toHaveProperty('__articleId', article.__id);
   });
   it('adds comment to article', () => {
     const article = dataWrapper.createArticle({ id: '1' });
@@ -114,8 +114,8 @@ describe('DataWrapper', () => {
       name: 'name',
       comment: 'comment',
       parent: 'parentId',
-    });    
+    });
     dataWrapper.addCommentToArticle(article, comment);
-    expect(dataWrapper.findComment(comment)).toHaveProperty('articleId', article._id);
+    expect(dataWrapper.findComment(comment)).toHaveProperty('__articleId', article.__id);
   });
 });
