@@ -1,6 +1,7 @@
+import validator = require('validator');
 interface IResourceBase {
-  __id: string;
-  createdAt: string | number;
+  __id?: string;
+  createdAt?: string | number;
 }
 interface IArticle extends IResourceBase {
   id: string;
@@ -12,7 +13,7 @@ interface ILike extends IResourceBase {
 }
 interface IComment extends IResourceBase {
   id: string;
-  _ip: string;
+  _ip?: string;
   name: string;
   comment: string;
   parent: string;
@@ -24,8 +25,24 @@ interface IData {
   likes: ILike[];
   comments: IComment[];
 }
-interface IDataWrapper {
+export interface IDataWrapper {
   data: IData;
+  getData: () => IData;
+  findArticleById: (id: string) => IArticle;
+  findLikes: (props: Partial<ILike>) => ILike[];
+  findLike: (props: Partial<ILike>) => ILike;
+  findComments: (props: Partial<IComment>) => IComment[];
+  findComment: (props: Partial<IComment>) => IComment;
+  createArticle: (props: { id: string }) => IArticle;
+  createLike: (props: ILike) => ILike;
+  createComment: (props: IComment) => IComment;
+  addLikeToArticle: (article: IArticle, like: ILike) => ILike;
+  addCommentToArticle: (article: IArticle, comment: IComment) => IComment;
+}
+function includesNoUrl(value) {
+  if (value.split(' ').some((v) => validator.isURL(v))) {
+    throw Error('Basic urls are not allowed (to prevent spam)');
+  }
 }
 
 const createFindFunction = (properties) => {
@@ -37,10 +54,22 @@ const createFindFunction = (properties) => {
 
 const getId = () => `${Date.now() + Math.random()}`;
 
+export const sortAsc = (data) => {
+  const d = data.slice();
+  d.sort((a, b) => a.createdAt - b.createdAt);
+  return d;
+};
+
+export const sortDsc = (data) => {
+  const d = data.slice();
+  d.sort((a, b) => b.createdAt - a.createdAt);
+  return d;
+};
+
 export class DataWrapper implements IDataWrapper {
   data: IData;
-  constructor() {
-    this.data = {
+  constructor(initialData: IData) {
+    this.data = initialData || {
       articles: [],
       likes: [],
       comments: [],
@@ -55,7 +84,7 @@ export class DataWrapper implements IDataWrapper {
     return this.data;
   }
 
-  findArticleById(id) {
+  findArticleById(id): IArticle {
     return this.data.articles.find((a) => a.id === id);
   }
 
@@ -98,6 +127,21 @@ export class DataWrapper implements IDataWrapper {
   }
 
   createComment({ id = getId(), _ip, name, comment, parent }: IComment) {
+    if (_ip === undefined || name === undefined || comment === undefined || parent === undefined) {
+      throw Error('Required fields are missing');
+    }
+
+    if (comment.length > 2000) {
+      throw Error('Comment length is invalid');
+    }
+
+    if (name.length > 50) {
+      throw Error('Comment length is invalid');
+    }
+
+    includesNoUrl(name);
+    includesNoUrl(comment);
+
     const resource = DataWrapper.create({
       id,
       _ip,
