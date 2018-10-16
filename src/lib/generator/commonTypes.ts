@@ -1,40 +1,40 @@
-import { CommentAttributes } from '../../server/db'
+import { ICommentWithReplies } from '../../server/db';
 export type fileName = string;
 
 export interface ArticleRaw {
-    fileName;
-    content: string;
+  fileName;
+  content: string;
 }
 
 export interface ArticlesReadersData {
-    likes: number[];
-    comments: CommentAttributes[];
+  likes: number[];
+  comments: ICommentWithReplies[];
 }
 
 export interface MetaData {
-    author: string;
-    title: string;
-    date: string;
-    tags: string[];
-    summary?: string;
-    id: string;
+  author: string;
+  title: string;
+  date: string;
+  tags: string[];
+  summary?: string;
+  id: string;
 }
 
 export interface ParsedArticle {
-    metaData: MetaData;
-    articleHtml: string;
+  metaData: MetaData;
+  articleHtml: string;
 }
 
 export interface ProcessedArticle extends ArticleRaw {
-    parsedArticle: ParsedArticle;
-    articlesReadersData: ArticlesReadersData;
+  parsedArticle: ParsedArticle;
+  articlesReadersData: ArticlesReadersData;
 }
 
 export interface PageJson {
-    renderedHtml: string;
+  renderedHtml: string;
 }
 
 export interface BuiltPage {
-    fullPage: string;
-    content: string;
+  fullPage: string;
+  content: string;
 }

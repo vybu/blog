@@ -11,28 +11,28 @@ import { ProcessedArticle, ArticleRaw } from './commonTypes';
  * only get latest likes and comments data.
  */
 export async function initHotArticleRebuilder() {
-    const commitsCount = await getGitCommitsCount();
-    const compiler = getJSAndCSSCompiler();
+  const commitsCount = await getGitCommitsCount();
+  const compiler = getJSAndCSSCompiler();
 
-    const templatesBuilder = new TemplatesBuilder(compiler, commitsCount);
-    const [articles]: [ArticleRaw[], void] = await Promise.all([getArticles(), templatesBuilder.precompileJsAndCss()]);
+  const templatesBuilder = new TemplatesBuilder(compiler, commitsCount);
+  const [articles]: [ArticleRaw[], void] = await Promise.all([getArticles(), templatesBuilder.precompileJsAndCss()]);
 
-    const parsedArticles = articles.reduce((result, { fileName, content }): { [key: string]: ProcessedArticle } => {
-        const parsedArticle = parseArticle(content);
-        const article = Object.assign({}, { fileName, content, parsedArticle });
-        result[parsedArticle.metaData.id] = article;
-        return result;
-    }, {});
+  const parsedArticles = articles.reduce((result, { fileName, content }): { [key: string]: ProcessedArticle } => {
+    const parsedArticle = parseArticle(content);
+    const article = Object.assign({}, { fileName, content, parsedArticle });
+    result[parsedArticle.metaData.id] = article;
+    return result;
+  }, {});
 
-    return async function generate(articleId) {
-        const [likes, comments] = await Promise.all([
-            Article.retrieveLikes(articleId),
-            Article.retrieveComments(articleId)
-        ]);
+  return async function generate(articleId) {
+    const [likes, comments] = await Promise.all([
+      Article.retrieveLikes(articleId),
+      Article.retrieveComments(articleId),
+    ]);
 
-        const { fileName, parsedArticle } = parsedArticles[articleId];
-        const builtArticle = await templatesBuilder.buildFullBlogPage(parsedArticle, { likes, comments });
-        saveFinalOutput(fileName, builtArticle);
-        return builtArticle;
-    };
+    const { fileName, parsedArticle } = parsedArticles[articleId];
+    const builtArticle = await templatesBuilder.buildFullBlogPage(parsedArticle, { likes, comments });
+    saveFinalOutput(fileName, builtArticle);
+    return builtArticle;
+  };
 }

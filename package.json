@@ -1,18 +1,19 @@
 {
-    "name": "blog",
+    "name": "vybu-blog",
     "version": "0.0.2",
     "description": "Personal blog engine",
     "main": "index.js",
     "author": "Vytenis Butkevicius",
     "license": "MIT",
     "scripts": {
-        "dev": "NODE_ENV=development PORT=3005 node ./src/index.js",
-        "build": "NODE_ENV=production node ./src/index.js",
+        "run:dev": "NODE_ENV=development PORT=3005 node ./src/index.js",
+        "run:prod": "NODE_ENV=production node ./src/index.js",
+        "static:build": "NODE_ENV=production node ./src/generatorRunnerProxy.js",
         "server:build": "node_modules/.bin/tsc ./src/server/index.ts --outDir distServer --rootDir ./src --target esnext --module commonjs",
         "server": "NODE_ENV=development PORT=3005 node ./distServer/server/index.js",
         "server:prod": "NODE_ENV=production PORT=3000 node ./distServer/server/index.js",
         "test": "NODE_ENV=test jest",
-        "format": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=all --write \"src/**/*.+(js|ts)\""
+        "format": "prettier --print-width=120 --tab-width=2 --single-quote --trailing-comma=all --write \"src/**/*.+(js|ts)\""
     },
     "devDependencies": {
         "@types/browser-sync": "0.0.41",
@@ -65,6 +66,7 @@
         "postcss-loader": "^3.0.0",
         "postcss-plugin": "^1.0.0",
         "postcss-scss": "^2.0.0",
+        "rc": "^1.2.8",
         "sass-loader": "^7.1.0",
         "style-loader": "^0.23.0",
         "ts-node": "^7.0.1",

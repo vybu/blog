@@ -2,7 +2,7 @@ import { a } from './elements';
 import { ContainerIds } from './constants';
 
 export function about(): string {
-    return `
+  return `
         <div class="about">
             <img src="/images/me_cartoon.png" alt="cartoon picture of me"/>
             <p>Welcome to my personal website, I am a software engineer based in Lithuania, Vilnius.</p>
@@ -13,10 +13,10 @@ export function about(): string {
             <blockquote>
                 <p> “If you can't explain it simply you don't understand it well enough.”
                  &mdash; ${a(
-                     ContainerIds.Noop,
-                     'https://skeptics.stackexchange.com/questions/8742/did-einstein-say-if-you-cant-explain-it-simply-you-dont-understand-it-well-en',
-                     '<s>Albert Einstein</s>',
-                     '_blank',
+                   ContainerIds.Noop,
+                   'https://skeptics.stackexchange.com/questions/8742/did-einstein-say-if-you-cant-explain-it-simply-you-dont-understand-it-well-en',
+                   '<s>Albert Einstein</s>',
+                   '_blank',
                  )}</p>
             </blockquote>
             <p>

@@ -7,7 +7,7 @@ interface IArticle extends IResourceBase {
   id: string;
 }
 interface ILike extends IResourceBase {
-  timestamp: string | number;
+  timestamp: number;
   _ip: string;
   __articleId?: string;
 }
@@ -41,27 +41,25 @@ export interface IDataWrapper {
   addCommentToArticle: (article: IArticle, comment: IComment) => IComment;
 }
 function includesNoUrl(value) {
-  if (value.split(' ').some((v) => validator.isURL(v))) {
+  if (value.split(' ').some(v => validator.isURL(v))) {
     throw Error('Basic urls are not allowed (to prevent spam)');
   }
 }
 
-const createFindFunction = (properties) => {
-  const props = Object.entries(properties).filter(
-    (key, value) => key !== undefined && value !== undefined,
-  );
-  return (target) => props.every(([ key, value ]) => target[key] === value);
+const createFindFunction = properties => {
+  const props = Object.entries(properties).filter((key, value) => key !== undefined && value !== undefined);
+  return target => props.every(([key, value]) => target[key] === value);
 };
 
 const getId = () => `${Date.now() + Math.random()}`;
 
-export const sortAsc = (data) => {
+export const sortAsc = data => {
   const d = data.slice();
   d.sort((a, b) => a.createdAt - b.createdAt);
   return d;
 };
 
-export const sortDsc = (data) => {
+export const sortDsc = data => {
   const d = data.slice();
   d.sort((a, b) => b.createdAt - a.createdAt);
   return d;
@@ -70,19 +68,17 @@ export const sortDsc = (data) => {
 export class DataWrapper implements IDataWrapper {
   data: IData;
   persistData: Function;
-  constructor(
-    {
-      initialData = {
-        articles: [],
-        likes: [],
-        comments: [],
-      },
-      persistData = () => Promise.resolve(),
-    }: {
-      initialData?: IData;
-      persistData?: Function;
-    } = {},
-  ) {
+  constructor({
+    initialData = {
+      articles: [],
+      likes: [],
+      comments: [],
+    },
+    persistData = () => Promise.resolve(),
+  }: {
+    initialData?: IData;
+    persistData?: Function;
+  } = {}) {
     this.data = initialData;
     this.persistData = persistData;
   }
@@ -100,7 +96,7 @@ export class DataWrapper implements IDataWrapper {
   }
 
   findArticleById(id): IArticle {
-    return this.data.articles.find((a) => a.id === id);
+    return this.data.articles.find(a => a.id === id);
   }
 
   findLikes(props) {
@@ -169,13 +165,13 @@ export class DataWrapper implements IDataWrapper {
   }
 
   addLikeToArticle({ __id: __articleId }: IArticle, { __id: likeId }: ILike) {
-    const like = this.data.likes.find((a) => a.__id === likeId);
+    const like = this.data.likes.find(a => a.__id === likeId);
     like.__articleId = __articleId;
     return like;
   }
 
   addCommentToArticle({ __id: __articleId }: IArticle, { __id: commentId }: IComment) {
-    const comment = this.data.comments.find((a) => a.__id === commentId);
+    const comment = this.data.comments.find(a => a.__id === commentId);
     comment.__articleId = __articleId;
     return comment;
   }

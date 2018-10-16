@@ -2,9 +2,7 @@ import micro = require('micro');
 import Busboy = require('busboy');
 import escapeHtml = require('escape-html');
 import { IncomingMessage, ServerResponse } from 'http';
-import { Database } from './db';
-import { GithubGistDriver } from './githubGistDriver';
-import { DataWrapper } from './dataWrapper';
+import { initDb } from './initDb';
 
 function getIp(req) {
   return req.connection.remoteAddress; // this will be needed to change to header under nginx
@@ -27,7 +25,7 @@ async function submitLike(articleId, _ip, database) {
 
 async function submitComment(articleId, ip, commentData, database) {
   commentData._ip = ip;
-  const [ isSuccessful, commentId ] = await database.submitComment(articleId, commentData);
+  const [isSuccessful, commentId] = await database.submitComment(articleId, commentData);
   return { isSuccessful, commentId };
 }
 
@@ -41,8 +39,8 @@ async function parseFormData(req: IncomingMessage) {
     req.pipe(formParser);
   });
 }
-
-const server = (hotArticleRebuilder) =>
+// TODO: trycatch
+const server = hotArticleRebuilder =>
   micro(async (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'content-type');
@@ -53,10 +51,7 @@ const server = (hotArticleRebuilder) =>
     const ip = getIp(req);
     const articleId = like ? like[1] : comment ? comment[1] : null;
 
-    const githubGistDriver = new GithubGistDriver({ gistId: 'TODO', secretToken: 'TODO!' });
-    const initialData = await githubGistDriver.getData();
-    const dataWrapper = new DataWrapper({ initialData, persistData: githubGistDriver.setData });
-    const database = new Database(dataWrapper);
+    const database = await initDb();
 
     if (!articleId) {
       return null;

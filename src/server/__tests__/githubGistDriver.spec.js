@@ -12,7 +12,7 @@ describe('githubDriver', () => {
     ],
     [
       {
-        articles: [ { __id: '1539191973461.9456' } ],
+        articles: [{ __id: '1539191973461.9456' }],
         likes: [
           {
             __id: '1539191973461.992',
@@ -44,7 +44,7 @@ describe('githubDriver', () => {
     ],
     [
       {
-        articles: [ { __id: '1539191973461.9456' } ],
+        articles: [{ __id: '1539191973461.9456' }],
         likes: [
           {
             __id: '1539191973461.992',
@@ -75,14 +75,14 @@ describe('githubDriver', () => {
     ],
   ];
   describe('serializer', () => {
-    testData.forEach(([ input, expectedResult ]) => {
+    testData.forEach(([input, expectedResult]) => {
       it('successfully serializes data for gist', () => {
         expect(serialize(input)).toMatchObject(expectedResult);
       });
     });
   });
   describe('deserializer', () => {
-    testData.forEach(([ expectedResult, input ]) => {
+    testData.forEach(([expectedResult, input]) => {
       it('successfully deserializes data for gist', () => {
         expect(deserialize(input)).toMatchObject(expectedResult);
       });

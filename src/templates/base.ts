@@ -4,15 +4,15 @@ import { footer } from './footer';
 import { ContainerIds } from './constants';
 
 export function base({
-    body = '',
-    head = '',
-    commitsCount,
+  body = '',
+  head = '',
+  commitsCount,
 }: {
-    body: string;
-    head?: string;
-    commitsCount: number;
+  body: string;
+  head?: string;
+  commitsCount: number;
 }): string {
-    return `
+  return `
         <!DOCTYPE html>
         <html lang="en">
 

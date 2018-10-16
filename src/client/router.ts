@@ -17,134 +17,136 @@ const ROUTER_LINKS_SELECTOR = `a[${routerLinkIdentifier}]`;
 type innerHTML = string;
 
 interface RoutingInfo {
-    containerId: ContainerIds;
-    href: string;
+  containerId: ContainerIds;
+  href: string;
 }
 
 interface HistoryState {
-    containerId: ContainerIds;
-    innerHTML;
+  containerId: ContainerIds;
+  innerHTML;
 }
 
 interface ContentPromises {
-    [key: string]: { then: Function };
+  [key: string]: { then: Function };
 }
 
 const JSONFetchMap = {
-    '/': '/index',
+  '/': '/index',
 };
 
 const contentPromises: ContentPromises = {};
 let navigationListeners: Function[] = [];
 
 function getJSON(href: string): Promise<any> {
-    return fetch(`${href}.json`).then(r => {
-        if (r.status === 200) {
-            return r.json();
-        } else {
-            throw new Error(r.statusText);
-        }
-    });
+  return fetch(`${href}.json`).then(r => {
+    if (r.status === 200) {
+      return r.json();
+    } else {
+      throw new Error(r.statusText);
+    }
+  });
 }
 
 function getRoutingInfo(element: Element): RoutingInfo {
-    return {
-        containerId: parseInt(element.getAttribute(routerLinkIdentifier)),
-        href: element.getAttribute('href'),
-    };
+  return {
+    containerId: parseInt(element.getAttribute(routerLinkIdentifier)),
+    href: element.getAttribute('href'),
+  };
 }
 
 function getContainerElement(containerId: ContainerIds): Element {
-    return document.getElementById(`${containerPrefix}${containerId}`);
+  return document.getElementById(`${containerPrefix}${containerId}`);
 }
 
 function changeUrlTo({ href, containerId }: RoutingInfo, innerHTML: innerHTML, replace: boolean = false): void {
-    const historyState: HistoryState = {
-        containerId,
-        innerHTML,
-    };
+  const historyState: HistoryState = {
+    containerId,
+    innerHTML,
+  };
 
-    if (replace) {
-        window.history.replaceState(historyState, href, href);
-    } else {
-        window.history.pushState(historyState, href, href);
-    }
+  if (replace) {
+    window.history.replaceState(historyState, href, href);
+  } else {
+    window.history.pushState(historyState, href, href);
+  }
 }
 
 function handleHistoryChange({ containerId, innerHTML }: HistoryState): void {
-    const container = getContainerElement(containerId);
+  const container = getContainerElement(containerId);
 
-    if (container) {
-        container.innerHTML = innerHTML;
-        initRouterForAllSelector(containerId);
+  if (container) {
+    container.innerHTML = innerHTML;
+    initRouterForAllSelector(containerId);
 
-        navigationListeners.forEach(l => l());
-    } else {
-        window.location.reload();
-    }
+    navigationListeners.forEach(l => l());
+  } else {
+    window.location.reload();
+  }
 }
 
 function startFetchingJson({ href }: RoutingInfo): EventListenerOrEventListenerObject {
-    return () => {
-        contentPromises[href] = {
-            then(handler) {
-                const h = JSONFetchMap[href] ? JSONFetchMap[href] : href;
-                getJSON(h).then(handler).catch(err => console.error(err));
-            },
-        };
+  return () => {
+    contentPromises[href] = {
+      then(handler) {
+        const h = JSONFetchMap[href] ? JSONFetchMap[href] : href;
+        getJSON(h)
+          .then(handler)
+          .catch(err => console.error(err));
+      },
     };
+  };
 }
 
 function jsonLoadHandler(r: PageJson) {
-    return r.renderedHtml;
+  return r.renderedHtml;
 }
 
 function displayedFetchedContent(
-    { href, containerId }: RoutingInfo,
-    jsonLoadHandler,
+  { href, containerId }: RoutingInfo,
+  jsonLoadHandler,
 ): EventListenerOrEventListenerObject {
-    return () =>
-        contentPromises[href] &&
-        contentPromises[href].then(r => {
-            const innerHTML = jsonLoadHandler(r);
-            changeUrlTo({ href, containerId }, innerHTML);
-            handleHistoryChange({ containerId, innerHTML });
-        });
-}
-
-function initRouter(routerLinksSelector: string, jsonLoadHandler: Function): void {
-    Array.from(document.querySelectorAll(routerLinksSelector)).forEach(element => {
-        const routingInfo = getRoutingInfo(element);
-
-        element.addEventListener('mousedown', startFetchingJson(routingInfo));
-        element.addEventListener('mouseup', displayedFetchedContent(routingInfo, jsonLoadHandler));
-        element.addEventListener('click', ev => ev.preventDefault());
+  return () =>
+    contentPromises[href] &&
+    contentPromises[href].then(r => {
+      const innerHTML = jsonLoadHandler(r);
+      changeUrlTo({ href, containerId }, innerHTML);
+      handleHistoryChange({ containerId, innerHTML });
     });
 }
 
-function setPushStateForInitialLoad() {
-    const container = getContainerElement(ContainerIds.App);
+function initRouter(routerLinksSelector: string, jsonLoadHandler: Function): void {
+  Array.from(document.querySelectorAll(routerLinksSelector)).forEach(element => {
+    const routingInfo = getRoutingInfo(element);
 
-    if (container) {
-        changeUrlTo({ href: window.location.pathname, containerId: ContainerIds.App }, container.innerHTML, true);
-    } else {
-        changeUrlTo({ href: window.location.pathname, containerId: ContainerIds.Noop }, '', true);
-    }
+    element.addEventListener('mousedown', startFetchingJson(routingInfo));
+    element.addEventListener('mouseup', displayedFetchedContent(routingInfo, jsonLoadHandler));
+    element.addEventListener('click', ev => ev.preventDefault());
+  });
+}
+
+function setPushStateForInitialLoad() {
+  const container = getContainerElement(ContainerIds.App);
+
+  if (container) {
+    changeUrlTo({ href: window.location.pathname, containerId: ContainerIds.App }, container.innerHTML, true);
+  } else {
+    changeUrlTo({ href: window.location.pathname, containerId: ContainerIds.Noop }, '', true);
+  }
 }
 
 function initRouterForAllSelector(specificContainerId: ContainerIds | null): void {
-    let containerSelector = '';
-    if (specificContainerId !== null) {
-        containerSelector = `#${containerPrefix}${specificContainerId} `;
-    }
-    initRouter(`${containerSelector}${ROUTER_LINKS_SELECTOR}`, jsonLoadHandler);
+  let containerSelector = '';
+  if (specificContainerId !== null) {
+    containerSelector = `#${containerPrefix}${specificContainerId} `;
+  }
+  initRouter(`${containerSelector}${ROUTER_LINKS_SELECTOR}`, jsonLoadHandler);
 }
 
 export default function init(...listeners: Function[]) {
-    if (window.fetch) {
-        window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
-        initRouterForAllSelector(null);
-        setPushStateForInitialLoad();
-        navigationListeners = navigationListeners.concat(listeners);
-    }
+  if (window.fetch) {
+    window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
+    initRouterForAllSelector(null);
+    setPushStateForInitialLoad();
+    navigationListeners = navigationListeners.concat(listeners);
+  }
 }

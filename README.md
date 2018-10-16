@@ -12,3 +12,9 @@ Runs in browser.
 
 Responsible for:
  - handling navigation.
+
+
+## TODO
+
+* Add static build process
+* Build function with hotRebuild included
