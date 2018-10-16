@@ -11,7 +11,7 @@ interface ILike extends IResourceBase {
   _ip: string;
   __articleId?: string;
 }
-interface IComment extends IResourceBase {
+export interface IComment extends IResourceBase {
   id: string;
   _ip?: string;
   name: string;
@@ -27,6 +27,7 @@ interface IData {
 }
 export interface IDataWrapper {
   data: IData;
+  save: () => Promise<void>;
   getData: () => IData;
   findArticleById: (id: string) => IArticle;
   findLikes: (props: Partial<ILike>) => ILike[];
@@ -68,16 +69,30 @@ export const sortDsc = (data) => {
 
 export class DataWrapper implements IDataWrapper {
   data: IData;
-  constructor(initialData: IData) {
-    this.data = initialData || {
-      articles: [],
-      likes: [],
-      comments: [],
-    };
+  persistData: Function;
+  constructor(
+    {
+      initialData = {
+        articles: [],
+        likes: [],
+        comments: [],
+      },
+      persistData = () => Promise.resolve(),
+    }: {
+      initialData?: IData;
+      persistData?: Function;
+    } = {},
+  ) {
+    this.data = initialData;
+    this.persistData = persistData;
   }
 
   static create<T>(obj: T): T & IResourceBase {
     return Object.assign({ createdAt: Date.now(), __id: getId() }, obj);
+  }
+
+  async save() {
+    await this.persistData(this.data);
   }
 
   getData(): IData {
