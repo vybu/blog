@@ -93,7 +93,7 @@ export class Database {
     }
   }
 
-  async retrieveComments(id: string): Promise<ICommentWithReplies | []> {
+  async retrieveComments(id: string): Promise<ICommentWithReplies[] | []> {
     // get comments, construct them into nested JSON`
     const article = this.dataWrapper.findArticleById(id);
     if (!article) {

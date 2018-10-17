@@ -2,8 +2,8 @@ import { parseArticle } from './parser';
 import { getArticles, saveFinalOutput, getGitCommitsCount } from './fileOperator';
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler';
-import { Article } from '../../server/db';
 import { ProcessedArticle, ArticleRaw } from './commonTypes';
+import { initDb } from '../../server/initDb';
 
 /**
  * To quickly rebuild and article page, we preload and pre-fetch all assets.
@@ -13,6 +13,7 @@ import { ProcessedArticle, ArticleRaw } from './commonTypes';
 export async function initHotArticleRebuilder() {
   const commitsCount = await getGitCommitsCount();
   const compiler = getJSAndCSSCompiler();
+  const database = await initDb()
 
   const templatesBuilder = new TemplatesBuilder(compiler, commitsCount);
   const [articles]: [ArticleRaw[], void] = await Promise.all([
@@ -31,8 +32,8 @@ export async function initHotArticleRebuilder() {
 
   return async function generate(articleId) {
     const [likes, comments] = await Promise.all([
-      Article.retrieveLikes(articleId),
-      Article.retrieveComments(articleId),
+      database.retrieveLikes(articleId),
+      database.retrieveComments(articleId),
     ]);
 
     const { fileName, parsedArticle } = parsedArticles[articleId];

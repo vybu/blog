@@ -1,8 +1,8 @@
 const createGitHubApi = require('@octokit/rest');
 
 export const serialize = (data, initial = {}) => {
-  return Object.entries(data).reduce((result, [key, value]: [string, any[]]) => {
-    value.forEach(obj => {
+  return Object.entries(data).reduce((result, [ key, value ]: [string, any[]]) => {
+    value.forEach((obj) => {
       result[`${key}::${obj.__id}`] = {
         content: JSON.stringify(obj),
       };
@@ -11,7 +11,7 @@ export const serialize = (data, initial = {}) => {
   }, initial);
 };
 export const deserialize = (data, initial = { articles: [], likes: [], comments: [] }) => {
-  return Object.entries(data).reduce((result, [key, value]: [string, { content: any }]) => {
+  return Object.entries(data).reduce((result, [ key, value ]: [string, { content: any }]) => {
     if (key === 'placeholder') {
       return result;
     }
@@ -42,7 +42,9 @@ export class GithubGistDriver {
   }
 
   async getData() {
+    console.info('Retrieving data from gist');
     const result = await this.api.gists.get({ gist_id: this.gistId });
+    console.info('Done retrieving data from gist');
     return deserialize(result.data.files);
   }
 
