@@ -15,9 +15,14 @@ export async function initHotArticleRebuilder() {
   const compiler = getJSAndCSSCompiler();
 
   const templatesBuilder = new TemplatesBuilder(compiler, commitsCount);
-  const [articles]: [ArticleRaw[], void] = await Promise.all([getArticles(), templatesBuilder.precompileJsAndCss()]);
+  const [articles]: [ArticleRaw[], void] = await Promise.all([
+    getArticles(),
+    templatesBuilder.precompileJsAndCss(),
+  ]);
 
-  const parsedArticles = articles.reduce((result, { fileName, content }): { [key: string]: ProcessedArticle } => {
+  const parsedArticles = articles.reduce((result, { fileName, content }): {
+    [key: string]: ProcessedArticle;
+  } => {
     const parsedArticle = parseArticle(content);
     const article = Object.assign({}, { fileName, content, parsedArticle });
     result[parsedArticle.metaData.id] = article;
@@ -31,7 +36,10 @@ export async function initHotArticleRebuilder() {
     ]);
 
     const { fileName, parsedArticle } = parsedArticles[articleId];
-    const builtArticle = await templatesBuilder.buildFullBlogPage(parsedArticle, { likes, comments });
+    const builtArticle = await templatesBuilder.buildFullBlogPage(parsedArticle, {
+      likes,
+      comments,
+    });
     saveFinalOutput(fileName, builtArticle);
     return builtArticle;
   };

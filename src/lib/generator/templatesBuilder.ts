@@ -15,10 +15,15 @@ export default class TemplatesBuilder {
   async precompileJsAndCss(): Promise<void> {
     const { js, css } = await this.jsAndCssCompiler();
     this.jsResources = js.map(src => html(h('script', { attrs: { src, async: true } })));
-    this.cssResources = css.map(href => html(h('link', { attrs: { href, type: 'text/css', rel: 'stylesheet' } })));
+    this.cssResources = css.map(href =>
+      html(h('link', { attrs: { href, type: 'text/css', rel: 'stylesheet' } })),
+    );
   }
 
-  async buildFullBlogPage(parsedArticle: ParsedArticle, articlesReadersData: ArticlesReadersData): Promise<BuiltPage> {
+  async buildFullBlogPage(
+    parsedArticle: ParsedArticle,
+    articlesReadersData: ArticlesReadersData,
+  ): Promise<BuiltPage> {
     return await this.assemble(article(parsedArticle, articlesReadersData));
   }
 

@@ -1,5 +1,11 @@
 import { parseArticle } from './parser';
-import { getArticles, saveFinalOutput, cleanup, copyStaticFiles, getGitCommitsCount } from './fileOperator';
+import {
+  getArticles,
+  saveFinalOutput,
+  cleanup,
+  copyStaticFiles,
+  getGitCommitsCount,
+} from './fileOperator';
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler';
 import { ProcessedArticle, ArticleRaw } from './commonTypes';
@@ -9,7 +15,10 @@ async function buildBlogPageAndSave(
   { fileName, parsedArticle, articlesReadersData }: ProcessedArticle,
   templatesBuilder: TemplatesBuilder,
 ) {
-  saveFinalOutput(fileName, await templatesBuilder.buildFullBlogPage(parsedArticle, articlesReadersData));
+  saveFinalOutput(
+    fileName,
+    await templatesBuilder.buildFullBlogPage(parsedArticle, articlesReadersData),
+  );
 }
 
 export async function initGenerator() {
@@ -19,7 +28,10 @@ export async function initGenerator() {
   copyStaticFiles();
 
   return async function generate() {
-    const [articles]: [ArticleRaw[], void] = await Promise.all([getArticles(), templatesBuilder.precompileJsAndCss()]);
+    const [articles]: [ArticleRaw[], void] = await Promise.all([
+      getArticles(),
+      templatesBuilder.precompileJsAndCss(),
+    ]);
 
     const parsedArticles = await Promise.all(
       articles.map(
@@ -30,7 +42,10 @@ export async function initGenerator() {
             database.retrieveComments(parsedArticle.metaData.id),
           ]);
 
-          return Object.assign({}, { fileName, content, parsedArticle, articlesReadersData: { likes, comments } });
+          return Object.assign(
+            {},
+            { fileName, content, parsedArticle, articlesReadersData: { likes, comments } },
+          );
         },
       ),
     );

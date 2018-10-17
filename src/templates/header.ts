@@ -22,7 +22,11 @@ export function header(): string {
                       'Github',
                       '_blank',
                     )}</span>                    
-                    <span class="about">${a(ContainerIds.App, '/about', 'About')}</span>                    
+                    <span class="about">${a(
+                      ContainerIds.App,
+                      '/about',
+                      'About',
+                    )}</span>                    
                 </nav>
             </div>
         </header>

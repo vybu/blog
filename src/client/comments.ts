@@ -31,18 +31,22 @@ function $(selector: string, el: Element | Document = document): HTMLInputElemen
   return <HTMLInputElement>base.querySelector(selector);
 }
 
-async function sendToServer(comment: CommentFormValues): Promise<{ isSuccessful: boolean; commentId?: string }> {
+async function sendToServer(
+  comment: CommentFormValues,
+): Promise<{ isSuccessful: boolean; commentId?: string }> {
   const urlBase = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3005';
 
   try {
-    const r = await (<Promise<ServerPostResponse>>fetch(`${urlBase}/comments/${comment.articleId}`, {
-      method: 'POST',
-      body: JSON.stringify(comment),
-      mode: 'cors',
-      headers: new Headers({
-        'content-type': 'application/json',
-      }),
-    }));
+    const r = await (<Promise<ServerPostResponse>>(
+      fetch(`${urlBase}/comments/${comment.articleId}`, {
+        method: 'POST',
+        body: JSON.stringify(comment),
+        mode: 'cors',
+        headers: new Headers({
+          'content-type': 'application/json',
+        }),
+      })
+    ));
     if (r.status === 200) {
       return r.json();
     }
@@ -58,7 +62,9 @@ function enhanceCommentFormValues(comment: CommentFormValues): Comment {
 
 function getRepliesContainer(form: Element) {
   const parent = form.parentElement.parentElement.parentElement;
-  if (parent.parentElement.parentElement.lastElementChild.classList.contains(REPLIES_CONTAINER_CLASS)) {
+  if (
+    parent.parentElement.parentElement.lastElementChild.classList.contains(REPLIES_CONTAINER_CLASS)
+  ) {
     return parent.parentElement.parentElement.lastElementChild;
   } else {
     return parent.lastElementChild;
@@ -86,7 +92,9 @@ function appendComment(comment: Comment, form: Element) {
   return {
     successfullyCreated(articleId: string) {
       const commentEl: Element = document.getElementById(comment.id);
-      const parentInput: HTMLFormElement = <HTMLFormElement>commentEl.querySelector(PARENT_SELECTOR);
+      const parentInput: HTMLFormElement = <HTMLFormElement>(
+        commentEl.querySelector(PARENT_SELECTOR)
+      );
       const replyBtn: Element = commentEl.querySelector(REPLY_BTN_SELECTOR);
 
       commentEl.setAttribute('id', articleId);

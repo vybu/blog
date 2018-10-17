@@ -29,7 +29,11 @@ function removeUrlEscape(comment: string): string {
   }, '');
 }
 
-export function existingComment(data: ICommentWithReplies, articleId: string, parent: string = null) {
+export function existingComment(
+  data: ICommentWithReplies,
+  articleId: string,
+  parent: string = null,
+) {
   if (parent === null) {
     parent = articleId;
   }
@@ -47,7 +51,9 @@ export function existingComment(data: ICommentWithReplies, articleId: string, pa
 
                 <div class="new-reply">${newComment(articleId, data.id)}</div>
             </div>
-            <div class="replies">${data.comments.map(c => existingComment(c, articleId)).join('')}</div>
+            <div class="replies">${data.comments
+              .map(c => existingComment(c, articleId))
+              .join('')}</div>
         </div>
     `;
 }

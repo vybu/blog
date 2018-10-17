@@ -9,7 +9,11 @@ export function articlesList(articles: ProcessedArticle[]): string {
               .map(
                 ({ fileName, parsedArticle }) =>
                   `<li>
-                <h2 class="title">${a(ContainerIds.App, `/${fileName}`, parsedArticle.metaData.title)}</h2>
+                <h2 class="title">${a(
+                  ContainerIds.App,
+                  `/${fileName}`,
+                  parsedArticle.metaData.title,
+                )}</h2>
                 <div class="date">${parsedArticle.metaData.date}</div>
                 <p class="summary">${parsedArticle.metaData.summary}<p/>
             </li>`,

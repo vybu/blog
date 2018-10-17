@@ -64,7 +64,10 @@ export function getJSAndCSSCompiler(): Function {
           use: [
             isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
             'css-loader',
-            { loader: 'postcss-loader', options: { parser: 'postcss-scss', syntax: 'postcss-scss' } },
+            {
+              loader: 'postcss-loader',
+              options: { parser: 'postcss-scss', syntax: 'postcss-scss' },
+            },
             'sass-loader',
           ],
         },

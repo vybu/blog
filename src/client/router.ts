@@ -58,7 +58,11 @@ function getContainerElement(containerId: ContainerIds): Element {
   return document.getElementById(`${containerPrefix}${containerId}`);
 }
 
-function changeUrlTo({ href, containerId }: RoutingInfo, innerHTML: innerHTML, replace: boolean = false): void {
+function changeUrlTo(
+  { href, containerId }: RoutingInfo,
+  innerHTML: innerHTML,
+  replace: boolean = false,
+): void {
   const historyState: HistoryState = {
     containerId,
     innerHTML,
@@ -128,7 +132,11 @@ function setPushStateForInitialLoad() {
   const container = getContainerElement(ContainerIds.App);
 
   if (container) {
-    changeUrlTo({ href: window.location.pathname, containerId: ContainerIds.App }, container.innerHTML, true);
+    changeUrlTo(
+      { href: window.location.pathname, containerId: ContainerIds.App },
+      container.innerHTML,
+      true,
+    );
   } else {
     changeUrlTo({ href: window.location.pathname, containerId: ContainerIds.Noop }, '', true);
   }
@@ -144,7 +152,9 @@ function initRouterForAllSelector(specificContainerId: ContainerIds | null): voi
 
 export default function init(...listeners: Function[]) {
   if (window.fetch) {
-    window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
+    window.addEventListener('popstate', (e: { state: HistoryState }) =>
+      handleHistoryChange(e.state),
+    );
     initRouterForAllSelector(null);
     setPushStateForInitialLoad();
     navigationListeners = navigationListeners.concat(listeners);

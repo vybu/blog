@@ -36,7 +36,10 @@ describe('db.comments', () => {
     const commentReply = makeComment('Hello universe', commentId);
     const [, commentReplyId] = await db.submitComment(articleId, commentReply);
     const commentReplyReply = makeComment('Hello universe', commentReplyId);
-    const [isSuccessful, commentReplyReplyId] = await db.submitComment(articleId, commentReplyReply);
+    const [isSuccessful, commentReplyReplyId] = await db.submitComment(
+      articleId,
+      commentReplyReply,
+    );
 
     const commentReplyReplyResult = await db.dataWrapper.findComment({ id: commentReplyReplyId });
 
@@ -53,12 +56,18 @@ describe('db.comments', () => {
   });
 
   it('fails to create a comment if parent comment does not exist', async () => {
-    const [isSuccessful] = await db.submitComment(articleId, makeComment('Hello world', 'non-existent-id'));
+    const [isSuccessful] = await db.submitComment(
+      articleId,
+      makeComment('Hello world', 'non-existent-id'),
+    );
     expect(isSuccessful).toBeFalsy();
   });
 
   it('fails to create a comment if comment length is more than 20000', async () => {
-    const [isSuccessful] = await db.submitComment(articleId, makeComment(Array(20005).join('.'), articleId));
+    const [isSuccessful] = await db.submitComment(
+      articleId,
+      makeComment(Array(20005).join('.'), articleId),
+    );
     expect(isSuccessful).toBeFalsy();
   });
 
@@ -70,19 +79,37 @@ describe('db.comments', () => {
     expect(isSuccessful).toBeFalsy();
   });
 
-  ['http://docs.sequelizejs.com', 'https://docs.sequelizejs.com', 'docs.sequelizejs.lt'].forEach(link => {
-    it(`fails to create a comment if comment includes a basic link (${link})`, async () => {
-      const [isSuccessful1] = await db.submitComment(articleId, makeComment(`Hello ${link}`, articleId));
-      const [isSuccessful2] = await db.submitComment(articleId, makeComment('Hello world', articleId, `Hi ${link}`));
-      expect(isSuccessful1).toBeFalsy();
-      expect(isSuccessful2).toBeFalsy();
-    });
-  });
+  ['http://docs.sequelizejs.com', 'https://docs.sequelizejs.com', 'docs.sequelizejs.lt'].forEach(
+    link => {
+      it(`fails to create a comment if comment includes a basic link (${link})`, async () => {
+        const [isSuccessful1] = await db.submitComment(
+          articleId,
+          makeComment(`Hello ${link}`, articleId),
+        );
+        const [isSuccessful2] = await db.submitComment(
+          articleId,
+          makeComment('Hello world', articleId, `Hi ${link}`),
+        );
+        expect(isSuccessful1).toBeFalsy();
+        expect(isSuccessful2).toBeFalsy();
+      });
+    },
+  );
 
-  ['(http://docs.sequelizejs.com)', '_https://docs.sequelizejs.com', '<docs.sequelizejs.lt'].forEach(link => {
+  [
+    '(http://docs.sequelizejs.com)',
+    '_https://docs.sequelizejs.com',
+    '<docs.sequelizejs.lt',
+  ].forEach(link => {
     it(`succeeds to create a comment if comment includes an escaped link (${link})`, async () => {
-      const [isSuccessful1] = await db.submitComment(articleId, makeComment(`Hello ${link}`, articleId));
-      const [isSuccessful2] = await db.submitComment(articleId, makeComment('Hello world', articleId, `Hi ${link}`));
+      const [isSuccessful1] = await db.submitComment(
+        articleId,
+        makeComment(`Hello ${link}`, articleId),
+      );
+      const [isSuccessful2] = await db.submitComment(
+        articleId,
+        makeComment('Hello world', articleId, `Hi ${link}`),
+      );
       expect(isSuccessful1).toBeTruthy();
       expect(isSuccessful2).toBeTruthy();
     });

@@ -9,7 +9,12 @@ const FAKE_DATA: UnitsData = [];
 let likesCount = 0;
 let readerLikedTimestamp: number | boolean = false;
 
-function el(tag: string, className: string = '', innerHTML: string = null, props: Object = null): HTMLElement {
+function el(
+  tag: string,
+  className: string = '',
+  innerHTML: string = null,
+  props: Object = null,
+): HTMLElement {
   const e = document.createElement(tag);
   e.className = className;
   if (innerHTML) {
@@ -29,7 +34,9 @@ function createLikeNumberText(): [HTMLElement, Function] {
     if (likesCount === 0) {
       e.innerText = readerLikedTimestamp ? 'You liked this post' : 'Be first to like this post!';
     } else if (likesCount === 1) {
-      e.innerText = readerLikedTimestamp ? 'You and 1 other person liked this post' : '1 person liked this post';
+      e.innerText = readerLikedTimestamp
+        ? 'You and 1 other person liked this post'
+        : '1 person liked this post';
     } else {
       e.innerText = readerLikedTimestamp
         ? `You and ${likesCount} other people liked this post`
@@ -62,7 +69,9 @@ function addUnits(unitContainer: HTMLElement, unitsData: UnitsData, readerLikedT
   unitsData.forEach(u =>
     unitContainer.appendChild(
       el('div', `lb-unit ${readerLikedTimestamp === u ? 'is-personal' : ''}`, null, {
-        title: `${readerLikedTimestamp === u ? 'You' : 'Someone'} liked this at ${new Date(u).toLocaleString()}`,
+        title: `${readerLikedTimestamp === u ? 'You' : 'Someone'} liked this at ${new Date(
+          u,
+        ).toLocaleString()}`,
       }),
     ),
   );

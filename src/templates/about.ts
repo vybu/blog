@@ -28,7 +28,12 @@ export function about(): string {
             <h4 style="display: flex; justify-content: center;">* * *</h4>
             <p>
             This website is made  without any framework and is served as simple static files built with 
-            ${a(ContainerIds.Noop, 'https://github.com/vybu/blog', 'custom static site generator', '_black')}.
+            ${a(
+              ContainerIds.Noop,
+              'https://github.com/vybu/blog',
+              'custom static site generator',
+              '_black',
+            )}.
             From the ground up it's
             progressively enhanced and can run on any browser, with or without javascript enabled. </p>
         </div>

@@ -47,7 +47,9 @@ function includesNoUrl(value) {
 }
 
 const createFindFunction = properties => {
-  const props = Object.entries(properties).filter((key, value) => key !== undefined && value !== undefined);
+  const props = Object.entries(properties).filter(
+    (key, value) => key !== undefined && value !== undefined,
+  );
   return target => props.every(([key, value]) => target[key] === value);
 };
 
