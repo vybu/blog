@@ -40,7 +40,6 @@
         "webpack-md5-hash": "0.0.6"
     },
     "dependencies": {
-        "@octokit/rest": "^15.13.1",
         "@types/glob": "^5.0.30",
         "@types/hyperscript": "0.0.3",
         "autoprefixer": "^9.1.5",
@@ -61,6 +60,7 @@
         "memory-fs": "^0.4.1",
         "micro": "^9.3.3",
         "mini-css-extract-plugin": "^0.4.2",
+        "node-fetch": "^2.2.0",
         "node-sass": "^4.9.3",
         "postcss-load-config": "^2.0.0",
         "postcss-loader": "^3.0.0",

@@ -1,12 +1,7 @@
-import micro = require('micro');
-import Busboy = require('busboy');
+import * as querystring from 'querystring';
 import escapeHtml = require('escape-html');
-import { IncomingMessage, ServerResponse } from 'http';
 import { initDb } from './initDb';
-
-function getIp(req) {
-  return req.connection.remoteAddress; // this will be needed to change to header under nginx
-}
+import { triggerRebuild } from './netlifyRebuild';
 
 function sanitize(comment) {
   return {
@@ -25,72 +20,68 @@ async function submitLike(articleId, _ip, database) {
 
 async function submitComment(articleId, ip, commentData, database) {
   commentData._ip = ip;
-  const [isSuccessful, commentId] = await database.submitComment(articleId, commentData);
+  const [ isSuccessful, commentId ] = await database.submitComment(articleId, commentData);
   return { isSuccessful, commentId };
 }
 
-async function parseFormData(req: IncomingMessage) {
-  return await new Promise((resolve, reject) => {
-    const formValues = {};
-    const formParser = new Busboy({ headers: req.headers });
-    formParser.on('field', (field, val) => (formValues[field] = val));
-    formParser.on('finish', () => resolve(formValues));
+const responseOk = (body: any = {}) => ({ statusCode: 200, body: JSON.stringify(body) });
+const responseError = (body: any = {}) => ({ statusCode: 500, body: JSON.stringify(body) });
 
-    req.pipe(formParser);
-  });
-}
-// TODO: trycatch
-const server = hotArticleRebuilder =>
-  micro(async (req: IncomingMessage, res: ServerResponse) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'content-type');
-
-    const { method, url } = req;
+const server = async (event, context) => {
+  try {
+    const contentType = event.headers['content-type'];
+    const method = event.httpMethod;
+    const url = event.path;
     const like = url.match(/like\/([^/]+)/);
     const comment = url.match(/comments\/([^/]+)/);
-    const ip = getIp(req);
+    const ip = event.headers['client-ip'];
     const articleId = like ? like[1] : comment ? comment[1] : null;
 
     const database = await initDb();
 
     if (!articleId) {
-      return null;
+      return responseOk(null);
     }
 
     if (like) {
       if (method === 'POST') {
-        return await submitLike(articleId, ip, database);
+        return responseOk(await submitLike(articleId, ip, database));
       } else if (method === 'GET') {
         const likes = await database.retrieveLikes(articleId);
         const existingLike = await database.retrieveLikeForIp(ip);
-        return { likes, existingLike };
+        return responseOk({ likes, existingLike });
       }
     } else if (comment) {
       if (method === 'POST') {
-        console.info(req.headers['content-type']);
+        console.info({ contentType });
         let comment = {};
-        if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
-          comment = await parseFormData(req);
+        if (contentType === 'application/x-www-form-urlencoded') {
+          comment = querystring.parse(event.body);
           const result = await submitComment(articleId, ip, sanitize(comment), database);
           if (result.isSuccessful) {
-            await hotArticleRebuilder(articleId);
+            await triggerRebuild();
           }
-          res.setHeader('Location', req.headers.referer);
-          return micro.send(res, 302);
-        } else if (req.headers['content-type'] === 'application/json') {
-          comment = await micro.json(req);
+          return responseOk(
+            'Your comment has been submitted, it will take a couple of moments to appear on site.',
+          );
+        } else if (contentType === 'application/json') {
+          comment = JSON.parse(event.body);
           const result = await submitComment(articleId, ip, sanitize(comment), database);
           if (result.isSuccessful) {
-            hotArticleRebuilder(articleId);
+            await triggerRebuild();
           }
-          return result;
+          return responseOk(result);
         }
       } else if (method === 'GET') {
-        return await database.retrieveComments(articleId);
+        return responseOk(await database.retrieveComments(articleId));
       }
     }
 
-    return {};
-  });
+    return responseOk();
+  } catch (error) {
+    console.error({ error });
+    return responseError();
+  }
+};
 
 export default server;

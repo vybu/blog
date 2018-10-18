@@ -1,4 +1,4 @@
-const createGitHubApi = require('@octokit/rest');
+import fetch from 'node-fetch/lib/index.js';
 
 export const serialize = (data, initial = {}) => {
   return Object.entries(data).reduce((result, [ key, value ]: [string, any[]]) => {
@@ -24,31 +24,37 @@ export const deserialize = (data, initial = { articles: [], likes: [], comments:
     return result;
   }, initial);
 };
-
 export class GithubGistDriver {
+  private githubApi = 'https://api.github.com';
+
   gistId: string;
   secretToken: string;
-  api: any;
 
   constructor({ gistId, secretToken }) {
     this.gistId = gistId;
     this.secretToken = secretToken;
-    this.api = createGitHubApi();
-
-    this.api.authenticate({
-      type: 'token',
-      token: secretToken,
-    });
   }
 
   async getData() {
     console.info('Retrieving data from gist');
-    const result = await this.api.gists.get({ gist_id: this.gistId });
-    console.info('Done retrieving data from gist');
-    return deserialize(result.data.files);
+    const result = await fetch(`${this.githubApi}/gists/${this.gistId}`, {
+      method: 'GET',
+      headers: { Authorization: `token ${this.secretToken}` },
+    }).then((r) => {
+      console.log(`Retrieving data from gist status ${r.status}`);
+      return r.json();
+    });
+    return deserialize(result.files);
   }
 
   async setData(data) {
-    await this.api.gists.edit({ gist_id: this.gistId, files: serialize(data) });
+    return await fetch(`${this.githubApi}/gists/${this.gistId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ files: serialize(data) }),
+      headers: { Authorization: `token ${this.secretToken}` },
+    }).then((r) => {
+      console.log(`Patching gist status ${r.status}`);
+      return r.json();
+    });
   }
 }
