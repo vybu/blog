@@ -35,7 +35,7 @@ export class GithubGistDriver {
     this.secretToken = secretToken;
   }
 
-  async getData() {
+  getData = async () => {
     console.info('Retrieving data from gist');
     const result = await fetch(`${this.githubApi}/gists/${this.gistId}`, {
       method: 'GET',
@@ -45,9 +45,9 @@ export class GithubGistDriver {
       return r.json();
     });
     return deserialize(result.files);
-  }
+  };
 
-  async setData(data) {
+  setData = async (data) => {
     return await fetch(`${this.githubApi}/gists/${this.gistId}`, {
       method: 'PATCH',
       body: JSON.stringify({ files: serialize(data) }),
@@ -56,5 +56,5 @@ export class GithubGistDriver {
       console.log(`Patching gist status ${r.status}`);
       return r.json();
     });
-  }
+  };
 }

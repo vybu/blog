@@ -1,4 +1,4 @@
-import { ICommentWithReplies } from '../../server/db';
+import { ICommentWithReplies } from '../../server/db/db';
 export type fileName = string;
 
 export interface ArticleRaw {

@@ -1,4 +1,4 @@
-import { ICommentWithReplies } from '../../server/db';
+import { ICommentWithReplies } from '../../server/db/db';
 import { newComment } from './newComment';
 
 var _MS_PER_DAY = 1000 * 60 * 60 * 24;

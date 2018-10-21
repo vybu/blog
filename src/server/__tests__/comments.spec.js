@@ -1,5 +1,5 @@
-const { Database } = require('../db.ts');
-const { DataWrapper } = require('../dataWrapper');
+const { Database } = require('../db/db.ts');
+const { DataWrapper } = require('../db/dataWrapper');
 
 function makeComment(comment, parent, name = `${Math.random()}`, _ip = `${Math.random()}`) {
   return { comment, parent, name, _ip };

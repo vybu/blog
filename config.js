@@ -6,6 +6,8 @@ const config = rc(pckg.name, {
     secretToken: process.env.gHsecretToken,
     gistId: process.env.gHgistId,
   },
+  buildTriggerHook: process.env.buildTriggerHook,
 });
 
 process.env.githubTokens = JSON.stringify(config.githubTokens);
+process.env.buildTriggerHook = config.buildTriggerHook;

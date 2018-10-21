@@ -1,4 +1,4 @@
-const { serialize, deserialize } = require('../githubGistDriver');
+const { serialize, deserialize } = require('../db/githubGistDriver');
 
 describe('githubDriver', () => {
   const testData = [

@@ -1,4 +1,4 @@
-const { DataWrapper } = require('../dataWrapper');
+const { DataWrapper } = require('../db/dataWrapper');
 
 describe('DataWrapper', () => {
   let dataWrapper;

@@ -1,8 +1,11 @@
+import '../../config';
 import { ServerResponse, IncomingMessage } from 'http';
 import micro = require('micro');
 import Busboy = require('busboy');
 import { serverPort } from '../lib/constants';
 import app from './app';
+
+const log = (...args) => console.log(`microAdapter`, ...args);
 
 async function parseFormData(req: IncomingMessage) {
   return await new Promise((resolve, reject) => {
@@ -27,12 +30,12 @@ micro(async (req: IncomingMessage, res: ServerResponse) => {
   try {
     body =
       req.headers['content-type'] === 'application/json'
-        ? JSON.stringify(micro.json(req))
+        ? JSON.stringify(await micro.json(req))
         : await parseFormData(req);
   } catch (e) {
     body = '';
   }
-
+  log({ body, });
   const result = await app(
     {
       httpMethod: req.method,

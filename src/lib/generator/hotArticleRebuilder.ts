@@ -3,7 +3,7 @@ import { getArticles, saveFinalOutput, getGitCommitsCount } from './fileOperator
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler';
 import { ProcessedArticle, ArticleRaw } from './commonTypes';
-import { initDb } from '../../server/initDb';
+import { initDb } from '../../server/db/initDb';
 
 /**
  * To quickly rebuild and article page, we preload and pre-fetch all assets.

@@ -9,7 +9,7 @@ import {
 import TemplatesBuilder from './templatesBuilder';
 import { getJSAndCSSCompiler } from './jsAndCssCompiler';
 import { ProcessedArticle, ArticleRaw } from './commonTypes';
-import { initDb } from '../../server/initDb';
+import { initDb } from '../../server/db/initDb';
 
 async function buildBlogPageAndSave(
   { fileName, parsedArticle, articlesReadersData }: ProcessedArticle,

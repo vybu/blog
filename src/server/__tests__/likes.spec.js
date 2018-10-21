@@ -1,11 +1,11 @@
-const { Database } = require('../db.ts');
-const { DataWrapper } = require('../dataWrapper');
+const { Database } = require('../db/db.ts');
+const { DataWrapper } = require('../db/dataWrapper');
 
 function makeLike(_ip = `${Math.random()}`, timestamp = Date.now()) {
   return { _ip, timestamp };
 }
 
-describe.only('db.likes', async () => {
+describe('db.likes', async () => {
   let articleId;
   let db;
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe.only('db.likes', async () => {
     articleId = article.id;
   });
 
-  it.only('adds a likes to an article', async () => {
+  it('adds a likes to an article', async () => {
     const like1 = makeLike('123.567.23', 1234456);
     const like2 = makeLike('123.567.24', 1234457);
 

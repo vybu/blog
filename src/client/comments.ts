@@ -34,7 +34,7 @@ function $(selector: string, el: Element | Document = document): HTMLInputElemen
 async function sendToServer(
   comment: CommentFormValues,
 ): Promise<{ isSuccessful: boolean; commentId?: string }> {
-  const urlBase = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3005';
+  const urlBase = process.env.NODE_ENV === 'production' ? '/.netlify/functions' : 'http://localhost:3005';
 
   try {
     const r = await (<Promise<ServerPostResponse>>(

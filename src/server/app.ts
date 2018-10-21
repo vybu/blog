@@ -1,13 +1,13 @@
 import * as querystring from 'querystring';
 import escapeHtml = require('escape-html');
-import { initDb } from './initDb';
+import { initDb } from './db/initDb';
 import { triggerRebuild } from './netlifyRebuild';
 
 function sanitize(comment) {
   return {
-    name: escapeHtml(comment.name),
-    comment: escapeHtml(comment.comment),
-    parent: comment.parent,
+    name: comment.name && escapeHtml(comment.name),
+    comment: comment.comment && escapeHtml(comment.comment),
+    parent: comment.parent && comment.parent,
   };
 }
 
@@ -32,7 +32,7 @@ const server = async (event, context) => {
     const contentType = event.headers['content-type'];
     const method = event.httpMethod;
     const url = event.path;
-    const like = url.match(/like\/([^/]+)/);
+    const like = url.match(/likes\/([^/]+)/);
     const comment = url.match(/comments\/([^/]+)/);
     const ip = event.headers['client-ip'];
     const articleId = like ? like[1] : comment ? comment[1] : null;
@@ -53,7 +53,6 @@ const server = async (event, context) => {
       }
     } else if (comment) {
       if (method === 'POST') {
-        console.info({ contentType });
         let comment = {};
         if (contentType === 'application/x-www-form-urlencoded') {
           comment = querystring.parse(event.body);

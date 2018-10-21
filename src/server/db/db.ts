@@ -1,4 +1,4 @@
-import { isDevMode, isTestMode } from '../lib/constants';
+import { isDevMode, isTestMode } from '../../lib/constants';
 import { IDataWrapper, sortDsc, sortAsc, IComment } from './dataWrapper';
 
 export interface ICommentWithReplies extends IComment {
@@ -64,7 +64,6 @@ export class Database {
       if (!article) {
         return [false, null];
       }
-
       if (commentData.parent !== id) {
         // we don't allow to nest comments deeper than 1 level;
         // a comment can have a reply, but reply can't have a reply;

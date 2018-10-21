@@ -1,4 +1,4 @@
-import { ICommentWithReplies } from '../../server/db';
+import { ICommentWithReplies } from '../../server/db/db';
 import { existingComment } from './existingComment';
 import { newComment } from './newComment';
 
