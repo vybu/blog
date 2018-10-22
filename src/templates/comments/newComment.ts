@@ -10,7 +10,7 @@ export function newComment(articleId: string, parentId: string = null) {
             <textarea required="true" class="comment-area" name="comment" placeholder="Your comment goes here"></textarea>
             <div class="formatting-info">Only spacing is supported as formatting. To include a link escape it with @ i.e. @https://example.com@</div>
             <div class="bottom">
-                <input class="name" name="name" type="text" placeholder="Francis Underwood (optional)"></input>            
+                <input class="name" name="name" type="text" placeholder="Name (optional)"></input>            
                 <button class="add">Add comment</button>
             </div>
         </form>

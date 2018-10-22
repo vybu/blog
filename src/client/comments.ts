@@ -8,7 +8,6 @@ const INNER_WRAP_SELECTOR = '.inner-wrap'; // used for focusing / showing commen
 
 const COMMENTS_CONTAINER_CLASS = 'comments-container';
 const REPLIES_CONTAINER_CLASS = 'replies';
-// TODO: must tree shake this
 // TODO: Bugs: <a> is triggering router
 interface CommentFormValues {
   name: string;
@@ -36,18 +35,17 @@ function $(selector: string, el: Element | Document = document): HTMLInputElemen
 async function sendToServer(
   comment: CommentFormValues,
 ): Promise<{ isSuccessful: boolean; commentId?: string }> {
-
   try {
-    const r = await (<Promise<ServerPostResponse>>(
-      fetch(`${urlBase}/comments/${comment.articleId}`, {
-        method: 'POST',
-        body: JSON.stringify(comment),
-        mode: 'cors',
-        headers: new Headers({
-          'content-type': 'application/json',
-        }),
-      })
-    ));
+    const r = await (<Promise<
+      ServerPostResponse
+    >>fetch(`${urlBase}/comments/${comment.articleId}`, {
+      method: 'POST',
+      body: JSON.stringify(comment),
+      mode: 'cors',
+      headers: new Headers({
+        'content-type': 'application/json',
+      }),
+    }));
     if (r.status === 200) {
       return r.json();
     }
@@ -72,11 +70,13 @@ function getRepliesContainer(form: Element) {
   }
 }
 
+
 function showCommentActionMsg(commentEl: Element, isPositive: boolean) {
   const msg = document.createElement('div');
   msg.innerText = isPositive ? 'Saved!' : 'Failed to save :(';
   msg.className = `coment-msg ${isPositive ? 'is-positive' : 'is-negative'}`;
   commentEl.appendChild(msg);
+  setTimeout(() => commentEl.removeChild(msg), 4000);
 }
 
 function appendComment(comment: Comment, form: Element) {
@@ -93,8 +93,8 @@ function appendComment(comment: Comment, form: Element) {
   return {
     successfullyCreated(articleId: string) {
       const commentEl: Element = document.getElementById(comment.id);
-      const parentInput: HTMLFormElement = <HTMLFormElement>(
-        commentEl.querySelector(PARENT_SELECTOR)
+      const parentInput: HTMLFormElement = <HTMLFormElement>commentEl.querySelector(
+        PARENT_SELECTOR,
       );
       const replyBtn: Element = commentEl.querySelector(REPLY_BTN_SELECTOR);
 
@@ -134,8 +134,8 @@ function addCommentOnSubmit() {
   const commentForms: Element[] = Array.from(document.querySelectorAll(FORM_CLASS_SELECTOR));
 
   const addFormVisibilityToggleOnReplyClick = () => {
-    Array.from(document.querySelectorAll('a.reply-btn')).forEach(a =>
-      a.addEventListener('click', e => {
+    Array.from(document.querySelectorAll('a.reply-btn')).forEach((a) =>
+      a.addEventListener('click', (e) => {
         e.preventDefault();
         hideOpenReply && hideOpenReply();
         const target = document.getElementById(a.getAttribute('href').slice(1));
@@ -143,11 +143,10 @@ function addCommentOnSubmit() {
         hideOpenReply = () => target.classList.remove('show-reply');
       }),
     );
-  }
-
+  };
 
   const interceptFormSubmit = (form: Element): void => {
-    const listener = async ev => {
+    const listener = async (ev) => {
       ev.preventDefault();
       hideOpenReply && hideOpenReply();
       const commentData = getFormValue(form);
@@ -158,7 +157,7 @@ function addCommentOnSubmit() {
       } else {
         commentComponent.failedToCreate();
       }
-      listenerRemovers.forEach(r => r());
+      listenerRemovers.forEach((r) => r());
       addCommentOnSubmit();
     };
 

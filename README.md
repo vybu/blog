@@ -31,9 +31,9 @@ _______________________
 
 [x] Build function with hotRebuild included
 
-[] Fix comments bugs (likes message double appearing)
+[x] Fix comments bugs (likes message double appearing)
 
-[] Improve comments experience: better success/fail message, spacing
+[x] Improve comments experience: better success/fail message, spacing
 
 [x] Remake likes so they work and are SSR'ed
 
@@ -52,3 +52,5 @@ _______________________
 [] Leave/Remake/Remove hot rebuilder
 
 [] Treeshake the client code since it imports from templates
+
+[] Add a "kickstart" for likebox
