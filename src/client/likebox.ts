@@ -1,115 +1,114 @@
-import { getCurrentArticleId, persist, retrieve } from './lib';
+import { getCurrentArticleId, persist, retrieve, urlBase } from './lib';
 import { PersistObject } from './commonTypes';
+import { getLikesText } from '../templates/likebox';
 
-type UnitsData = number[];
+// likebox is rendered SSR
+// this script either removes the like button if user has already liked post (localstorage) and marks users like as red
+// or it adds listener to like button and submits like with ajax and adds red like to box
 
-// sorted by timestamp
-const FAKE_DATA: UnitsData = [];
-
-let likesCount = 0;
-let readerLikedTimestamp: number | boolean = false;
-
-function el(
-  tag: string,
-  className: string = '',
-  innerHTML: string = null,
-  props: Object = null,
-): HTMLElement {
-  const e = document.createElement(tag);
-  e.className = className;
-  if (innerHTML) {
-    e.innerHTML = innerHTML;
-  }
-
-  if (props) {
-    Object.keys(props).forEach(p => (e[p] = props[p]));
-  }
-  return e;
+interface ServerPostResponse extends Response {
+  isSuccessful: boolean;
+  timestamp: string;
 }
 
-function createLikeNumberText(): [HTMLElement, Function] {
-  const e = el('span', 'lb-likes');
+function el(htmlString): ChildNode {
+  const div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+  return div.firstChild;
+}
 
-  const updateText = () => {
-    if (likesCount === 0) {
-      e.innerText = readerLikedTimestamp ? 'You liked this post' : 'Be first to like this post!';
-    } else if (likesCount === 1) {
-      e.innerText = readerLikedTimestamp
-        ? 'You and 1 other person liked this post'
-        : '1 person liked this post';
-    } else {
-      e.innerText = readerLikedTimestamp
-        ? `You and ${likesCount} other people liked this post`
-        : `${likesCount} people liked this post`;
+async function sendToServer(
+  articleId: string,
+): Promise<{ isSuccessful: boolean; timestamp?: string }> {
+  try {
+    const r = await (<Promise<ServerPostResponse>>fetch(`${urlBase}/likes/${articleId}`, {
+      method: 'POST',
+      body: '',
+      mode: 'cors',
+      headers: new Headers({
+        'content-type': 'application/json',
+      }),
+    }));
+    if (r.status === 200) {
+      return r.json();
     }
-  };
-  updateText();
-
-  return [e, updateText];
+    return { isSuccessful: false };
+  } catch (e) {
+    return { isSuccessful: false };
+  }
 }
 
-function initLikeAdder(unitContainer: HTMLElement, updateLikesCountText: Function) {
-  const likeBtn = el('a', 'lb-like', '+');
-  likeBtn.title = 'Click to like this post';
-  unitContainer.appendChild(likeBtn);
-  likeBtn.addEventListener('click', function addUnit() {
-    const timestamp = Date.now();
-    readerLikedTimestamp = true;
-    unitContainer.appendChild(el('div', 'lb-unit is-personal'));
+function getExistingLikes() {
+  return document.querySelectorAll('.lb-container .lb-unit');
+}
+
+function getUnitContainer() {
+  return document.querySelector('.lb-container .lb-unit-container');
+}
+
+function getLikeBtn() {
+  return document.querySelector('a.lb-like');
+}
+
+function updateLikesCountText() {
+  const existingLikes = getExistingLikes().length - 1; // subtract own like
+  document.querySelector('.lb-likes').innerHTML = getLikesText(existingLikes, true);
+}
+
+function initLikeAdder() {
+  const articleId = getCurrentArticleId();
+  const unitContainer = getUnitContainer();
+  const likeBtn = getLikeBtn();
+  likeBtn.addEventListener('click', function addUnit(ev) {
+    ev.preventDefault();
+    unitContainer.appendChild(el('<div class="lb-unit is-personal"></div>'));
 
     likeBtn.removeEventListener('click', addUnit);
     unitContainer.removeChild(likeBtn);
     updateLikesCountText();
-    persist(getCurrentArticleId(), { hasReaderLiked: true, timestamp });
-    // sendToServer
+
+    sendToServer(articleId).then((response) => {
+      console.log('save like', response);
+      if (response.isSuccessful) {
+        persist(getCurrentArticleId(), { hasReaderLiked: true, timestamp: response.timestamp });
+      }
+    });
   });
 }
 
-function addUnits(unitContainer: HTMLElement, unitsData: UnitsData, readerLikedTimestamp) {
-  unitsData.forEach(u =>
-    unitContainer.appendChild(
-      el('div', `lb-unit ${readerLikedTimestamp === u ? 'is-personal' : ''}`, null, {
-        title: `${readerLikedTimestamp === u ? 'You' : 'Someone'} liked this at ${new Date(
-          u,
-        ).toLocaleString()}`,
-      }),
-    ),
-  );
-}
+function markReadersLike(readersTimestamp) {
+  let hasMarked;
+  const existingLikes = getExistingLikes();
+  existingLikes.forEach((likeUnit) => {
+    if (likeUnit.getAttribute('data-t') == readersTimestamp) {
+      likeUnit.classList.add('is-personal');
+      hasMarked = true;
+    }
+  });
 
-function getHasReaderLiked(): boolean | number {
-  const o = retrieve(getCurrentArticleId());
-  if (o) {
-    return o.hasReaderLiked === true ? o.timestamp : false;
+  if (!hasMarked) {
+    // this means that like is not yet in HTML (rebuild lag)
+    const unitContainer = getUnitContainer();
+    unitContainer.appendChild(el('<div class="lb-unit is-personal"></div>'));
   }
 
-  return false;
+  getUnitContainer().removeChild(getLikeBtn());
+  updateLikesCountText();
+}
+
+function getHasReaderLiked(): false | number {
+  const o: PersistObject = retrieve(getCurrentArticleId());
+  return o && o.hasReaderLiked === true ? o.timestamp : false;
 }
 
 export default function drawLikebox() {
-  const target = document.querySelector('.lb');
+  const target = document.querySelector('.lb-container');
   if (getCurrentArticleId() === null || !target) return;
 
-  // fetch.then
-  likesCount = FAKE_DATA.length;
-  readerLikedTimestamp = getHasReaderLiked();
-
-  const likeBoxContainer = el('div', 'lb-container');
-  const unitContainer = el('div', 'lb-unit-container');
-  const textContainer = el('div', 'lb-text-container');
-
-  const [likesCountTextElement, updateLikesCountText] = createLikeNumberText();
-
-  addUnits(unitContainer, FAKE_DATA, readerLikedTimestamp);
-
-  !readerLikedTimestamp && initLikeAdder(unitContainer, updateLikesCountText);
-
-  textContainer.appendChild(likesCountTextElement);
-  likeBoxContainer.appendChild(textContainer);
-  likeBoxContainer.appendChild(unitContainer);
-  target.appendChild(likeBoxContainer);
+  const readerLikedTimestamp: number | false = getHasReaderLiked();
+  if (readerLikedTimestamp) {
+    markReadersLike(readerLikedTimestamp);
+  } else {
+    initLikeAdder();
+  }
 }
-
-// TODO:
-// Refactor this so it can function without DOM and can be used for server-side rendering. And so code doesn't look like shit.
-// Server side render with refactored version

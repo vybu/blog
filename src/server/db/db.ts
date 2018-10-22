@@ -5,6 +5,8 @@ export interface ICommentWithReplies extends IComment {
   comments: ICommentWithReplies[];
 }
 
+export type ILikesTimestamps = number[];
+
 export class Database {
   constructor(public dataWrapper: IDataWrapper) {}
 
@@ -35,7 +37,7 @@ export class Database {
     }
   }
 
-  async retrieveLikes(id) {
+  async retrieveLikes(id): Promise<ILikesTimestamps> {
     const article = this.dataWrapper.findArticleById(id);
     if (!article) return [];
     const likes = this.dataWrapper.findLikes({ __articleId: article.__id });
@@ -49,7 +51,7 @@ export class Database {
   }
 
   async isCommentWithValidFrequency(article, commentData: IComment) {
-    const [com1, com2] = sortDsc(this.dataWrapper.findComments({ _ip: commentData._ip }));
+    const [ com1, com2 ] = sortDsc(this.dataWrapper.findComments({ _ip: commentData._ip }));
 
     if (com1 && com2 && !isDevMode) {
       // has made at least 2 comments and last one is older than 10 min;
@@ -62,7 +64,7 @@ export class Database {
     try {
       const article = await this.getArticle(id);
       if (!article) {
-        return [false, null];
+        return [ false, null ];
       }
       if (commentData.parent !== id) {
         // we don't allow to nest comments deeper than 1 level;
@@ -70,7 +72,7 @@ export class Database {
         const parentComment = this.dataWrapper.findComment({ id: commentData.parent });
 
         if (!parentComment) {
-          return [false, null];
+          return [ false, null ];
         }
         if (parentComment.parent !== id) {
           commentData.parent = parentComment.parent;
@@ -79,16 +81,16 @@ export class Database {
 
       const isValidPostFrequency = await this.isCommentWithValidFrequency(article, commentData);
       if (!isValidPostFrequency) {
-        return [false, null];
+        return [ false, null ];
       }
 
       const comment = this.dataWrapper.createComment(commentData);
       this.dataWrapper.addCommentToArticle(article, comment);
       await this.dataWrapper.save();
-      return [true, comment.id];
+      return [ true, comment.id ];
     } catch (e) {
       !isTestMode && console.error('Failed to submitComment on Article', e);
-      return [false, null];
+      return [ false, null ];
     }
   }
 
@@ -106,7 +108,7 @@ export class Database {
       if (comment.parent === id) {
         result.push(comment);
       } else {
-        const parent = result.find(c => c.id === comment.parent);
+        const parent = result.find((c) => c.id === comment.parent);
         parent.comments.push(comment);
       }
 

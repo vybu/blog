@@ -205,7 +205,9 @@ footer {
         font-style: italic;
         text-align: right;
     }
-    a.lb-like {
+    &-like {
+        font-size: 17px;
+        line-height: 20px;
         margin: 0 4px;
         flex: 1;
         color: rgba(0, 0, 0, 0.9);

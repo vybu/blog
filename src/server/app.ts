@@ -33,9 +33,10 @@ const server = async (event, context) => {
     const method = event.httpMethod;
     const url = event.path;
     const like = url.match(/likes\/([^/]+)/);
+    const likeNoJs = url.match(/likes_\/([^/]+)/);
     const comment = url.match(/comments\/([^/]+)/);
     const ip = event.headers['client-ip'];
-    const articleId = like ? like[1] : comment ? comment[1] : null;
+    const articleId = like ? like[1] : comment ? comment[1] : likeNoJs ? likeNoJs[1] : null;
 
     const database = await initDb();
 
@@ -43,8 +44,8 @@ const server = async (event, context) => {
       return responseOk(null);
     }
 
-    if (like) {
-      if (method === 'POST') {
+    if (like || likeNoJs) {
+      if (method === 'POST' || likeNoJs) {
         return responseOk(await submitLike(articleId, ip, database));
       } else if (method === 'GET') {
         const likes = await database.retrieveLikes(articleId);

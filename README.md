@@ -35,11 +35,13 @@ _______________________
 
 [] Improve comments experience: better success/fail message, spacing
 
-[] Remake likes so they work and are SSR'ed
+[x] Remake likes so they work and are SSR'ed
 
 [] Do proper testing on different browsers devices, there has to be 0 bugs
 
 [] Ensure that SW is working as expected
+
+[] Don't transpile client code, modern browsers should support everything. On IE11 just don't run it. 
 
 ## TODO after release
 
@@ -48,3 +50,5 @@ _______________________
 [] Refactor comments
 
 [] Leave/Remake/Remove hot rebuilder
+
+[] Treeshake the client code since it imports from templates

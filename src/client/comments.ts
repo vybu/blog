@@ -1,4 +1,6 @@
 import { existingComment } from '../templates/comments/existingComment';
+import { urlBase } from './lib';
+
 const FORM_CLASS_SELECTOR = 'form.new-comment';
 const REPLY_BTN_SELECTOR = '.add-reply a';
 const PARENT_SELECTOR = '[name="parent"]';
@@ -34,7 +36,6 @@ function $(selector: string, el: Element | Document = document): HTMLInputElemen
 async function sendToServer(
   comment: CommentFormValues,
 ): Promise<{ isSuccessful: boolean; commentId?: string }> {
-  const urlBase = process.env.NODE_ENV === 'production' ? '/.netlify/functions' : 'http://localhost:3005';
 
   try {
     const r = await (<Promise<ServerPostResponse>>(
@@ -131,15 +132,19 @@ function addCommentOnSubmit() {
   let hideOpenReply;
 
   const commentForms: Element[] = Array.from(document.querySelectorAll(FORM_CLASS_SELECTOR));
-  Array.from(document.querySelectorAll('a.reply-btn')).forEach(a =>
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      hideOpenReply && hideOpenReply();
-      const target = document.getElementById(a.getAttribute('href').slice(1));
-      target.classList.add('show-reply');
-      hideOpenReply = () => target.classList.remove('show-reply');
-    }),
-  );
+
+  const addFormVisibilityToggleOnReplyClick = () => {
+    Array.from(document.querySelectorAll('a.reply-btn')).forEach(a =>
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        hideOpenReply && hideOpenReply();
+        const target = document.getElementById(a.getAttribute('href').slice(1));
+        target.classList.add('show-reply');
+        hideOpenReply = () => target.classList.remove('show-reply');
+      }),
+    );
+  }
+
 
   const interceptFormSubmit = (form: Element): void => {
     const listener = async ev => {
@@ -161,6 +166,7 @@ function addCommentOnSubmit() {
     listenerRemovers.push(() => form.removeEventListener('submit', listener));
   };
 
+  addFormVisibilityToggleOnReplyClick();
   commentForms.forEach(interceptFormSubmit);
 }
 
