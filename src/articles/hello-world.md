@@ -5,4 +5,4 @@ date: 2017-07-17
 id: 1
 ---
 
-Welcome to my blog..is working
+Welcome to my blog..is working and cooments work :)

@@ -1,5 +1,7 @@
 # Architecture
 
+This is static site hosted on netlify. It's rebuild on each push and when a new like or comments is submitted. 
+
 ## Generator
 Runs on server, nodejs.
 
@@ -7,14 +9,42 @@ Responsible for:
  - parsing *.md files into html/json.
  - compiling templates and content parsed from *.md into final html files for serving.
 
-# Client
+## Client
 Runs in browser.
 
 Responsible for:
  - handling navigation.
+ - Enhances Likes 
+ - Enhances Comments
+
+## Server
+Contains logic for persisting likes and comments. 
+
+For production builds into and `function` that run on netlify (basically AWS function). Locally `micro` is used as an adapter to accept http calls and transfor them into function like payload.
 
 
-## TODO
+_______________________
 
-* Add static build process
-* Build function with hotRebuild included
+## TODO before release
+
+[] Prepare static build process for netlify
+
+[x] Build function with hotRebuild included
+
+[] Fix comments bugs (likes message double appearing)
+
+[] Improve comments experience: better success/fail message, spacing
+
+[] Remake likes so they work and are SSR'ed
+
+[] Do proper testing on different browsers devices, there has to be 0 bugs
+
+[] Ensure that SW is working as expected
+
+## TODO after release
+
+[] Simplify server. It's very simple in what it does, but implementation is over complicated
+
+[] Refactor comments
+
+[] Leave/Remake/Remove hot rebuilder
