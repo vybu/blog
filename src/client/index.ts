@@ -3,7 +3,9 @@ import initServiceWorker from './sw';
 import enhanceComments from './comments';
 import drawLikebox from './likebox';
 
-initRouter(enhanceComments, drawLikebox);
-initServiceWorker();
-enhanceComments();
-drawLikebox();
+if (window.fetch) {
+  initRouter(enhanceComments, drawLikebox);
+  initServiceWorker();
+  enhanceComments();
+  drawLikebox();
+}

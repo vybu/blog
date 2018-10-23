@@ -8,7 +8,6 @@
 import { routerLinkIdentifier, ContainerIds, containerPrefix } from '../templates/constants';
 import { ParsedArticle, PageJson } from '../lib/generator/commonTypes';
 
-// TODO: don't transpile this, if browser don't support a feature, simple don't run this;
 // TODO: thoughrouly test
 // TODO: could do caching for recurring visits to same route.
 
@@ -38,7 +37,7 @@ const contentPromises: ContentPromises = {};
 let navigationListeners: Function[] = [];
 
 function getJSON(href: string): Promise<any> {
-  return fetch(`${href}.json`).then(r => {
+  return fetch(`${href}.json`).then((r) => {
     if (r.status === 200) {
       return r.json();
     } else {
@@ -82,7 +81,7 @@ function handleHistoryChange({ containerId, innerHTML }: HistoryState): void {
     container.innerHTML = innerHTML;
     initRouterForAllSelector(containerId);
 
-    navigationListeners.forEach(l => l());
+    navigationListeners.forEach((l) => l());
   } else {
     window.location.reload();
   }
@@ -93,9 +92,7 @@ function startFetchingJson({ href }: RoutingInfo): EventListenerOrEventListenerO
     contentPromises[href] = {
       then(handler) {
         const h = JSONFetchMap[href] ? JSONFetchMap[href] : href;
-        getJSON(h)
-          .then(handler)
-          .catch(err => console.error(err));
+        getJSON(h).then(handler).catch((err) => console.error(err));
       },
     };
   };
@@ -111,7 +108,7 @@ function displayedFetchedContent(
 ): EventListenerOrEventListenerObject {
   return () =>
     contentPromises[href] &&
-    contentPromises[href].then(r => {
+    contentPromises[href].then((r) => {
       const innerHTML = jsonLoadHandler(r);
       changeUrlTo({ href, containerId }, innerHTML);
       handleHistoryChange({ containerId, innerHTML });
@@ -119,12 +116,12 @@ function displayedFetchedContent(
 }
 
 function initRouter(routerLinksSelector: string, jsonLoadHandler: Function): void {
-  Array.from(document.querySelectorAll(routerLinksSelector)).forEach(element => {
+  Array.from(document.querySelectorAll(routerLinksSelector)).forEach((element) => {
     const routingInfo = getRoutingInfo(element);
 
     element.addEventListener('mousedown', startFetchingJson(routingInfo));
     element.addEventListener('mouseup', displayedFetchedContent(routingInfo, jsonLoadHandler));
-    element.addEventListener('click', ev => ev.preventDefault());
+    element.addEventListener('click', (ev) => ev.preventDefault());
   });
 }
 
@@ -151,12 +148,8 @@ function initRouterForAllSelector(specificContainerId: ContainerIds | null): voi
 }
 
 export default function init(...listeners: Function[]) {
-  if (window.fetch) {
-    window.addEventListener('popstate', (e: { state: HistoryState }) =>
-      handleHistoryChange(e.state),
-    );
-    initRouterForAllSelector(null);
-    setPushStateForInitialLoad();
-    navigationListeners = navigationListeners.concat(listeners);
-  }
+  window.addEventListener('popstate', (e: { state: HistoryState }) => handleHistoryChange(e.state));
+  initRouterForAllSelector(null);
+  setPushStateForInitialLoad();
+  navigationListeners = navigationListeners.concat(listeners);
 }
