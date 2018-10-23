@@ -17,9 +17,11 @@
         "format": "prettier --print-width=100 --tab-width=2 --single-quote --trailing-comma=all --write \"src/**/*.+(js|ts)\""
     },
     "devDependencies": {
-        "@types/browser-sync": "0.0.41",
+        "@types/browser-sync": "0.0.42",
         "@types/busboy": "^0.2.3",
+        "@types/glob": "^7.1.1",
         "@types/highlight.js": "^9.1.9",
+        "@types/hyperscript": "0.0.3",
         "@types/jest": "^23.3.2",
         "@types/markdown-it": "0.0.5",
         "@types/md5": "2.1.32",
@@ -42,8 +44,6 @@
         "webpack-md5-hash": "0.0.6"
     },
     "dependencies": {
-        "@types/glob": "^5.0.30",
-        "@types/hyperscript": "0.0.3",
         "autoprefixer": "^9.1.5",
         "browser-sync": "^2.24.7",
         "busboy": "^0.2.14",

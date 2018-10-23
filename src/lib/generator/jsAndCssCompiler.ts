@@ -122,11 +122,13 @@ export function getJSAndCSSCompiler(): Function {
         const statsJson = stats.toJson();
 
         if (stats.hasErrors() || stats.hasWarnings()) {
+          console.error('Failed to compile client');
           console.error(statsJson.errors);
           console.warn(statsJson.warnings);
+        } else {
+          console.info('Successfully compiled JS and CSS');
         }
 
-        console.info('Successfully compiled JS and CSS');
         resolve(getJsAndCssFileNames(statsJson.assets));
       });
     });

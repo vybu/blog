@@ -70,7 +70,6 @@ function getRepliesContainer(form: Element) {
   }
 }
 
-
 function showCommentActionMsg(commentEl: Element, isPositive: boolean) {
   const msg = document.createElement('div');
   msg.innerText = isPositive ? 'Saved!' : 'Failed to save :(';
