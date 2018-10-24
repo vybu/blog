@@ -1,4 +1,4 @@
-import path = require('path');
+import * as path from 'path';
 // TODO: this file should be in upper dirs, since it's used by server, templates, generator
 export const dist = path.join(__dirname, '../../dist');
 export const stylesEntryFile = path.join(__dirname, '../../src/styles/main.scss');

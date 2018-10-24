@@ -1,7 +1,7 @@
 import '../../config';
 import { ServerResponse, IncomingMessage } from 'http';
-import micro = require('micro');
-import Busboy = require('busboy');
+import  * as micro from 'micro';
+import  * as Busboy from 'busboy';
 import { serverPort } from '../lib/constants';
 import app from './app';
 

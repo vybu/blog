@@ -1,4 +1,4 @@
-import h = require('hyperscript');
+import * as h from 'hyperscript';
 import { html } from '../utils';
 import { ParsedArticle, ProcessedArticle, ArticlesReadersData, BuiltPage } from './commonTypes';
 import { base, articlesList, about, article, commentsContainer } from '../../templates';

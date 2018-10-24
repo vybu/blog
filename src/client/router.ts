@@ -6,9 +6,8 @@
 // for rendered content in [container] repeat
 
 import { routerLinkIdentifier, ContainerIds, containerPrefix } from '../templates/constants';
-import { ParsedArticle, PageJson } from '../lib/generator/commonTypes';
+import { PageJson } from '../lib/generator/commonTypes';
 
-// TODO: thoughrouly test
 // TODO: could do caching for recurring visits to same route.
 
 const ROUTER_LINKS_SELECTOR = `a[${routerLinkIdentifier}]`;

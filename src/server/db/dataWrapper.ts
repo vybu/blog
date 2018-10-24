@@ -1,4 +1,4 @@
-import validator = require('validator');
+import * as validator from 'validator';
 interface IResourceBase {
   __id?: string;
   createdAt?: string | number;

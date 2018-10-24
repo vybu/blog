@@ -1,5 +1,5 @@
 import * as querystring from 'querystring';
-import escapeHtml = require('escape-html');
+import * as escapeHtml from 'escape-html';
 import { initDb } from './db/initDb';
 import { triggerRebuild } from './netlifyRebuild';
 

@@ -1,7 +1,7 @@
-import webpack = require('webpack');
-import WebpackMd5Hash = require('webpack-md5-hash');
-import MiniCssExtractPlugin = require('mini-css-extract-plugin');
-import autoprefixer = require('autoprefixer');
+import * as webpack from 'webpack';
+import * as WebpackMd5Hash from 'webpack-md5-hash';
+import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import * as autoprefixer from 'autoprefixer';
 import { dist, stylesEntryFile, jsEntryFile, swFile, stylesPaths, isDevMode } from '../constants';
 
 const mode = isDevMode ? 'development' : 'production';

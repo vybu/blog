@@ -1,6 +1,6 @@
 import { getCurrentArticleId, persist, retrieve, urlBase } from './lib';
 import { PersistObject } from './commonTypes';
-import { getLikesText } from '../templates/likebox';
+import { getLikesText } from '../templates/likesText';
 
 // likebox is rendered SSR
 // this script either removes the like button if user has already liked post (localstorage) and marks users like as red

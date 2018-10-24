@@ -1,8 +1,8 @@
-import path = require('path');
-import fs = require('fs');
-import childProcess = require('child_process');
-import glob = require('glob');
-import rimraf = require('rimraf');
+import * as path from 'path';
+import * as fs from 'fs';
+import * as childProcess from 'child_process';
+import * as glob from 'glob';
+import * as rimraf from 'rimraf';
 
 import { ArticleRaw, fileName, BuiltPage, PageJson } from './commonTypes';
 import { dist, staticFilesPath } from '../constants';

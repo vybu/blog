@@ -1,8 +1,8 @@
-import MarkdownIt = require('markdown-it');
-import markdownItHighlight = require('markdown-it-highlightjs');
-import markdownItFootnote = require('markdown-it-footnote');
-import mdMetaParser = require('markdown-yaml-metadata-parser');
-import moment = require('moment');
+import * as MarkdownIt from 'markdown-it';
+import * as markdownItHighlight from 'markdown-it-highlightjs';
+import * as markdownItFootnote from 'markdown-it-footnote';
+import * as mdMetaParser from 'markdown-yaml-metadata-parser';
+import * as moment from 'moment';
 
 import { ParsedArticle, MetaData } from './commonTypes';
 
