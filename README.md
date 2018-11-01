@@ -20,14 +20,14 @@ Responsible for:
 ## Server
 Contains logic for persisting likes and comments. 
 
-For production builds into and `function` that run on netlify (basically AWS function). Locally `micro` is used as an adapter to accept http calls and transfor them into function like payload.
+For production builds into and `function` that run on netlify (basically AWS function). Locally `micro` is used as an adapter to accept http calls and transform them into function like payload.
 
 
 _______________________
 
 ## TODO before release
 
-[] Prepare static build process for netlify
+[x] Prepare static build process for netlify
 
 [x] Build function with hotRebuild included
 
@@ -42,6 +42,14 @@ _______________________
 [] Ensure that SW is working as expected
 
 [x] Don't transpile client code, modern browsers should support everything. On IE11 just don't run it. 
+
+[] Extract first paragraph
+
+[] Order articles in asc order
+
+[] Write first article
+
+[] Connect custom domain
 
 ## TODO after release
 
