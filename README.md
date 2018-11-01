@@ -41,7 +41,7 @@ _______________________
 
 [] Ensure that SW is working as expected
 
-[] Don't transpile client code, modern browsers should support everything. On IE11 just don't run it. 
+[x] Don't transpile client code, modern browsers should support everything. On IE11 just don't run it. 
 
 ## TODO after release
 

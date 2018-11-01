@@ -6,6 +6,8 @@
     "author": "Vytenis Butkevicius",
     "license": "MIT",
     "scripts": {
+        "dev": "npm run server:build-dev && npm run server:run-dev & npm run run:dev",
+        "netlify": "npm run server:build && npm run server:build-functions & npm run static:build",
         "run:dev": "NODE_ENV=development PORT=3005 node ./src/index.js",
         "run:prod": "NODE_ENV=production node ./src/index.js",
         "static:build": "NODE_ENV=production node ./src/generatorRunnerProxy.js",

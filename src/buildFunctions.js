@@ -17,7 +17,9 @@ compiler.run((err, stats) => {
   const statsJson = stats.toJson();
 
   if (stats.hasErrors() || stats.hasWarnings()) {
+    console.error('Errors: ')
     console.error(statsJson.errors);
+    console.warn('Warnings: ')
     console.warn(statsJson.warnings);
   }
 
