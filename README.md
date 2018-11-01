@@ -43,9 +43,9 @@ _______________________
 
 [x] Don't transpile client code, modern browsers should support everything. On IE11 just don't run it. 
 
-[] Extract first paragraph
+[x] Extract first paragraph
 
-[] Order articles in asc order
+[x] Order articles in desc order
 
 [] Write first article
 

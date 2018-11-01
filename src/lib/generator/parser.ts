@@ -17,10 +17,14 @@ const md = new MarkdownIt({
 
 md.use(markdownItFootnote).use(markdownItHighlight);
 
+function extractSummary(content: string) {
+  const firstParagraph = content.trim().split('\n\n')[0];
+  return firstParagraph.slice(0, 200);
+}
+
 function addSummary(metaData: MetaData, content: string): void {
   if (!metaData.summary) {
-    // take first paragraph
-    metaData.summary = 'TODO should take first paragraph from content';
+    metaData.summary = extractSummary(content);
   }
 }
 
