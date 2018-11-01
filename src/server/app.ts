@@ -46,7 +46,11 @@ const server = async (event, context) => {
 
     if (like || likeNoJs) {
       if (method === 'POST' || likeNoJs) {
-        return responseOk(await submitLike(articleId, ip, database));
+        const result = await submitLike(articleId, ip, database);
+        if (result.isSuccessful) {
+            await triggerRebuild();
+        }
+        return responseOk(result);
       } else if (method === 'GET') {
         const likes = await database.retrieveLikes(articleId);
         const existingLike = await database.retrieveLikeForIp(ip);

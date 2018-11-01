@@ -23,6 +23,8 @@ function setupEnvVariables() {
 }
 
 describe('api', () => {
+
+  afterEach(() => nock.cleanAll())
   describe('comments', () => {
     it('returns comments', async () => {
       nock('https://api.github.com').get('/gists/gistId2').reply(200, {
@@ -39,6 +41,7 @@ describe('api', () => {
       expect(JSON.parse(body)).toEqual([
         { __id: '123', parent: '1', __articleId: '333', comments: [] },
       ]);
+      expect(nock.isDone()).toBeTruthy();
     });
     it('returns empty comments if article does not exist', async () => {
       nock('https://api.github.com').get('/gists/gistId2').reply(200, {
@@ -51,6 +54,7 @@ describe('api', () => {
 
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toEqual([]);
+      expect(nock.isDone()).toBeTruthy();
     });
     it('creates comment for JSON post', async () => {
       nock('https://example.com').post('/').reply(200, {
@@ -78,6 +82,7 @@ describe('api', () => {
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toHaveProperty('isSuccessful', true);
       expect(JSON.parse(body)).toHaveProperty('commentId');
+      expect(nock.isDone()).toBeTruthy();
     });
     it('creates comment for form post', async () => {
       nock('https://example.com').post('/').reply(200, {
@@ -105,13 +110,7 @@ describe('api', () => {
       );
     });
     it('fails to create comment if missing "comment" property', async () => {
-      nock('https://example.com').post('/').reply(200, {
-        files: {},
-      });
       nock('https://api.github.com').get('/gists/gistId2').reply(200, {
-        files: {},
-      });
-      nock('https://api.github.com').patch('/gists/gistId2').reply(200, {
         files: {},
       });
       const { statusCode, body } = await api(
@@ -129,6 +128,7 @@ describe('api', () => {
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toHaveProperty('isSuccessful', false);
       expect(JSON.parse(body)).toHaveProperty('commentId', null);
+      expect(nock.isDone()).toBeTruthy();
     });
   });
 
@@ -151,6 +151,7 @@ describe('api', () => {
 
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toEqual({ existingLike: 1234567, likes: [ 1234567 ] });
+      expect(nock.isDone()).toBeTruthy();
     });
     it('returns empty likes if none exist', async () => {
       nock('https://api.github.com').get('/gists/gistId2').reply(200, {
@@ -160,6 +161,7 @@ describe('api', () => {
 
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toEqual({ existingLike: null, likes: [] });
+      expect(nock.isDone()).toBeTruthy();
     });
     it('returns empty likes if article does not exist', async () => {
       nock('https://api.github.com').get('/gists/gistId2').reply(200, {
@@ -169,6 +171,7 @@ describe('api', () => {
 
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toEqual({ existingLike: null, likes: [] });
+      expect(nock.isDone()).toBeTruthy();      
     });
     it('submits like', async () => {
       nock('https://example.com').post('/').reply(200);
@@ -188,9 +191,9 @@ describe('api', () => {
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toHaveProperty('isSuccessful', true);
       expect(JSON.parse(body)).toHaveProperty('timestamp');
+      expect(nock.isDone()).toBeTruthy();
     });
     it('fails to submit like if already liked', async () => {
-      nock('https://example.com').post('/').reply(200);
       nock('https://api.github.com').get('/gists/gistId2').reply(200, {
         files: {
           'likes::likeId': {
@@ -204,9 +207,6 @@ describe('api', () => {
           'articles::1': { content: JSON.stringify({ id: '1', __id: '333' }) },
         },
       });
-      nock('https://api.github.com').patch('/gists/gistId2').reply(200, {
-        files: {},
-      });
       const { statusCode, body } = await api(
         createEvent({
           httpMethod: 'POST',
@@ -217,6 +217,7 @@ describe('api', () => {
       expect(statusCode).toBe(200);
       expect(JSON.parse(body)).toHaveProperty('isSuccessful', false);
       expect(JSON.parse(body)).toHaveProperty('timestamp', null);
+      expect(nock.isDone()).toBeTruthy();
     });
   });
 });
