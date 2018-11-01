@@ -1,7 +1,7 @@
 import { PersistObject } from './commonTypes';
 
 export const urlBase =
-  process.env.NODE_ENV === 'production' ? '/.netlify/functions' : 'http://localhost:3005';
+  process.env.NODE_ENV === 'production' ? '/.netlify/functions/api' : 'http://localhost:3005';
 
 export function getCurrentArticleId() {
   const article = document.querySelector('article.blog-post');

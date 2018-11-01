@@ -8,6 +8,7 @@ const compiler = webpack({
   output: {
     path: path.join(__dirname, '../functions'),
     filename: 'api.js',
+    libraryTarget: 'commonjs',
   },
 });
 

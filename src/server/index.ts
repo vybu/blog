@@ -1,2 +1,2 @@
 import '../../config';
-export { default } from './app';
+export { default as handler } from './app';
