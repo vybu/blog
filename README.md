@@ -47,7 +47,7 @@ _______________________
 
 [] Simplify server. It's very simple in what it does, but implementation is over complicated
 
-[] Refactor comments
+[] Refactor comments: save comment in localstorage while it's building
 
 [] Leave/Remake/Remove hot rebuilder
 

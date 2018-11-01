@@ -1,6 +1,6 @@
 import fetch from 'node-fetch/lib/index.js';
 
-const defaultInitialState = { articles: [], likes: [], comments: [] };
+const getDefaultInitialState = () => ({ articles: [], likes: [], comments: [] });
 
 export const serialize = (data, initial = {}) => {
   return Object.entries(data).reduce((result, [ key, value ]: [string, any[]]) => {
@@ -12,7 +12,7 @@ export const serialize = (data, initial = {}) => {
     return result;
   }, initial);
 };
-export const deserialize = (data, initial = defaultInitialState) => {
+export const deserialize = (data, initial = getDefaultInitialState()) => {
   return Object.entries(data).reduce((result, [ key, value ]: [string, { content: any }]) => {
     if (key === 'placeholder') {
       return result;
@@ -41,7 +41,7 @@ export class GithubGistDriver {
     console.info('Retrieving data from gist');
     if (!this.gistId || !this.secretToken) {
       console.info('gistId or secretToken not found, returning empty data');
-      return defaultInitialState;
+      return getDefaultInitialState();
     }
     const result = await fetch(`${this.githubApi}/gists/${this.gistId}`, {
       method: 'GET',
