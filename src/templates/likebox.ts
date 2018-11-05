@@ -9,7 +9,7 @@ function likesUnits(likes: ILikesTimestamps) {
         timestamp,
       ).toLocaleString()}">
       </div>`,
-  );
+  ).join('');
 }
 
 export function likesContainer(likes: ILikesTimestamps, articleId: string) {

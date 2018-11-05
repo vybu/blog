@@ -49,7 +49,7 @@ _______________________
 
 [] Write first article
 
-[] Connect custom domain
+[x] Connect custom domain
 
 ## TODO after release
 
