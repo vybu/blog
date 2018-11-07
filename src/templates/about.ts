@@ -6,8 +6,7 @@ export function about(): string {
         <div class="about">
             <img src="/images/me_cartoon.png" alt="cartoon picture of me"/>
             <p>Welcome to my personal website, I am a software engineer based in Lithuania, Vilnius.</p>
-            <p>I spend most of my time
-             deepening my knowledge in front end development, especially performance and  architecture of single page applications.
+            <p>I spend most of my time writing front end code and I am especially focused on performance and architecture of single page applications.
              From time to time I like also like to tinker with  servers and back end technologies.
             </p>
             <blockquote>
@@ -20,7 +19,7 @@ export function about(): string {
                  )}</p>
             </blockquote>
             <p>
-            I have started this blog because, I believe that to truly become good at something,
+            I have started this blog because, I believe that to be truly good at something,
             you need to be able to express your thoughts about it clearly, so others can follow
             and understand with ease. It also serves as documentation for myself on topics and problems that I have already
             explored and solved.
@@ -32,10 +31,14 @@ export function about(): string {
               ContainerIds.Noop,
               'https://github.com/vybu/blog',
               'custom static site generator',
-              '_black',
+              '_blank',
             )}.
             From the ground up it's
-            progressively enhanced and can run on any browser, with or without javascript enabled. </p>
+            progressively enhanced and can run on any browser, with or without javascript enabled. Read more about it ${a(
+              ContainerIds.Noop,
+              '/hello-world',
+              'here',
+            )} </p>
         </div>
 `;
 }
