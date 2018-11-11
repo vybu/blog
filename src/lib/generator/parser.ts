@@ -19,7 +19,7 @@ md.use(markdownItFootnote).use(markdownItHighlight);
 
 function extractSummary(content: string) {
   const firstParagraph = content.trim().split('\n\n')[0];
-  return firstParagraph.slice(0, 200);
+  return `${firstParagraph.slice(0, 200)}...`
 }
 
 function addSummary(metaData: MetaData, content: string): void {
