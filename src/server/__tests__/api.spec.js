@@ -219,5 +219,34 @@ describe('api', () => {
       expect(JSON.parse(body)).toHaveProperty('timestamp', null);
       expect(nock.isDone()).toBeTruthy();
     });
+    it('submits like for different articles', async () => {
+      nock('https://api.github.com').get('/gists/gistId2').reply(200, {
+        files: {
+          'likes::likeId': {
+            content: JSON.stringify({
+              __id: '123',
+              _ip: '1.2.3.4.5.6',
+              __articleId: '333',
+              timestamp: 1234567,
+            }),
+          },
+          'articles::1': { content: JSON.stringify({ id: '1', __id: '333' }) },
+        },
+      });
+      nock('https://api.github.com').patch('/gists/gistId2').reply(200, {
+        files: {},
+      });
+      const { statusCode, body } = await api(
+        createEvent({
+          httpMethod: 'POST',
+          path: 'likes/2',
+        }),
+        {},
+      );
+      expect(statusCode).toBe(200);
+      expect(JSON.parse(body)).toHaveProperty('isSuccessful', true);
+      expect(JSON.parse(body)).toHaveProperty('timestamp');
+      expect(nock.isDone()).toBeTruthy();
+    });
   });
 });

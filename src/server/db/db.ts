@@ -23,7 +23,7 @@ export class Database {
   async submitLike(id, { timestamp, _ip }) {
     try {
       const article = await this.getArticle(id);
-      const previousLike = this.dataWrapper.findLike({ _ip });
+      const previousLike = this.dataWrapper.findLike({ _ip, __articleId: article.__id });
       if (!article || previousLike) {
         return false;
       }
