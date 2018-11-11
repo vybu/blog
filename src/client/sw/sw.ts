@@ -14,7 +14,7 @@ const INITIAL_FILES_TO_CACHE = [
   '/fonts/SourceSansPro_Bold.woff2',
   '/fonts/SourceSansPro_It.woff2',
 ];
-const DYNAMIC_FILES_CACHE_PATTERN = /(\.js|\.css|\.png|\.woff2)$/i;
+const DYNAMIC_FILES_CACHE_PATTERN = /(\.js|\.css|\.png|\.jpg|\.woff2)$/i;
 
 self.addEventListener('install', (event: ExtendableEvent) => {
   event.waitUntil(

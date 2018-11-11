@@ -39,7 +39,7 @@ _______________________
 
 [] Do proper testing on different browsers devices, there has to be 0 bugs
 
-[] Ensure that SW is working as expected
+[x] Ensure that SW is working as expected
 
 [x] Don't transpile client code, modern browsers should support everything. On IE11 just don't run it. 
 
@@ -47,7 +47,7 @@ _______________________
 
 [x] Order articles in desc order
 
-[] Write first article
+[x] Write first article
 
 [x] Connect custom domain
 
