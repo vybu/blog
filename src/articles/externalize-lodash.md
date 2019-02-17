@@ -1,6 +1,7 @@
 ---
 author: Vytenis Butkevicius
-title: Getting rid of lodash duplication in your bundle
+title: Lodash duplication and how to solve it
+summary: Lodash is very popular utility library, however its size in your bundle can grow beyond what you expect from few helper functions.
 date: 2019-01-13
 id: 3
 ---
@@ -124,7 +125,7 @@ and use it like this
 }
 
 ```
-That's it, we have removed the pesky lodash duplicates from our bundle. If you also want to make your bundle leaner and thus your user happier, I move the `externalizeLodash` function into a package (https://github.com/vybu/externalize-lodash) or you can simply copy paste the solution. However be ware of the risks outline below.
+That's it, we have removed the pesky lodash duplicates from our bundle. If you also want to make your bundle leaner, I have moved the `externalizeLodash` function into a package https://github.com/vybu/externalize-lodash or you can simply copy paste the solution. **However be ware of the risks outline below.**
 
 ### UMD and other build targets
 
@@ -159,7 +160,7 @@ Pay attention to how it either tries to require `"_.isEmpty"` in commonjs contex
 ```
 
 And this is a relevant module initialization part when target is default (iife). 
-As we can see it accesses `isEmpty` from a global object, which will work fine if we have lodash
+As we can see it accesses `isEmpty` from a global object `_`, which will work fine if we have lodash
 loaded globally.
 
 ```js
@@ -176,9 +177,9 @@ I haven't checked all of the build targets that webpack supports, but they might
 
 ### Other risks
 
-There is also a risk that some of you dependencies use different versions of lodash and throughout the versions lodash has added, removed, and renamed it's utilities.
+There is also a risk that some of you dependencies use different versions of lodash and throughout different versions lodash has added, removed, and renamed it's utilities.
 
-**To be safe you should test you application after externalizing dependency this way to asses that it still functions the same way**.
+**To be safe, as with every change, after externalizing dependency this way you should test your application and confirm that no bugs were introduced**.
 
 ## Is it worth it
 
