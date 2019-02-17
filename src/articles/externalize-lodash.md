@@ -179,7 +179,7 @@ I haven't checked all of the build targets that webpack supports, but they might
 
 There is also a risk that some of you dependencies use different versions of lodash and throughout different versions lodash has added, removed, and renamed it's utilities.
 
-**To be safe, as with every change, after externalizing dependency this way you should test your application and confirm that no bugs were introduced**.
+To be safe, as with every change, after externalizing dependency this way you should test your application and confirm that no bugs were introduced.
 
 ## Is it worth it
 
